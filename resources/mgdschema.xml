@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Schema xmlns="http://www.midgard-project.org/repligard/1.4">
+    <type name="ttoa_user" table="ttoa_user">
+        <property name="id" type="unsigned integer" primaryfield="id">
+            <description>Local non-replication-safe database identifier</description>
+        </property>
+        <property name="username" type="string" >
+            <description>Username for attending person</description>
+        </property>
+        <property name="latitude" type="float" />
+        <property name="longitude" type="float" />
+    </type>
+    <type name="ttoa_log" table="ttoa_log">
+        <property name="id" type="unsigned integer" primaryfield="id">
+            <description>Local non-replication-safe database identifier</description>
+        </property>
+        <property name="date" type="datetime" index="yes">
+    		<description>date the log was posted on </description>
+    	</property>
+        <property name="author" type="unsigned integer" link="ttoa_user:id">
+    		<description>the person who wrote it </description>
+    		</property>
+    	<property name="latitude" type="float" index="yes">
+    	</property>
+    	<property name="longitude" type="float" index="yes">
+    	</property>
+    	<property name="comment" type="text">
+    		<description>Actual log entry</description>
+    	</property>
+    	<property name="mission" type="unsigned integer" link="ttoa_mission:id">
+    		<description>Mission the log is aboud</description>
+    	</property>
+    	<property name="participating" type="bool">
+    		<description>Are you just trolling or are you running </description>
+    	</property>
+    </type>
+    <type name="ttoa_mission" table="ttoa_mission">
+        <property name="id" type="unsigned integer" primaryfield="id">
+            <description>Local non-replication-safe database identifier</description>
+        </property>
+        <property name="type" type="integer">
+    		<description>1= geohash 2=friend race </description>
+    	</property>
+    	<property name="latitude" type="float" index="yes">
+    	</property>
+    	<property name="longitude" type="float" index="yes">
+    	</property>
+    	<property name="pubDate" type="datetime">
+    		<description>Date when the mission was posted</description>
+    	</property>
+    	<property name="validDate" type="datetime" index="yes">
+    		<description>Date when mission is valid </description>
+    	</property>
+    	<property name="text" type="string">
+    		<description>Mission description </description>
+    	</property>
+    	<property name="author" type="unsigned integer" link="ttoa_user:id">
+    		<description>Game master in friend races</description>
+    	</property> 	
+    </type>
+</Schema>
+
