@@ -42,4 +42,4 @@ if __name__ == '__main__':
     blyton = enid()
     mission = blyton.adventure_from_geohash(location)
     print("%s, your mission, if you choose to accept it, is:") % (suski.nick)
-    print("  %s in %s, %s, some %s km away from you") % (mission.name, mission.destination.lat, mission.destination.lon, int(location.distance_to(mission.destination)))
+    print("  %s is in %s (%s, %s), some %s km away from you") % (mission.name, mission.destination.describe(), mission.destination.lat, mission.destination.lon, int(location.distance_to(mission.destination)))

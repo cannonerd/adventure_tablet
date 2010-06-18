@@ -3,6 +3,7 @@ import math
 class point():
     lat = 0.0
     lon = 0.0
+    cloudmade_key = 'f4f1cc62bbca426a84fe69fcd27b0498'
 
     def __init__(self, latitude = 0.0, longitude = 0.0):
         self.lat = float(latitude)
@@ -23,9 +24,36 @@ class point():
         final = 6371 * c
         return final
 
+    def describe(self):
+        import urllib, urllib2
+        import simplejson as json
+        opener = urllib2.build_opener()
+        opener.addheaders = [('User-agent', 'adventure_tablet/0.1')]
+        try:
+            params = urllib.urlencode({'object_type': 'city', 'distance': 'closest', 'around': '%s,%s' % (self.lat, self.lon)})
+            url = 'http://geocoding.cloudmade.com/%s/geocoding/v2/find.js?%s' % (self.cloudmade_key, params)
+            req = opener.open(url)
+            features = req.read()
+        except urllib2.HTTPError, e:
+            print('Sorry, authorization failed.')
+            return False
+        except urllib2.URLError, e:
+            print("Connection failed, error %s. Try again later" % (e.message))
+            return False
+
+        try:
+            features = json.loads(features)
+        except ValueError, e:
+            print('Parse error')
+            return False
+
+        for feature in features['features']:
+            return feature['properties']['name']
+        return False
+
 if __name__ == '__main__':
     # Helsinki-Malmi airport
-    efhf = point(60.254558, 24.042828)
+    efhf = point(60.254558, 25.042828)
 
     # Midgard airport
     fymg = point(-22.083332, 17.366667)
