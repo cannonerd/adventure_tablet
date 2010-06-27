@@ -19,7 +19,6 @@
  You should have received a copy of the GNU General Public License along
  with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-import math
 import gtk.gdk
 import gobject
 import adventurer, enid
@@ -36,8 +35,8 @@ class UI(gtk.Window):
         self.set_default_size(500, 500)
         self.connect('destroy', lambda x: gtk.main_quit())
         self.set_title('the Tablet of Adventure')
-        self.vbox = gtk.VBox(False, 0)
-        self.add(self.vbox)
+        self.hbox = gtk.HBox(False, 0)
+        self.add(self.hbox)
 
         self.osm = osmgpsmap.GpsMap()
         self.osm.connect('button_release_event', self.map_clicked)
@@ -51,24 +50,49 @@ class UI(gtk.Window):
 
         self.latlon_entry = gtk.Entry()
 
-        zoom_in_button = gtk.Button(stock=gtk.STOCK_ZOOM_IN)
+        self.destination_info = gtk.Label()
+        self.destination_info.set_line_wrap(True)
+        self.destination_info.set_width_chars(20)
+
+        zoom_in_image = gtk.Image()
+        zoom_in_image.set_from_stock(gtk.STOCK_ZOOM_IN, gtk.ICON_SIZE_BUTTON)
+        zoom_in_button = gtk.Button()
+        zoom_in_button.add(zoom_in_image)
         zoom_in_button.connect('clicked', self.zoom_in_clicked)
-        zoom_out_button = gtk.Button(stock=gtk.STOCK_ZOOM_OUT)
+
+        zoom_out_image = gtk.Image()
+        zoom_out_image.set_from_stock(gtk.STOCK_ZOOM_OUT, gtk.ICON_SIZE_BUTTON)
+        zoom_out_button = gtk.Button()
+        zoom_out_button.add(zoom_out_image)
         zoom_out_button.connect('clicked', self.zoom_out_clicked)
-        home_button = gtk.Button(stock=gtk.STOCK_HOME)
+
+        home_image = gtk.Image()
+        home_image.set_from_stock(gtk.STOCK_HOME, gtk.ICON_SIZE_BUTTON)
+        home_button = gtk.Button()
+        home_button.add(home_image)
         home_button.connect('clicked', self.home_clicked)
-        destination_button = gtk.Button("Destination")
+
+        destination_image = gtk.Image()
+        destination_image.set_from_stock(gtk.STOCK_JUMP_TO, gtk.ICON_SIZE_BUTTON)
+        destination_button = gtk.Button()
+        destination_button.add(destination_image)
         destination_button.connect ('clicked', self.destination_clicked)
 
+        vbox = gtk.VBox(False, 2)
+        locationbox = gtk.HBox(True, 2)
+        zoombox = gtk.HBox(True, 2)
+        zoombox.pack_start(zoom_in_button)
+        zoombox.pack_start(zoom_out_button)
+        locationbox.pack_start(home_button)
+        locationbox.pack_start(destination_button)
+        vbox.pack_start(self.destination_info, padding = 10, fill = False)
+        vbox.pack_end(zoombox, expand = False)
+        vbox.pack_end(locationbox, expand = False)
 
-        self.vbox.pack_start(self.osm)
-        hbox = gtk.HBox(False, 0)
-        hbox.pack_start(zoom_in_button)
-        hbox.pack_start(zoom_out_button)
-        hbox.pack_start(home_button)
-        hbox.pack_start(destination_button)
+        self.hbox.pack_start(vbox, False)
+        self.hbox.pack_end(self.osm)
 
-        self.vbox.pack_end(hbox, False)
+        self.home_clicked(home_button)
 
     def zoom_in_clicked(self, button):
         self.osm.set_zoom(self.osm.props.zoom + 1)
@@ -84,6 +108,7 @@ class UI(gtk.Window):
         lati = self.location.lat
         longi = self.location.lon
 
+        self.destination_info.set_text(self.location.describe())
         self.osm.set_mapcenter(lati, longi, 12)
 
     def destination_clicked(self, button):
@@ -96,6 +121,7 @@ class UI(gtk.Window):
         lat = mission.destination.lat
         lon = mission.destination.lon
 
+        self.destination_info.set_text("%s is in %s (%s, %s), some %s km away from you" % (mission.name, mission.destination.describe(), mission.destination.lat, mission.destination.lon, int(self.location.distance_to(mission.destination))))
         self.osm.set_mapcenter(lat, lon, 12)
 
 
@@ -107,13 +133,6 @@ class UI(gtk.Window):
                     self.osm.props.longitude
                 )
             )
-        elif event.button == 2:
-            rlat, rlon = self.osm.get_co_ordinates(event.x, event.y)
-            self.osm.draw_gps(
-                    math.degrees(rlat),
-                    math.degrees(rlon),
-                    osmgpsmap.INVALID);
- 
 
 if __name__ == "__main__":
     u = UI()
