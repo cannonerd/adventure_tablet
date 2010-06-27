@@ -36,16 +36,19 @@ class point():
             features = req.read()
         except urllib2.HTTPError, e:
             print('Sorry, authorization failed.')
-            return False
+            return ''
         except urllib2.URLError, e:
             print("Connection failed, error %s. Try again later" % (e.message))
-            return False
+            return ''
 
         try:
             features = json.loads(features)
         except ValueError, e:
             print('Parse error')
-            return False
+            return ''
+
+        if 'features' not in features:
+            return ''
 
         for feature in features['features']:
             return feature['properties']['name']
