@@ -92,7 +92,7 @@ class UI(gtk.Window):
         self.hbox.pack_start(vbox, False)
         self.hbox.pack_end(self.osm)
 
-        self.home_clicked(home_button)
+        self.destination_clicked(destination_button)
 
     def zoom_in_clicked(self, button):
         self.osm.set_zoom(self.osm.props.zoom + 1)
