@@ -106,7 +106,7 @@ class UI(gtk.Window):
         print "Location changed to %s %s, %s" % (location.describe(), location.lat, location.lon)
         self.location = location
         if (self.track_location):
-            self.osm.set_mapcenter(self.location.lat, self.location.lon, self.osm.zoom)
+            self.osm.set_mapcenter(self.location.lat, self.location.lon, self.osm.props.zoom)
 
     def zoom_in_clicked(self, button):
         self.osm.set_zoom(self.osm.props.zoom + 1)
