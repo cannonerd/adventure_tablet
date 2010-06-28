@@ -103,6 +103,7 @@ class UI(gtk.Window):
         self.destination_clicked(destination_button)
 
     def location_changed(self, adventurer, location, data=None):
+        print "Location changed to %s %s, %s" % (location.describe(), location.lat, location.lon)
         self.location = location
         if (self.track_location):
             self.osm.set_mapcenter(self.location.lat, self.location.lon)
