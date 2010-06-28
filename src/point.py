@@ -24,6 +24,14 @@ class point():
         final = 6371 * c
         return final
 
+    def bearing_to(self, point):
+        dLon = point.lon - self.lon
+        y = math.sin(dLon) * math.cos(point.lat)
+        x = math.cos(self.lat) * math.sin(point.lat) \
+            - math.sin(self.lat) * math.cos(point.lat) * math.cos(dLon)
+        bear = math.atan2(y, x)
+        return bear
+
     def describe(self):
         import urllib, urllib2
         import simplejson as json
@@ -62,4 +70,5 @@ if __name__ == '__main__':
     fymg = point(-22.083332, 17.366667)
 
     distance = efhf.distance_to(fymg)
-    print("Distance from Helsinki-Malmi to Midgard Airport is %s kilometers") % (int(distance))
+    bearing = efhf.bearing_to(fymg)
+    print("Distance from Helsinki-Malmi to Midgard Airport is %s kilometers %s degrees") % (int(distance), bearing)
