@@ -29,6 +29,9 @@ gtk.gdk.threads_init()
 import osmgpsmap
 
 class UI(gtk.Window):
+    track_location = False
+    location = None
+
     def __init__(self):
         gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
 
@@ -92,7 +95,17 @@ class UI(gtk.Window):
         self.hbox.pack_start(vbox, False)
         self.hbox.pack_end(self.osm)
 
+        self.adventurer = adventurer.adventurer('suski')
+        self.adventurer.get_location()
+        self.location = self.adventurer.location
+        self.adventurer.connect('location-changed', self.location_changed)
+
         self.destination_clicked(destination_button)
+
+    def location_changed(self, adventurer, location, data=None):
+        self.location = location
+        if (self.track_location):
+            self.osm.set_mapcenter(self.location.lat, self.location.lon)
 
     def zoom_in_clicked(self, button):
         self.osm.set_zoom(self.osm.props.zoom + 1)
@@ -102,24 +115,22 @@ class UI(gtk.Window):
 
     def home_clicked(self, button):
 
-        self.adventurer = adventurer.adventurer('suski')
-        self.location = self.adventurer.location()
-
         lati = self.location.lat
         longi = self.location.lon
 
         self.destination_info.set_text(self.location.describe())
         self.osm.set_mapcenter(lati, longi, 12)
 
-    def destination_clicked(self, button):
+        self.track_location = True
 
-        self.adventurer = adventurer.adventurer('suski')
-        self.location = self.adventurer.location()
+    def destination_clicked(self, button):
 
         self.enid = enid.enid()
         mission = self.enid.adventure_from_geohash(self.location)
         lat = mission.destination.lat
         lon = mission.destination.lon
+
+        self.track_location = False
 
         self.destination_info.set_text("%s is in %s (%s, %s), some %s km away from you" % (mission.name, mission.destination.describe(), mission.destination.lat, mission.destination.lon, int(self.location.distance_to(mission.destination))))
         self.osm.set_mapcenter(lat, lon, 12)
