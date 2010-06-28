@@ -28,6 +28,7 @@ class adventurer(gobject.GObject):
                 self.location = point.point()
 
     def get_location_liblocation(self):
+        import location
         control = location.GPSDControl.get_default()
         device = location.GPSDevice()
         control.set_properties(preferred_method=location.METHOD_USER_SELECTED,
