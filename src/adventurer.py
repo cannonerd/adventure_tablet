@@ -33,20 +33,25 @@ class adventurer(gobject.GObject):
            self.location = point.point()
 
     def get_location_liblocation(self):
-        control = location.GPSDControl.get_default()
-        device = location.GPSDevice()
-        control.set_properties(preferred_method=location.METHOD_USER_SELECTED,
+        self.control = location.GPSDControl.get_default()
+        self.device = location.GPSDevice()
+        self.control.set_properties(preferred_method=location.METHOD_USER_SELECTED,
             preferred_interval=location.INTERVAL_DEFAULT)
 
         # We don't have a location yet, return blank point
         self.location = point.point()
 
-        device.connect("changed", self.location_changed_liblocation, control)
-        gobject.idle_add(self.location_start_liblocation, control)
+        self.control.connect("error-verbose", self.location_error_liblocation, None)
+        self.device.connect("changed", self.location_changed_liblocation, self.control)
+        self.control.start()
+        if self.device.fix:
+            if device.fix[1] & location.GPS_DEVICE_LATLONG_SET:
+                # We have a "hot" fix
+                self.location = point.point(device.fix[4], device.fix[6])
 
-    def location_start_liblocation(self, control):
-        control.start()
-        return
+    def location_error_liblocation(self, control, error):
+        print "location error: %d" % error
+        self.control.quit()
 
     def location_changed_liblocation(self, device, control):
         if not device:
@@ -54,7 +59,6 @@ class adventurer(gobject.GObject):
         if device.fix:
             if device.fix[1] & location.GPS_DEVICE_LATLONG_SET:
                 self.location = point.point(device.fix[4], device.fix[6])
-                data.stop()
             self.emit('location-changed', self.location)
 
     def get_location_geoclue(self):
