@@ -47,7 +47,7 @@ class adventurer(gobject.GObject):
         if self.device.fix:
             if self.device.fix[1] & location.GPS_DEVICE_LATLONG_SET:
                 # We have a "hot" fix
-                self.location = point.point(self.device.fix[4], self.device.fix[6])
+                self.location = point.point(self.device.fix[4], self.device.fix[5])
 
     def location_error_liblocation(self, control, error):
         print "location error: %d" % error
@@ -58,7 +58,7 @@ class adventurer(gobject.GObject):
             return
         if self.device.fix:
             if self.device.fix[1] & location.GPS_DEVICE_LATLONG_SET:
-                self.location = point.point(self.device.fix[4], self.device.fix[6])
+                self.location = point.point(self.device.fix[4], self.device.fix[5])
             self.emit('location-changed', self.location)
 
     def get_location_geoclue(self):
