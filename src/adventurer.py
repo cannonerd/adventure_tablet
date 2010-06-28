@@ -1,5 +1,15 @@
 import point, gobject
 
+location = None
+Geoclue = None
+try:
+    import Geoclue
+except ImportError:
+    try:
+        import location
+    except ImportError:
+        print "No location service found"
+
 class adventurer(gobject.GObject):
     nick = ""
     color = ""
@@ -15,30 +25,30 @@ class adventurer(gobject.GObject):
         self.nick = nickname
 
     def get_location(self):
-        try:
-            import Geoclue
+        if Geoclue:
             self.get_location_geoclue()
-
-        except ImportError:
-            try:
-                # We are probably on Maemo 5, try using liblocation
-                import location
-                self.get_location_liblocation()
-            except ImportError:
-                self.location = point.point()
+        elif location:
+           self.get_location_liblocation()
+        else:
+           self.location = point.point()
 
     def get_location_liblocation(self):
-        import location
         control = location.GPSDControl.get_default()
         device = location.GPSDevice()
         control.set_properties(preferred_method=location.METHOD_USER_SELECTED,
             preferred_interval=location.INTERVAL_DEFAULT)
 
-        device.connect("changed", self.location_changed_liblocation, control)
         # We don't have a location yet, return blank point
         self.location = point.point()
 
-    def location_changed_liblocation(self, device, data):
+        device.connect("changed", self.location_changed_liblocation, control)
+        gobject.idle_add(self.location_start_liblocation, control)
+
+    def location_start_liblocation(self, control):
+        control.start()
+        return
+
+    def location_changed_liblocation(self, device, control):
         if not device:
             return
         if device.fix:
@@ -48,7 +58,6 @@ class adventurer(gobject.GObject):
             self.emit('location-changed', self.location)
 
     def get_location_geoclue(self):
-        import Geoclue
         self.geoclue = Geoclue.DiscoverLocation()
         self.geoclue.init()
         self.geoclue.set_position_provider("hostip")
