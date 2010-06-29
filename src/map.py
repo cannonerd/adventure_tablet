@@ -119,11 +119,14 @@ class UI(gtk.Window):
         lati = self.location.lat
         longi = self.location.lon
 
-        self.destination_info.set_text(self.location.describe())
+        self.enid = enid.enid()
+        mission = self.enid.adventure_from_geohash(self.location)
+        self.destination_info.set_text("You are in %s (%s, %s), destination is %s km away from you" %(self.location.describe(), lati, longi, int(self.location.distance_to(mission.destination))))
         self.osm.set_mapcenter(lati, longi, 12)
 
         self.track_location = True
 
+        
     def destination_clicked(self, button):
 
         self.enid = enid.enid()
