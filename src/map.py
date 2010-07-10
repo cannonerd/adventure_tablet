@@ -57,16 +57,10 @@ class UI(gtk.Window):
         self.destination_info.set_line_wrap(True)
         self.destination_info.set_width_chars(20)
 
-        zoom_in_image = gtk.Image()
-        zoom_in_image.set_from_stock(gtk.STOCK_ZOOM_IN, gtk.ICON_SIZE_BUTTON)
-        zoom_in_button = gtk.Button()
-        zoom_in_button.add(zoom_in_image)
+        zoom_in_button = gtk.Button( " + ")
         zoom_in_button.connect('clicked', self.zoom_in_clicked)
 
-        zoom_out_image = gtk.Image()
-        zoom_out_image.set_from_stock(gtk.STOCK_ZOOM_OUT, gtk.ICON_SIZE_BUTTON)
-        zoom_out_button = gtk.Button()
-        zoom_out_button.add(zoom_out_image)
+        zoom_out_button = gtk.Button(" - ")
         zoom_out_button.connect('clicked', self.zoom_out_clicked)
 
         home_image = gtk.Image()
@@ -126,7 +120,7 @@ class UI(gtk.Window):
 
         self.track_location = True
 
-        you = gtk.gdk.pixbuf_new_from_file_at_size ("you.png", 30,30)
+        you = gtk.gdk.pixbuf_new_from_file_at_size ("you.png", 35,35)
         self.osm.add_image(lati, longi, you)
 
     def destination_clicked(self, button):
