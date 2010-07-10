@@ -126,7 +126,9 @@ class UI(gtk.Window):
 
         self.track_location = True
 
-        
+        you = gtk.gdk.pixbuf_new_from_file_at_size ("you.png", 30,30)
+        self.osm.add_image(lati, longi, you)
+
     def destination_clicked(self, button):
 
         self.enid = enid.enid()
@@ -139,6 +141,8 @@ class UI(gtk.Window):
         self.destination_info.set_text("%s is in %s (%s, %s), some %s km away from you" % (mission.name, mission.destination.describe(), mission.destination.lat, mission.destination.lon, int(self.location.distance_to(mission.destination))))
         self.osm.set_mapcenter(lat, lon, 12)
 
+        target = gtk.gdk.pixbuf_new_from_file_at_size ("target.png", 24,24)
+        self.osm.add_image(lat, lon, target)
 
     def map_clicked(self, osm, event):
         if event.button == 1:
