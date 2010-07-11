@@ -58,7 +58,6 @@ class UI(gtk.Window):
             player.piece = gtk.gdk.pixbuf_new_from_file_at_size ("you.png", 35,35)
             self.osm.add_image(player.location.lat, player.location.lon, player.piece)
 
-
         target = gtk.gdk.pixbuf_new_from_file_at_size ("target.png", 24,24)
         self.osm.add_image(self.current_adventure.destination.lat, self.current_adventure.destination.lon, target)
 
@@ -116,7 +115,11 @@ class UI(gtk.Window):
 
 
     def location_changed(self, adventurer, location, data=None):
-        #TODO: move adventurer.piece
+
+        # FIXME: In newer OsmGpsMap versions we can just move the image
+        self.osm.remove_image(player.piece)
+        self.osm.add_image(player.location.lat, player.location.lon, player.piece)
+
         if (self.track_location):
             self.osm.set_mapcenter(location.lat, location.lon, self.osm.props.zoom)
 
