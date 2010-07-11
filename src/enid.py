@@ -3,10 +3,10 @@ import adventure, hashlib, datetime, struct, urllib, re, point
 class enid():
     adventures = []
 
-    def adventure_from_geohash(self, location):
-        date = datetime.date.today()
+    def adventure_from_geohash(self, location, date):
         destination = self.geohash(location, date)
         mission = adventure.adventure(destination, "Today's Geohash")
+        self.adventures.append(mission)
         return mission
 
     def geohash(self, location, date):
@@ -40,6 +40,7 @@ if __name__ == '__main__':
     suski = adventurer.adventurer('suski')
     location = suski.location()
     blyton = enid()
-    mission = blyton.adventure_from_geohash(location)
+    date = datetime.date.today()
+    mission = blyton.adventure_from_geohash(location, date)
     print("%s, your mission, if you choose to accept it, is:") % (suski.nick)
     print("  %s is in %s (%s, %s), some %s km away from you") % (mission.name, mission.destination.describe(), mission.destination.lat, mission.destination.lon, int(location.distance_to(mission.destination)))

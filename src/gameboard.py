@@ -30,14 +30,39 @@ import osmgpsmap
 
 class UI(gtk.Window):
     track_location = False
-    location = None
+    player = None
+    blyton = None
+    current_adventure = None
 
-    def __init__(self):
+    def __init__(self, enid, player):
         gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
 
         self.set_default_size(500, 500)
         self.connect('destroy', lambda x: gtk.main_quit())
         self.set_title('the Tablet of Adventure')
+
+        self.build_ui()
+        
+        self.blyton = enid
+        self.player = player
+        self.current_adventure = self.blyton.adventures[0]#ei valintaa otetaan ensimmainen
+
+        self.add_players()
+
+        self.destination_clicked(self.destination_button)
+
+    def add_players(self):
+        for player in self.current_adventure.adventurers:
+            player.connect('location-changed', self.location_changed)
+
+            player.piece = gtk.gdk.pixbuf_new_from_file_at_size ("you.png", 35,35)
+            self.osm.add_image(player.location.lat, player.location.lon, player.piece)
+
+
+        target = gtk.gdk.pixbuf_new_from_file_at_size ("target.png", 24,24)
+        self.osm.add_image(self.current_adventure.destination.lat, self.current_adventure.destination.lon, target)
+
+    def build_ui(self):
         self.hbox = gtk.HBox(False, 0)
         self.add(self.hbox)
 
@@ -71,9 +96,9 @@ class UI(gtk.Window):
 
         destination_image = gtk.Image()
         destination_image.set_from_stock(gtk.STOCK_JUMP_TO, gtk.ICON_SIZE_BUTTON)
-        destination_button = gtk.Button()
-        destination_button.add(destination_image)
-        destination_button.connect ('clicked', self.destination_clicked)
+        self.destination_button = gtk.Button()
+        self.destination_button.add(destination_image)
+        self.destination_button.connect ('clicked', self.destination_clicked)
 
         vbox = gtk.VBox(False, 2)
         locationbox = gtk.HBox(True, 2)
@@ -81,7 +106,7 @@ class UI(gtk.Window):
         zoombox.pack_start(zoom_in_button)
         zoombox.pack_start(zoom_out_button)
         locationbox.pack_start(home_button)
-        locationbox.pack_start(destination_button)
+        locationbox.pack_start(self.destination_button)
         vbox.pack_start(self.destination_info, padding = 10, fill = False)
         vbox.pack_end(zoombox, expand = False)
         vbox.pack_end(locationbox, expand = False)
@@ -89,18 +114,11 @@ class UI(gtk.Window):
         self.hbox.pack_start(vbox, False)
         self.hbox.pack_end(self.osm)
 
-        self.adventurer = adventurer.adventurer('suski')
-        self.adventurer.get_location()
-        self.location = self.adventurer.location
-        self.adventurer.connect('location-changed', self.location_changed)
-
-        self.destination_clicked(destination_button)
 
     def location_changed(self, adventurer, location, data=None):
-        print "Location changed to %s %s, %s" % (location.describe(), location.lat, location.lon)
-        self.location = location
+        #TODO: move adventurer.piece
         if (self.track_location):
-            self.osm.set_mapcenter(self.location.lat, self.location.lon, self.osm.props.zoom)
+            self.osm.set_mapcenter(location.lat, location.lon, self.osm.props.zoom)
 
     def zoom_in_clicked(self, button):
         self.osm.set_zoom(self.osm.props.zoom + 1)
@@ -110,33 +128,20 @@ class UI(gtk.Window):
 
     def home_clicked(self, button):
 
-        lati = self.location.lat
-        longi = self.location.lon
+        lati = self.player.location.lat
+        longi = self.player.location.lon
 
-        self.enid = enid.enid()
-        mission = self.enid.adventure_from_geohash(self.location)
-        self.destination_info.set_text("You are in %s (%s, %s), destination is %s km away from you" %(self.location.describe(), lati, longi, int(self.location.distance_to(mission.destination))))
+        self.destination_info.set_text("You are in %s (%s, %s), destination is %s km away from you" %(self.player.location.describe(), lati, longi, int(self.player.location.distance_to(self.current_adventure.destination))))
         self.osm.set_mapcenter(lati, longi, 12)
 
         self.track_location = True
 
-        you = gtk.gdk.pixbuf_new_from_file_at_size ("you.png", 35,35)
-        self.osm.add_image(lati, longi, you)
-
     def destination_clicked(self, button):
-
-        self.enid = enid.enid()
-        mission = self.enid.adventure_from_geohash(self.location)
-        lat = mission.destination.lat
-        lon = mission.destination.lon
 
         self.track_location = False
 
-        self.destination_info.set_text("%s is in %s (%s, %s), some %s km away from you" % (mission.name, mission.destination.describe(), mission.destination.lat, mission.destination.lon, int(self.location.distance_to(mission.destination))))
-        self.osm.set_mapcenter(lat, lon, 12)
-
-        target = gtk.gdk.pixbuf_new_from_file_at_size ("target.png", 24,24)
-        self.osm.add_image(lat, lon, target)
+        self.destination_info.set_text("%s is in %s (%s, %s), some %s km away from you" % (self.current_adventure.name, self.current_adventure.destination.describe(), self.current_adventure.destination.lat, self.current_adventure.destination.lon, int(self.player.location.distance_to(self.current_adventure.destination))))
+        self.osm.set_mapcenter(self.current_adventure.destination.lat, self.current_adventure.destination.lon, 12)
 
     def map_clicked(self, osm, event):
         if event.button == 1:
