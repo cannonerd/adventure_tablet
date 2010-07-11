@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import math
 
 class point():
@@ -38,6 +39,29 @@ class point():
             bearing = 360 - bearing
         return int(bearing)
 
+    def pretty_print(self):
+        lat_degrees = math.floor(abs(self.lat))
+        lat_minutes = (abs(self.lat) % abs(lat_degrees)) * 60
+        lat_seconds = (lat_minutes % int(lat_minutes)) * 60
+        lon_degrees = int(self.lon)
+        lon_minutes = (abs(self.lon) % abs(lon_degrees)) * 60
+        lon_seconds = (lon_minutes % int(lon_minutes)) * 60
+
+        lat = u"%s°%s'%s\"" % (int(lat_degrees), int(lat_minutes), int(lat_seconds))
+        lon = u"%s°%s'%s\"" % (int(lon_degrees), int(lon_minutes), int(lon_seconds))
+
+        if self.lat > 0:
+            lat = lat + 'N'
+        else:
+            lat = lat + 'S'
+
+        if self.lon > 0:
+            lon = lon + 'E'
+        else:
+            lon = lon + 'W'
+
+        return u"%s, %s" % (lat, lon)
+
     def describe(self):
         if self.description != None:
             return self.description
@@ -52,24 +76,24 @@ class point():
             features = req.read()
         except urllib2.HTTPError, e:
             print('Sorry, authorization failed.')
-            return ''
+            return self.pretty_print()
         except urllib2.URLError, e:
             print("Connection failed, error %s. Try again later" % (e.message))
-            return ''
+            return self.pretty_print()
 
         try:
             features = json.loads(features)
         except ValueError, e:
             print('Parse error')
-            return ''
+            return self.pretty_print()
 
         if 'features' not in features:
-            return ''
+            return self.pretty_print()
 
         for feature in features['features']:
             self.description = feature['properties']['name']
             return self.description
-        return False
+        return self.pretty_print()
 
 if __name__ == '__main__':
     # Helsinki-Malmi airport
@@ -81,4 +105,4 @@ if __name__ == '__main__':
     distance = efhf.distance_to(fymg)
     distance_n = efhf.distance_to(fymg, 'N')
     bearing = efhf.bearing_to(fymg)
-    print("Distance from Helsinki-Malmi to Midgard Airport is %s kilometers (%s Nautical miles) %s degrees") % (int(distance), int(distance_n), bearing)
+    print("Distance from Helsinki-Malmi (%s) to Midgard Airport (%s) is %s kilometers (%s Nautical miles) %s degrees") % (efhf.describe(), fymg.describe(), int(distance), int(distance_n), bearing)

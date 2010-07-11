@@ -135,9 +135,9 @@ class UI(gtk.Window):
 
     def update_description(self, mode):
         if mode is 'home':
-            description = u"You are in %s (%s, %s), destination is %s km from you, in %s°" %(self.player.location.describe(), self.player.location.lat, self.player.location.lon, int(self.player.location.distance_to(self.current_adventure.destination)), self.player.location.bearing_to(self.current_adventure.destination))
+            description = u"You are in %s. Destination is %s km from you, in %s°" %(self.player.location.describe(), int(self.player.location.distance_to(self.current_adventure.destination)), self.player.location.bearing_to(self.current_adventure.destination))
         else:
-            description = u"%s is in %s (%s, %s), some %s km from you, in %s°" % (self.current_adventure.name, self.current_adventure.destination.describe(), self.current_adventure.destination.lat, self.current_adventure.destination.lon, int(self.player.location.distance_to(self.current_adventure.destination)), self.player.location.bearing_to(self.current_adventure.destination))
+            description = u"%s is in %s, some %s km from you, in %s°" % (self.current_adventure.name, self.current_adventure.destination.describe(), int(self.player.location.distance_to(self.current_adventure.destination)), self.player.location.bearing_to(self.current_adventure.destination))
 
         self.destination_info.set_text(description)
 
