@@ -42,12 +42,12 @@ class UI(gtk.Window):
         self.connect('destroy', lambda x: gtk.main_quit())
         self.set_title('the Tablet of Adventure')
 
-        self.build_ui()
-        
+
+
         self.blyton = enid
         self.player = player
         self.current_adventure = self.blyton.adventures[0]#ei valintaa otetaan ensimmainen
-
+        self.build_ui()
         self.add_players()
 
         self.destination_clicked(self.destination_button)
@@ -59,8 +59,8 @@ class UI(gtk.Window):
             player.piece = gtk.gdk.pixbuf_new_from_file_at_size ("you.png", 35,35)
             self.osm.add_image(player.location.lat, player.location.lon, player.piece)
 
-        target = gtk.gdk.pixbuf_new_from_file_at_size ("target.png", 24,24)
-        self.osm.add_image(self.current_adventure.destination.lat, self.current_adventure.destination.lon, target)
+        self.target_image = gtk.gdk.pixbuf_new_from_file_at_size ("target.png", 24,24)
+        self.osm.add_image(self.current_adventure.destination.lat, self.current_adventure.destination.lon, self.target_image)
 
     def build_ui(self):
         self.hbox = gtk.HBox(False, 0)
@@ -75,6 +75,18 @@ class UI(gtk.Window):
         self.osm.set_keyboard_shortcut(osmgpsmap.KEY_DOWN, gtk.gdk.keyval_from_name("Down"))
         self.osm.set_keyboard_shortcut(osmgpsmap.KEY_LEFT, gtk.gdk.keyval_from_name("Left"))
         self.osm.set_keyboard_shortcut(osmgpsmap.KEY_RIGHT, gtk.gdk.keyval_from_name("Right"))
+
+        combobox = gtk.combo_box_new_text()
+        combobox.append_text('Select adventure:')
+        i = 0
+        for adventure in self.blyton.adventures:
+            i = i + 1
+            combobox.append_text(adventure.name)
+            adventure.combo_index = i
+        combobox.connect('changed', self.changed_adventure)
+        combobox.set_active(0)
+
+
 
         self.latlon_entry = gtk.Entry()
 
@@ -101,6 +113,7 @@ class UI(gtk.Window):
         self.destination_button.connect ('clicked', self.destination_clicked)
 
         vbox = gtk.VBox(False, 2)
+        vbox.pack_start(combobox, expand = False, fill = False)
         locationbox = gtk.HBox(True, 2)
         zoombox = gtk.HBox(True, 2)
         zoombox.pack_start(zoom_in_button)
@@ -114,6 +127,23 @@ class UI(gtk.Window):
         self.hbox.pack_start(vbox, False)
         self.hbox.pack_end(self.osm)
 
+
+
+    def changed_adventure(self, combobox):
+        model = combobox.get_model()
+        index = combobox.get_active()
+        if index is 0:
+            # "Select adventure" selected
+            return
+        # Check which adventure user selected
+        for adventure in self.blyton.adventures:
+            if index is adventure.combo_index:
+                self.current_adventure = adventure
+                print "Adventure is %s" % (adventure.name)
+                self.osm.remove_image(self.target_image)
+                self.osm.add_image(adventure.destination.lat, adventure.destination.lon, self.target_image)
+                self.destination_clicked(self.destination_button)
+                return
 
     def location_changed(self, adventurer, location, data=None):
 
