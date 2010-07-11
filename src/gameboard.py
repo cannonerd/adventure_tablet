@@ -117,8 +117,9 @@ class UI(gtk.Window):
     def location_changed(self, adventurer, location, data=None):
 
         # FIXME: In newer OsmGpsMap versions we can just move the image
-        self.osm.remove_image(player.piece)
-        self.osm.add_image(player.location.lat, player.location.lon, player.piece)
+        print self.osm.remove_image(adventurer.piece)
+
+        self.osm.add_image(adventurer.location.lat, adventurer.location.lon, adventurer.piece)
 
         if (self.track_location):
             self.osm.set_mapcenter(location.lat, location.lon, self.osm.props.zoom)
