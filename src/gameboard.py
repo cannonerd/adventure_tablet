@@ -117,12 +117,14 @@ class UI(gtk.Window):
     def location_changed(self, adventurer, location, data=None):
 
         # FIXME: In newer OsmGpsMap versions we can just move the image
-        print self.osm.remove_image(adventurer.piece)
-
+        self.osm.remove_image(adventurer.piece)
         self.osm.add_image(adventurer.location.lat, adventurer.location.lon, adventurer.piece)
 
         if (self.track_location):
             self.osm.set_mapcenter(location.lat, location.lon, self.osm.props.zoom)
+            self.update_description('home')
+        else:
+            self.update_description('destination')
 
     def zoom_in_clicked(self, button):
         self.osm.set_zoom(self.osm.props.zoom + 1)
@@ -130,21 +132,25 @@ class UI(gtk.Window):
     def zoom_out_clicked(self, button):
         self.osm.set_zoom(self.osm.props.zoom - 1)
 
+    def update_description(self, mode):
+        if mode is 'home':
+            description = "You are in %s (%s, %s), destination is %s km away from you" %(self.player.location.describe(), self.player.location.lat, self.player.location.lon, int(self.player.location.distance_to(self.current_adventure.destination)))
+        else:
+            description = "%s is in %s (%s, %s), some %s km away from you" % (self.current_adventure.name, self.current_adventure.destination.describe(), self.current_adventure.destination.lat, self.current_adventure.destination.lon, int(self.player.location.distance_to(self.current_adventure.destination)))
+
+        self.destination_info.set_text(description)
+
     def home_clicked(self, button):
-
-        lati = self.player.location.lat
-        longi = self.player.location.lon
-
-        self.destination_info.set_text("You are in %s (%s, %s), destination is %s km away from you" %(self.player.location.describe(), lati, longi, int(self.player.location.distance_to(self.current_adventure.destination))))
-        self.osm.set_mapcenter(lati, longi, 12)
+        self.update_description('home')
+        self.osm.set_mapcenter(self.player.location.lat, self.player.location.lon, 12)
 
         self.track_location = True
 
     def destination_clicked(self, button):
-
+        self.update_description('destination')
         self.track_location = False
 
-        self.destination_info.set_text("%s is in %s (%s, %s), some %s km away from you" % (self.current_adventure.name, self.current_adventure.destination.describe(), self.current_adventure.destination.lat, self.current_adventure.destination.lon, int(self.player.location.distance_to(self.current_adventure.destination))))
+
         self.osm.set_mapcenter(self.current_adventure.destination.lat, self.current_adventure.destination.lon, 12)
 
     def map_clicked(self, osm, event):

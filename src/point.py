@@ -3,6 +3,7 @@ import math
 class point():
     lat = 0.0
     lon = 0.0
+    description = None
     cloudmade_key = 'f4f1cc62bbca426a84fe69fcd27b0498'
 
     def __init__(self, latitude = 0.0, longitude = 0.0):
@@ -33,6 +34,8 @@ class point():
         return bear
 
     def describe(self):
+        if self.description != None:
+            return self.description
         import urllib, urllib2
         import simplejson as json
         opener = urllib2.build_opener()
@@ -59,7 +62,8 @@ class point():
             return ''
 
         for feature in features['features']:
-            return feature['properties']['name']
+            self.description = feature['properties']['name']
+            return self.description
         return False
 
 if __name__ == '__main__':
