@@ -10,7 +10,7 @@ class point():
         self.lat = float(latitude)
         self.lon = float(longitude)
 
-    def distance_to(self, point):
+    def distance_to(self, point, unit = 'K'):
 
         start_long = math.radians(self.lon)
         start_latt = math.radians(self.lat)
@@ -23,15 +23,20 @@ class point():
         a = math.sin(d_latt/2)**2 + math.cos(start_latt) * math.cos(end_latt) * math.sin(d_long/2)**2
         c = 2 * math.atan2(math.sqrt(a),  math.sqrt(1-a))
         final = 6371 * c
+
+        # Convert to nautical miles
+        if unit is 'N':
+            final = final * 0.539956803
+
         return final
 
     def bearing_to(self, point):
-        dLon = point.lon - self.lon
-        y = math.sin(dLon) * math.cos(point.lat)
-        x = math.cos(self.lat) * math.sin(point.lat) \
-            - math.sin(self.lat) * math.cos(point.lat) * math.cos(dLon)
-        bear = math.atan2(y, x)
-        return bear
+        distance = self.distance_to(point, 'N')
+        arad = math.acos((math.sin(math.radians(point.lat)) - math.sin(math.radians(self.lat)) * math.cos(math.radians(distance / 60))) / (math.sin(math.radians(distance / 60)) * math.cos(math.radians(self.lat))))
+        bearing = arad * 180 / math.pi
+        if (math.sin(math.radians(point.lon - self.lon)) < 0):
+            bearing = 360 - bearing
+        return int(bearing)
 
     def describe(self):
         if self.description != None:
@@ -74,5 +79,6 @@ if __name__ == '__main__':
     fymg = point(-22.083332, 17.366667)
 
     distance = efhf.distance_to(fymg)
+    distance_n = efhf.distance_to(fymg, 'N')
     bearing = efhf.bearing_to(fymg)
-    print("Distance from Helsinki-Malmi to Midgard Airport is %s kilometers %s degrees") % (int(distance), bearing)
+    print("Distance from Helsinki-Malmi to Midgard Airport is %s kilometers (%s Nautical miles) %s degrees") % (int(distance), int(distance_n), bearing)
