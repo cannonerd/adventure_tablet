@@ -139,7 +139,6 @@ class UI(gtk.Window):
         for adventure in self.blyton.adventures:
             if index is adventure.combo_index:
                 self.current_adventure = adventure
-                print "Adventure is %s" % (adventure.name)
                 self.osm.remove_image(self.target_image)
                 self.osm.add_image(adventure.destination.lat, adventure.destination.lon, self.target_image)
                 self.destination_clicked(self.destination_button)
