@@ -33,6 +33,8 @@ class point():
 
     def bearing_to(self, point):
         distance = self.distance_to(point, 'N')
+        if distance is 0:
+            return None
         arad = math.acos((math.sin(math.radians(point.lat)) - math.sin(math.radians(self.lat)) * math.cos(math.radians(distance / 60))) / (math.sin(math.radians(distance / 60)) * math.cos(math.radians(self.lat))))
         bearing = arad * 180 / math.pi
         if (math.sin(math.radians(point.lon - self.lon)) < 0):
@@ -98,7 +100,7 @@ class point():
 if __name__ == '__main__':
     # Helsinki-Malmi airport
     efhf = point(60.254558, 25.042828)
-
+    print self.lat, self.lon
     # Midgard airport
     fymg = point(-22.083332, 17.366667)
 

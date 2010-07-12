@@ -163,7 +163,13 @@ class UI(gtk.Window):
         self.osm.set_zoom(self.osm.props.zoom - 1)
 
     def update_description(self, mode):
-        if mode is 'home':
+        if self.player.location.distance_to(self.current_adventure.destination) <= 0.05:
+            description = "Congratulations! you have arrived to your destination."
+            self.osm.remove_image(self.target_image)
+            self.fin_image = gtk.gdk.pixbuf_new_from_file_at_size ("lippu.png", 45,45)
+            self.osm.add_image(self.current_adventure.destination.lat, self.current_adventure.destination.lon, self.fin_image)
+
+        elif mode is 'home':
             description = u"You are in %s. Destination is %s km from you, in %s°" %(self.player.location.describe(), int(self.player.location.distance_to(self.current_adventure.destination)), self.player.location.bearing_to(self.current_adventure.destination))
         else:
             description = u"%s is in %s, some %s km from you, in %s°" % (self.current_adventure.name, self.current_adventure.destination.describe(), int(self.player.location.distance_to(self.current_adventure.destination)), self.player.location.bearing_to(self.current_adventure.destination))
@@ -191,6 +197,8 @@ class UI(gtk.Window):
                     self.osm.props.longitude
                 )
             )
+
+
 
 if __name__ == "__main__":
     u = UI()
