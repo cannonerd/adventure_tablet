@@ -2,11 +2,15 @@ Source: adventure-tablet
 Section: user/games
 Priority: optional
 Maintainer: Susanna Huhtanen <ihmis.suski@gmail.com>
+Description: Random adventure generator
 Build-Depends: debhelper (>= 4.0.0)
 Standards-Version: 3.6.0
 
 Package: adventure-tablet
+Maintainer: Susanna Huhtanen <ihmis.suski@gmail.com>
+Section: user/games
 Architecture: all
-Depends: python2.5-minimal, python-gtk2, python-geoclue | python-location
+Depends: python2.5-minimal, python-gtk2, python-geoclue | python-location, python-osmgpsmap
 Description: Random adventure generator
+XB-Maemo-Display-Name: the Tablet of Adventure
 XSBC-Bugtracker: http://github.com/cannonerd/adventure_tablet/issues
