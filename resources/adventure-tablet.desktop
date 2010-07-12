@@ -1,0 +1,9 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Name=the Tablet of Adventure
+Exec=/usr/bin/python /opt/adventure-tablet/src/__main__.py >/tmp/adventure_tablet.out 2>/tmp/adventure_tablet.err
+Icon=adventure-tablet
+Name[en_US]=the Tablet of Adventure
