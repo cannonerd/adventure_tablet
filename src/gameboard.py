@@ -170,9 +170,15 @@ class UI(gtk.Window):
             self.osm.add_image(self.current_adventure.destination.lat, self.current_adventure.destination.lon, self.fin_image)
 
         elif mode is 'home':
-            description = u"You are in %s. Destination is %s km from you, in %s°" %(self.player.location.describe(), int(self.player.location.distance_to(self.current_adventure.destination)), self.player.location.bearing_to(self.current_adventure.destination))
+            if int(self.player.location.distance_to(self.current_adventure.destination)) <= 2:
+                description = u"You are in %s. Destination is %s km from you, in %s°" %(self.player.location.describe(), round( self.player.location.distance_to(self.current_adventure.destination), 2), self.player.location.bearing_to(self.current_adventure.destination))
+            else:
+                description = u"You are in %s. Destination is %s km from you, in %s°" %(self.player.location.describe(), int(self.player.location.distance_to(self.current_adventure.destination)), self.player.location.bearing_to(self.current_adventure.destination))
         else:
-            description = u"%s is in %s, some %s km from you, in %s°" % (self.current_adventure.name, self.current_adventure.destination.describe(), int(self.player.location.distance_to(self.current_adventure.destination)), self.player.location.bearing_to(self.current_adventure.destination))
+            if int(self.player.location.distance_to(self.current_adventure.destination)) <= 2:
+                description = u"You are in %s. Destination is %s km from you, in %s°" %(self.player.location.describe(), round( self.player.location.distance_to(self.current_adventure.destination), 2), self.player.location.bearing_to(self.current_adventure.destination))
+            else:
+                description = u"%s is in %s, some %s km from you, in %s°" % (self.current_adventure.name, self.current_adventure.destination.describe(), int(self.player.location.distance_to(self.current_adventure.destination)), self.player.location.bearing_to(self.current_adventure.destination))
 
         self.destination_info.set_text(description)
 

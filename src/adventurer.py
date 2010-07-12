@@ -36,7 +36,7 @@ class adventurer(gobject.GObject):
         self.control = location.GPSDControl.get_default()
         self.device = location.GPSDevice()
         self.control.set_properties(preferred_method=location.METHOD_USER_SELECTED,
-            preferred_interval=location.INTERVAL_60S)
+            preferred_interval=location.INTERVAL_10S)
 
         # We don't have a location yet, return blank point
         self.location = point.point()
