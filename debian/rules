@@ -1,0 +1,46 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+# Sample debian/rules that uses debhelper.
+# GNU copyright 1997 to 1999 by Joey Hess.
+
+# Uncomment this to turn on verbose mode.
+export DH_VERBOSE=1
+
+binary-indep: build install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep
+
+build:
+	dh_testdir
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_installdirs
+
+	mkdir -p $(CURDIR)/debian/adventure-tablet/opt/adventure-tablet/resources
+	cp -a resources/* $(CURDIR)/debian/adventure-tablet/opt/adventure-tablet/resources/
+	mkdir -p $(CURDIR)/debian/adventure-tablet/opt/adventure-tablet/src
+	cp -a src/* $(CURDIR)/debian/adventure-tablet/opt/adventure-tablet/src/
+	mkdir -p $(CURDIR)/debian/adventure-tablet/usr/share/midgard2/schema/
+	ln -s /opt/adventure-tablet/resources/mgdschema.xml $(CURDIR)/debian/adventure-tablet/usr/share/midgard2/schema/adventure-tablet.xml
+	mkdir -p $(CURDIR)/debian/adventure-tablet/usr/share/applications/hildon/
+	ln -s -f /opt/adventure-tablet/resources/adventure-tablet.desktop $(CURDIR)/debian/adventure-tablet/usr/share/applications/hildon/adventure-tablet.desktop
+	mkdir -p $(CURDIR)/debian/adventure-tablet/usr/share/icons/hicolor/scalable/
+	ln -s -f /opt/adventure-tablet/resources/adventure-tablet_64x64.png $(CURDIR)/debian/adventure-tablet/usr/share/icons/hicolor/scalable/adventure-tablet.png
+	mkdir -p $(CURDIR)/debian/adventure-tablet/usr/share/icons/hicolor/64x64/apps
+	ln -s -f /opt/adventure-tablet/resources/adventure-tablet_64x64.png $(CURDIR)/debian/adventure-tablet/usr/share/icons/hicolor/64x64/apps/adventure-tablet.png
+	mkdir -p $(CURDIR)/debian/adventure-tablet/usr/share/pixmaps/
+	ln -s -f /opt/adventure-tablet/resources/adventure-tablet_64x64.png $(CURDIR)/debian/adventure-tablet/usr/share/pixmaps/adventure-tablet.png 
+
+clean:
+	dh_clean
+	rm -rf $(CURDIR)/debian/adventure-tablet/ 

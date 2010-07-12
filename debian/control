@@ -1,0 +1,12 @@
+Source: adventure-tablet
+Section: user/games
+Priority: optional
+Maintainer: Susanna Huhtanen <ihmis.suski@gmail.com>
+Build-Depends: debhelper (>= 4.0.0)
+Standards-Version: 3.6.0
+
+Package: adventure-tablet
+Architecture: all
+Depends: python2.5-minimal, python-gtk2, python-geoclue | python-location
+Description: Random adventure generator
+XSBC-Bugtracker: http://github.com/cannonerd/adventure_tablet/issues
