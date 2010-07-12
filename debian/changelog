@@ -1,3 +1,10 @@
+adventure-tablet (0.2) unstable; urgency=low
+
+  * Minor packaging fixes
+  * Changed application icon
+
+ -- Henri Bergius <henri.bergius@iki.fi>  Mon, 12 Jul 2010 19:09:24 +0200
+
 adventure-tablet (0.1) unstable; urgency=low
 
   * Initial release
