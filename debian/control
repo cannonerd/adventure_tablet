@@ -2,12 +2,10 @@ Source: adventure-tablet
 Section: user/games
 Priority: optional
 Maintainer: Susanna Huhtanen <ihmis.suski@gmail.com>
-Description: Random adventure generator
 Build-Depends: debhelper (>= 4.0.0)
 Standards-Version: 3.6.0
 
 Package: adventure-tablet
-Maintainer: Susanna Huhtanen <ihmis.suski@gmail.com>
 Section: user/games
 Architecture: all
 Depends: python2.5-minimal, python-gtk2, python-gobject, python-geoclue | python-location, python-osmgpsmap
