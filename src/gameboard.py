@@ -23,6 +23,7 @@
 import gtk.gdk
 import gobject
 import adventurer, enid
+import os
 
 gobject.threads_init()
 gtk.gdk.threads_init()
@@ -56,10 +57,10 @@ class UI(gtk.Window):
         for player in self.current_adventure.adventurers:
             player.connect('location-changed', self.location_changed)
 
-            player.piece = gtk.gdk.pixbuf_new_from_file_at_size ("you.png", 35,35)
+            player.piece = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/you.png", 35,35)
             self.osm.add_image(player.location.lat, player.location.lon, player.piece)
 
-        self.target_image = gtk.gdk.pixbuf_new_from_file_at_size ("target.png", 24,24)
+        self.target_image = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/target.png", 24,24)
         self.osm.add_image(self.current_adventure.destination.lat, self.current_adventure.destination.lon, self.target_image)
 
     def build_ui(self):
@@ -166,7 +167,7 @@ class UI(gtk.Window):
         if self.player.location.distance_to(self.current_adventure.destination) <= 0.05:
             description = "Congratulations! you have arrived to your destination."
             self.osm.remove_image(self.target_image)
-            self.fin_image = gtk.gdk.pixbuf_new_from_file_at_size ("lippu.png", 45,45)
+            self.fin_image = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/lippu.png", 45,45)
             self.osm.add_image(self.current_adventure.destination.lat, self.current_adventure.destination.lon, self.fin_image)
 
         elif mode is 'home':
