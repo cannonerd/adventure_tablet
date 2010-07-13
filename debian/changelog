@@ -2,7 +2,7 @@ adventure-tablet (0.3) unstable; urgency=low
 
   * Added the simplejson dependency
 
- -- Henri Bergius <henri.bergius@iki.fi>  Tue, 13 Jul 2010 11:54:24 +02
+ -- Henri Bergius <henri.bergius@iki.fi>  Tue, 13 Jul 2010 11:54:24 +0200
 
 adventure-tablet (0.2) unstable; urgency=low
 
