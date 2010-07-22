@@ -33,7 +33,7 @@ gtk.gdk.threads_init()
 
 import osmgpsmap
 
-class UI(gtk.Window):
+class UI(hildon.StackableWindow):
     track_location = False
     player = None
     blyton = None
@@ -229,14 +229,13 @@ class UI(gtk.Window):
         button1 = hildon.GtkButton(gtk.HILDON_SIZE_AUTO)
         button1.set_label("create an adventure")
         button1.connect("clicked", self.menu_button_clicked)
-        
-     
+
         # Add entry to the view menu
         self.menu.append(button)
         self.menu.append(button1)
-    
+
         self.menu.show_all()
-     
+
         return self.menu
 
 if __name__ == "__main__":
