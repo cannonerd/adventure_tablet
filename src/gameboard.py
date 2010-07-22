@@ -24,6 +24,9 @@ import gtk.gdk
 import gobject
 import adventurer, enid
 import os
+import sys
+import gtk
+import hildon
 
 gobject.threads_init()
 gtk.gdk.threads_init()
@@ -37,10 +40,10 @@ class UI(gtk.Window):
     current_adventure = None
 
     def __init__(self, enid, player):
-        gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
+        win = hildon.StackableWindow.__init__(self)
 
         self.set_default_size(500, 500)
-        self.connect('destroy', lambda x: gtk.main_quit())
+        self.connect('destroy', gtk.main_quit, None)
         self.set_title('the Tablet of Adventure')
 
 
@@ -50,6 +53,10 @@ class UI(gtk.Window):
         self.current_adventure = self.blyton.adventures[0]#ei valintaa otetaan ensimmainen
         self.build_ui()
         self.add_players()
+
+        men = self.create_menu()
+        self.set_app_menu(men)
+        self.show_all()
 
         self.destination_clicked(self.destination_button)
 
@@ -205,7 +212,32 @@ class UI(gtk.Window):
                 )
             )
 
-
+    def menu_button_clicked(self, button):
+        print "Button clicked:s"
+    
+     
+    def create_menu(self):
+        self.menu = hildon.AppMenu()
+    
+        # Create menu entries
+        button = hildon.GtkButton(gtk.HILDON_SIZE_AUTO)
+        button.set_label("settings")
+        button.connect("clicked", self.menu_button_clicked)
+        
+    
+    
+        button1 = hildon.GtkButton(gtk.HILDON_SIZE_AUTO)
+        button1.set_label("create an adventure")
+        button1.connect("clicked", self.menu_button_clicked)
+        
+     
+        # Add entry to the view menu
+        self.menu.append(button)
+        self.menu.append(button1)
+    
+        self.menu.show_all()
+     
+        return self.menu
 
 if __name__ == "__main__":
     u = UI()
