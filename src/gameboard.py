@@ -212,23 +212,23 @@ class UI(hildon.StackableWindow):
                 )
             )
 
-    def menu_button_clicked(self, button):
-        print "Button clicked:s"
-    
-     
+    def create_adventure(self, button):
+        print "Adventure clicked"
+
+    def settings(self, button):
+        print "Settings clicked"
+
     def create_menu(self):
         self.menu = hildon.AppMenu()
-    
+
         # Create menu entries
         button = hildon.GtkButton(gtk.HILDON_SIZE_AUTO)
         button.set_label("settings")
-        button.connect("clicked", self.menu_button_clicked)
-        
-    
-    
+        button.connect("clicked", self.settings)
+
         button1 = hildon.GtkButton(gtk.HILDON_SIZE_AUTO)
         button1.set_label("create an adventure")
-        button1.connect("clicked", self.menu_button_clicked)
+        button1.connect("clicked", self.create_adventure)
 
         # Add entry to the view menu
         self.menu.append(button)
