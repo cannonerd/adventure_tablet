@@ -219,8 +219,8 @@ class UI(hildon.StackableWindow):
         self.entry = hildon.AppMenu()
 
         # Create menu entries
-        but = hildon.Entry(gtk.HILDON_SIZE_AUTO)
-        but.set_placeholder("51 28 38")
+        but = hildon.GtkButton(gtk.HILDON_SIZE_AUTO)
+        but.set_label("from map")
 
         # Add entry to the view menu
         self.entry.append(but)
