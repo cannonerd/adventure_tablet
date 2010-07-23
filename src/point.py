@@ -49,8 +49,8 @@ class point():
         lon_minutes = (abs(self.lon) % abs(lon_degrees)) * 60
         lon_seconds = (lon_minutes % int(lon_minutes)) * 60
 
-        lat = u"%s°%s'%s\"" % (int(lat_degrees), int(lat_minutes), int(lat_seconds))
-        lon = u"%s°%s'%s\"" % (int(lon_degrees), int(lon_minutes), int(lon_seconds))
+        lat = u"%s°%s′%s″" % (int(lat_degrees), int(lat_minutes), int(lat_seconds))
+        lon = u"%s°%s′%s″" % (int(lon_degrees), int(lon_minutes), int(lon_seconds))
 
         if self.lat > 0:
             lat = lat + 'N'
@@ -62,7 +62,7 @@ class point():
         else:
             lon = lon + 'W'
 
-        return u"%s, %s" % (lat, lon)
+        return u"%s %s" % (lat, lon)
 
     def describe(self):
         if self.description != None:
@@ -100,7 +100,7 @@ class point():
 if __name__ == '__main__':
     # Helsinki-Malmi airport
     efhf = point(60.254558, 25.042828)
-    print self.lat, self.lon
+    print efhf.lat, efhf.lon
     # Midgard airport
     fymg = point(-22.083332, 17.366667)
 
