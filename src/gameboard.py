@@ -216,7 +216,9 @@ class UI(hildon.StackableWindow):
 
     def create_adventure(self, button):
         print " Adventure creation clicked"
-
+        self.entry = hildon.Entry(gtk.HILDON_SIZE_AUTO)
+        self.entry.set_placeholder("51 28 38")
+        self.entry.show_all()
 
     def settings(self, button):
         print "Settings clicked"
