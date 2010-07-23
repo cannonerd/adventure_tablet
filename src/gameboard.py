@@ -216,15 +216,6 @@ class UI(hildon.StackableWindow):
 
     def create_adventure(self, button):
         print " Adventure creation clicked"
-        menubox = gtk.Hbox(True, 2)
-        menubox.pack_start(create_entry)
-        show_all()
-        def create_entry():
-            entry = hildon.Entry(gtk.HILDON_SIZE_AUTO)
-            entry.set_placeholder("51 28 38")
-            entr = hildon.Entry(gtk.HILDON_SIZE_AUTO)
-            entr.set_placeholder("25 28 38")
-            return entry
 
 
     def settings(self, button):
