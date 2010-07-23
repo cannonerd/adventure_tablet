@@ -226,7 +226,7 @@ class UI(hildon.StackableWindow):
         wind.add(vbox)
         entry = hildon.Entry(gtk.HILDON_SIZE_AUTO)
         entry.set_placeholder("We're Going to...")
-        entry.add(vbox)
+        vbox.add(entry)
         
         # This call show the window and also add the window to the stack
         wind.show_all()
