@@ -238,7 +238,7 @@ class UI(hildon.StackableWindow):
     def added(self, button):
         print"added"
 
-    def map_info(self):
+    def map_info(self, osm, event):
         print "indeed, you did release your finger"
 
     def settings(self, button):
