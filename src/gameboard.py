@@ -226,6 +226,7 @@ class UI(hildon.StackableWindow):
 
 
         vbox.add(entry)
+        vbox.add(self.osms)
 
         add = hildon.GtkButton(gtk.HILDON_SIZE_AUTO)
         add.set_label("Add")
@@ -234,8 +235,9 @@ class UI(hildon.StackableWindow):
 
         wind.show_all()
 
-    def added(self):
+    def added(self, button):
         print"added"
+
     def map_info(self):
         print "indeed, you did release your finger"
 
