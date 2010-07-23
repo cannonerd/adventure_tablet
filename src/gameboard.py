@@ -206,30 +206,38 @@ class UI(hildon.StackableWindow):
         self.osm.set_mapcenter(self.current_adventure.destination.lat, self.current_adventure.destination.lon, 12)
 
     def map_clicked(self, osm, event):
-        if event.button == 1:
-            self.latlon_entry.set_text(
-                'Map Centre: latitude %s longitude %s' % (
-                    self.osm.props.latitude,
-                    self.osm.props.longitude
-                )
-            )
+        print "kliketiklak"
 
     def create_adventure(self, button):
         print " Adventure creation clicked"
 
         wind = hildon.StackableWindow()
-        wind.set_title("choose destination")
-    # Setting a label in the new window
-        label = gtk.Label("Choose your destination from map")
+        wind.set_title("Plan your adventure")
+        label = gtk.Label("Name your adventure")#tama taytyy napata choose adventure listaan
         vbox = gtk.VBox(False, 0)
         vbox.pack_start(label, True, True, 0)
         wind.add(vbox)
         entry = hildon.Entry(gtk.HILDON_SIZE_AUTO)
         entry.set_placeholder("We're Going to...")
+#Choose your destination
+
+        self.osms = osmgpsmap.GpsMap()
+        self.osms.connect('button_release_event', self.map_info)
+
+
         vbox.add(entry)
-        
-        # This call show the window and also add the window to the stack
+
+        add = hildon.GtkButton(gtk.HILDON_SIZE_AUTO)
+        add.set_label("Add")
+        add.connect("clicked", self.)
+        vbox.add(add)
+
         wind.show_all()
+
+    def added(self):
+
+    def map_info(self):
+        print "indeed, you did release your finger"
 
     def settings(self, button):
         print "Settings clicked"
