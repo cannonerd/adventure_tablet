@@ -217,6 +217,17 @@ class UI(hildon.StackableWindow):
     def create_adventure(self, button):
         print " Adventure creation clicked"
 
+        wind = hildon.StackableWindow()
+        wind.set_title("choose destination")
+    # Setting a label in the new window
+        label = gtk.Label("Choose your destination from map")
+        vbox = gtk.VBox(False, 0)
+        vbox.pack_start(label, True, True, 0)
+        wind.add(vbox)
+        entry = hildon.Entry(gtk.HILDON_SIZE_AUTO)
+        entry.set_placeholder("We're Going to...")
+        # This call show the window and also add the window to the stack
+        wind.show_all()
 
     def settings(self, button):
         print "Settings clicked"
