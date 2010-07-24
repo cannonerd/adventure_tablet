@@ -220,6 +220,7 @@ class UI(hildon.StackableWindow):
 
         self.osms = osmgpsmap.GpsMap()
         self.osms.connect('button_release_event', self.map_info)
+        self.osms.add_image(self.osms.props.latitude, self.osms.props.longitude, self.target_image)
 
         zoom_in_button_choose = gtk.Button( " + ")
         zoom_in_button_choose.connect('clicked', self.zoom_in_clicked_choose)
@@ -237,6 +238,7 @@ class UI(hildon.StackableWindow):
         hbox.pack_end(add, expand = False)
         hbox.pack_end(zoom_in_button_choose, expand = False)
         hbox.pack_end(zoom_out_button_choose, expand = False)
+        vbox.pack_end(hbox, expand = False)
         wind.show_all()
 
     def zoom_in_clicked_choose(self, button):
@@ -259,7 +261,10 @@ class UI(hildon.StackableWindow):
         adventure = self.blyton.adventure_from_mission(mission)
         self.blyton.adventures.append(adventure)
         self.add_adventure_to_selector(adventure)
-        # TODO: close the window
+        
+        # Close the "add" window
+        stack = self.get_stack()
+        stack.pop()
 
     def map_info(self, osm, event):
         self.create_destination = point.point(osm.props.latitude, osm.props.longitude)
