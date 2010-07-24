@@ -1,4 +1,4 @@
-import adventure, hashlib, datetime, struct, urllib, re, point
+import adventure, hashlib, datetime, struct, urllib, re, point, math
 import _midgard as midgard
 
 class enid():
@@ -19,7 +19,7 @@ class enid():
         geohash_found = False
         missions = qb.execute()
         for mission in missions:
-            if mission.type is 1:
+            if mission.type is 1 and math.floor(mission.latitude) is math.floor(location.lat) and math.floor(mission.longitude) is math.floor(location.lon):
                 geohash_found = True
             self.adventures.append(self.adventure_from_mission(mission))
 
@@ -36,7 +36,7 @@ class enid():
         destination = self.geohash(location, datetime.date())
         mission = midgard.mgdschema.ttoa_mission()
         mission.type = 1
-        mission.text = "Today's Geohash"
+        mission.text = "Geohash for %s,%s" % (math.floor(destination.lat), math.floor(destination.lon))
         mission.pubDate = datetime
         mission.validDate = datetime.replace(hour=23, minute=59, second=59)
         mission.latitude = destination.lat
