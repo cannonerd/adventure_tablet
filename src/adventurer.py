@@ -1,4 +1,5 @@
 import point, gobject
+import _midgard as midgard
 
 location = None
 Geoclue = None
@@ -20,8 +21,23 @@ class adventurer(gobject.GObject):
         'location-changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, ))
     }
 
-    def __init__(self, nickname):
+    def __init__(self, nickname, login = False):
         gobject.GObject.__init__(self)
+
+        # Ensure we have a corresponding Midgard user record
+        try:
+            self.user = midgard.db.user({'login': nickname, 'authtype': 'APIkey'})
+        except:
+            self.user = midgard.db.user()
+            self.user.login = nickname
+            self.user.authtype = 'APIkey'
+            self.user.active = True
+            self.user.create()
+
+        if login is True:
+            # Initialize a Midgard session for the user
+            self.user.log_in()
+
         self.nick = nickname
 
     def get_location(self):

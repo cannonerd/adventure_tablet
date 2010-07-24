@@ -223,23 +223,26 @@ class UI(hildon.StackableWindow):
 
         self.osms = osmgpsmap.GpsMap()
         self.osms.connect('button_release_event', self.map_info)
+#piirretan ruksi keskelle ruutua, olet menossa tanne
 
 
-        vbox.add(entry)
-        vbox.add(self.osms)
 
         add = hildon.GtkButton(gtk.HILDON_SIZE_AUTO)
         add.set_label("Add")
         add.connect("clicked", self.added)
-        vbox.add(add)
 
+        vbox.add(entry)
+        vbox.add(self.osms)
+        vbox.add(add)
         wind.show_all()
 
     def added(self, button):
         print"added"
+#lisataan adventure listaan seikkailun nimi ja kohde
 
     def map_info(self, osm, event):
         print "indeed, you did release your finger"
+#kerataan tieto kohteesta
 
     def settings(self, button):
         print "Settings clicked"
