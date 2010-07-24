@@ -36,7 +36,7 @@ class enid():
         destination = self.geohash(location, datetime.date())
         mission = midgard.mgdschema.ttoa_mission()
         mission.type = 1
-        mission.text = "Geohash for %s,%s" % (math.floor(destination.lat), math.floor(destination.lon))
+        mission.text = "Geohash for %s, %s" % (int(math.floor(destination.lat)), int(math.floor(destination.lon)))
         mission.pubDate = datetime
         mission.validDate = datetime.replace(hour=23, minute=59, second=59)
         mission.latitude = destination.lat
