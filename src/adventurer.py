@@ -16,6 +16,7 @@ class adventurer(gobject.GObject):
     color = ""
     adventure = None
     location = None
+    user = None
 
     __gsignals__ = {
         'location-changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, ))

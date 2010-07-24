@@ -27,7 +27,7 @@ import os
 import sys
 import gtk
 import hildon
-
+import datetime
 gobject.threads_init()
 gtk.gdk.threads_init()
 
@@ -215,36 +215,45 @@ class UI(hildon.StackableWindow):
 
         wind = hildon.StackableWindow()
         wind.set_title("Plan your adventure")
-        label = gtk.Label("Name your adventure")#tama taytyy napata choose adventure listaan
+        label = gtk.Label("Name your adventure")
         vbox = gtk.VBox(False, 0)
-        vbox.pack_start(label, True, True, 0)
+        vbox.pack_start(label, expand = False)
         wind.add(vbox)
-        entry = hildon.Entry(gtk.HILDON_SIZE_AUTO)
-        entry.set_placeholder("We're Going to...")
+        self.create_adventure = hildon.Entry(gtk.HILDON_SIZE_AUTO)
+        self.create_adventure.set_placeholder("We're Going to...")
 #Choose your destination
 
         self.osms = osmgpsmap.GpsMap()
         self.osms.connect('button_release_event', self.map_info)
-#piirretan ruksi keskelle ruutua, olet menossa tanne
-
-
 
         add = hildon.GtkButton(gtk.HILDON_SIZE_AUTO)
         add.set_label("Add")
         add.connect("clicked", self.added)
-
-        vbox.add(entry)
-        vbox.add(self.osms)
-        vbox.add(add)
+        vbox.pack_start(self.create_adventure, expand = False)
+        vbox.pack_start(self.osms)
+        vbox.pack_end(add, expand = False)
         wind.show_all()
 
     def added(self, button):
         print"added"
 #lisataan adventure listaan seikkailun nimi ja kohde
+        datetime = datetime.datetime.today()
+        mission = midgard.mgdschema.ttoa_mission()
+        mission.type = 2
+        mission.text = self.create_adventure.get_text()
+        mission.pubDate = datetime
+        mission.validDate = datetime.replace(hour=23, minute=59, second=59)
+        mission.latitude = self.create_destination.lat
+        mission.longitude = self.create_destination.lon
+        mission.author = self.player.user.id
+        mission.create()
+        self.blyton.adventures.append(self.blyton.adventure_from_mission(mission))
+        # Sulje ikkuna
 
     def map_info(self, osm, event):
-        print "indeed, you did release your finger"
-#kerataan tieto kohteesta
+        self.create_destination = point.point(osm.props.latitude, osm.props.longitude)
+        self.osms.remove_image(self.target_image)
+        self.osms.add_image(self.create_destination.lat, self.create_destination.lon, self.target_image)
 
     def settings(self, button):
         print "Settings clicked"
