@@ -19,7 +19,8 @@ class enid():
         geohash_found = False
         missions = qb.execute()
         for mission in missions:
-            if mission.type is 1 and math.floor(mission.latitude) is math.floor(location.lat) and math.floor(mission.longitude) is math.floor(location.lon):
+            if (mission.type is 1) and (int(math.floor(mission.latitude)) == int(math.floor(location.lat))) and (int(math.floor(mission.longitude)) == int(math.floor(location.lon))):
+                # We have a geohash for today and current graticule
                 geohash_found = True
             self.adventures.append(self.adventure_from_mission(mission))
 
