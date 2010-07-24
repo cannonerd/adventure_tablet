@@ -41,16 +41,18 @@ class point():
             bearing = 360 - bearing
         return int(bearing)
 
-    def pretty_print(self):
-        lat_degrees = math.floor(abs(self.lat))
-        lat_minutes = (abs(self.lat) % abs(lat_degrees)) * 60
-        lat_seconds = (lat_minutes % int(lat_minutes)) * 60
-        lon_degrees = int(self.lon)
-        lon_minutes = (abs(self.lon) % abs(lon_degrees)) * 60
-        lon_seconds = (lon_minutes % int(lon_minutes)) * 60
+    def pretty_print_coordinate(self, coordinate):
+        degrees_float = abs(coordinate)
+        degrees = int(math.floor(degrees_float))
+        minutes_float = 60 * (degrees_float - degrees)
+        minutes = int(minutes_float)
+        seconds_float = 60 * (minutes_float - minutes)
+        seconds = int(seconds_float)
+        return u"%s°%s′%s″" % (degrees, minutes, seconds)
 
-        lat = u"%s°%s′%s″" % (int(lat_degrees), int(lat_minutes), int(lat_seconds))
-        lon = u"%s°%s′%s″" % (int(lon_degrees), int(lon_minutes), int(lon_seconds))
+    def pretty_print(self):
+        lat = self.pretty_print_coordinate(self.lat)
+        lon = self.pretty_print_coordinate(self.lon)
 
         if self.lat > 0:
             lat = lat + 'N'
@@ -108,3 +110,7 @@ if __name__ == '__main__':
     distance_n = efhf.distance_to(fymg, 'N')
     bearing = efhf.bearing_to(fymg)
     print("Distance from Helsinki-Malmi (%s) to Midgard Airport (%s) is %s kilometers (%s Nautical miles) %s degrees") % (efhf.describe(), fymg.describe(), int(distance), int(distance_n), bearing)
+
+    # Timbuktu
+    timbuktu = point(16.775833, -3.009444)
+    print "Timbuktu is in %s" % (timbuktu.pretty_print())
