@@ -8,7 +8,7 @@ Standards-Version: 3.6.0
 Package: adventure-tablet
 Section: user/games
 Architecture: all
-Depends: python2.5-minimal, python-gtk2, python-gobject, python-geoclue | python-location, python-osmgpsmap, python-simplejson
+Depends: python2.5-minimal, python-gtk2, python-gobject, python-geoclue | python-location, python-osmgpsmap, python-simplejson, python-midgard2, libgda4-sqlite
 Description: Random adventure generator
 XB-Maemo-Display-Name: the Tablet of Adventure
 XSBC-Bugtracker: http://github.com/cannonerd/adventure_tablet/issues
