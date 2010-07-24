@@ -88,7 +88,10 @@ class UI(hildon.StackableWindow):
         self.osm.set_keyboard_shortcut(osmgpsmap.KEY_RIGHT, gtk.gdk.keyval_from_name("Right"))
 
         self.adventure_selector = gtk.combo_box_new_text()
-        self.adventures_to_selector()
+        self.adventure_selector.append_text('Select adventure:')
+        self.adventure_selector_position = 0
+        for adventure in self.blyton.adventures:
+            self.add_adventure_to_selector(adventure)
         self.adventure_selector.connect('changed', self.changed_adventure)
         self.adventure_selector.set_active(0)
 
@@ -134,21 +137,10 @@ class UI(hildon.StackableWindow):
         self.hbox.pack_start(vbox, False)
         self.hbox.pack_end(self.osm)
 
-    def adventures_to_selector(self):
-        # Clear the combobox first
-        i = 0
-        model = self.adventure_selector.get_model()
-        for entry in model:
-            self.adventure_selector.remove_text(i)
-            i = i + 1
-
-        # Then fill it
-        self.adventure_selector.append_text('Select adventure:')
-        i = 0
-        for adventure in self.blyton.adventures:
-            i = i + 1
-            self.adventure_selector.append_text(adventure.name)
-            adventure.combo_index = i
+    def add_adventure_to_selector(self, adventure):
+        self.adventure_selector_position = self.adventure_selector_position + 1
+        self.adventure_selector.append_text(adventure.name)
+        adventure.combo_index = self.adventure_selector_position
 
     def changed_adventure(self, combobox):
         model = combobox.get_model()
@@ -254,8 +246,9 @@ class UI(hildon.StackableWindow):
         mission.longitude = self.create_destination.lon
         mission.author = self.player.user.id
         mission.create()
-        self.blyton.adventures.append(self.blyton.adventure_from_mission(mission))
-        self.adventures_to_selector()
+        adventure = self.blyton.adventure_from_mission(mission)
+        self.blyton.adventures.append(adventure)
+        self.add_adventure_to_selector(adventure)
         # TODO: close the window
 
     def map_info(self, osm, event):
