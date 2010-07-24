@@ -24,21 +24,36 @@ class adventurer(gobject.GObject):
     def __init__(self, nickname, login = False):
         gobject.GObject.__init__(self)
 
-        # Ensure we have a corresponding Midgard user record
-        try:
-            self.user = midgard.db.user({'login': nickname, 'authtype': 'APIkey'})
-        except:
-            self.user = midgard.db.user()
-            self.user.login = nickname
-            self.user.authtype = 'APIkey'
-            self.user.active = True
-            self.user.create()
-
         if login is True:
-            # Initialize a Midgard session for the user
-            self.user.log_in()
+            self.init_midgard_session(nickname)
+
+        # Every adventurer has a ttoa_user record, check if it already exists
+        qb = midgard.query_builder('ttoa_user')
+        qb.add_constraint('username', '=', nickname)
+        if qb.count() is 0:
+            # No user yet in database, create it
+            self.user = midgard.mgdschema.ttoa_user()
+            self.user.username = nickname
+            self.user.create()
+        else:
+            users = qb.execute()
+            for user in users:
+                self.user = user
 
         self.nick = nickname
+
+    def init_midgard_session(self, username):
+        # Ensure we have a corresponding Midgard user record
+        try:
+            self.mgduser = midgard.db.user({'login': nickname, 'authtype': 'APIkey'})
+        except:
+            self.mgduser = midgard.db.user()
+            self.mgduser.login = nickname
+            self.mgduser.authtype = 'APIkey'
+            self.mgduser.active = True
+            self.mgduser.create()
+        # Initialize a Midgard session for the user
+        self.mgduser.log_in()
 
     def get_location(self):
         if Geoclue:
@@ -75,6 +90,12 @@ class adventurer(gobject.GObject):
         if self.device.fix:
             if self.device.fix[1] & location.GPS_DEVICE_LATLONG_SET:
                 self.location = point.point(self.device.fix[4], self.device.fix[5])
+            
+            # Update user record
+            self.user.latitude = self.location.lat
+            self.user.longitude = self.location.lon
+            self.user.update()
+
             self.emit('location-changed', self.location)
 
     def get_location_geoclue(self):
@@ -92,6 +113,12 @@ class adventurer(gobject.GObject):
 
     def location_changed_geoclue(self, fields, timestamp, latitude, longitude, altitude, accuracy):
         self.location = point.point(latitude, longitude)
+
+        # Update user record
+        self.user.latitude = self.location.lat
+        self.user.longitude = self.location.lon
+        self.user.update()
+
         self.emit('location-changed', self.location)
 
 if __name__ == '__main__':
