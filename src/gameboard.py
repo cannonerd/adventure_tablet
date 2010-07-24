@@ -235,9 +235,9 @@ class UI(hildon.StackableWindow):
         vbox.pack_start(self.create_adventure, expand = False)
         vbox.pack_start(self.osms)
         hbox = gtk.HBox(False, 0)
+        hbox.pack_start(zoom_in_button_choose, expand = False)
+        hbox.pack_start(zoom_out_button_choose, expand = False)
         hbox.pack_end(add, expand = False)
-        hbox.pack_end(zoom_in_button_choose, expand = False)
-        hbox.pack_end(zoom_out_button_choose, expand = False)
         vbox.pack_end(hbox, expand = False)
         wind.show_all()
 
@@ -264,7 +264,7 @@ class UI(hildon.StackableWindow):
         
         # Close the "add" window
         stack = self.get_stack()
-        stack.pop()
+        stack.pop(1)
 
     def map_info(self, osm, event):
         self.create_destination = point.point(osm.props.latitude, osm.props.longitude)
