@@ -78,7 +78,6 @@ class UI(hildon.StackableWindow):
         self.add(self.hbox)
 
         self.osm = osmgpsmap.GpsMap()
-        self.osm.connect('button_release_event', self.map_clicked)
 
         #connect keyboard shortcuts
         self.osm.set_keyboard_shortcut(osmgpsmap.KEY_FULLSCREEN, gtk.gdk.keyval_from_name("F11"))
@@ -208,12 +207,7 @@ class UI(hildon.StackableWindow):
 
         self.osm.set_mapcenter(self.current_adventure.destination.lat, self.current_adventure.destination.lon, 12)
 
-    def map_clicked(self, osm, event):
-        print "kliketiklak"
-
     def create_adventure(self, button):
-        print " Adventure creation clicked"
-
         wind = hildon.StackableWindow()
         wind.set_title("Plan your adventure")
         label = gtk.Label("Name your adventure")
