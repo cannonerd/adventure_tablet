@@ -13,8 +13,9 @@ class enid():
 
         # Fetch currently valid adventures from Midgard
         today = datetime.datetime.today()
+        today.microsecond = 0
         qb = midgard.query_builder('ttoa_mission')
-        qb.add_constraint('validDate', '>=', today)
+        qb.add_constraint('validDate', '>=', today.isoformat())
         geohash_found = False
         missions = qb.execute()
         for mission in missions:
@@ -36,8 +37,8 @@ class enid():
         mission = midgard.mgdschema.ttoa_mission()
         mission.type = 1
         mission.text = "Today's Geohash"
-        mission.pubDate = date
-        mission.validDate = date.replace(hour=23, minute=59, second=59)
+        mission.pubDate = date.isoformat()
+        mission.validDate = date.replace(hour=23, minute=59, second=59).isoformat()
         mission.latitude = destination.lat
         mission.longitude = destination.lon
         mission.create()
