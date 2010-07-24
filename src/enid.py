@@ -1,13 +1,47 @@
 import adventure, hashlib, datetime, struct, urllib, re, point
+import _midgard as midgard
 
 class enid():
     adventures = []
 
+    def __init__(self, location):
+        self.refresh_adventures(location)
+
+    def refresh_adventures(self, location):
+        # Clear old list of adventures
+        self.adventures = []
+
+        # Fetch currently valid adventures from Midgard
+        today = datetime.date.today()
+        qb = midgard.query_builder('ttoa_mission')
+        qb.add_constraint('validDate', '>=', today)
+        geohash_found = False
+        missions = qb.execute()
+        for mission in missions:
+            if mission.type is 1:
+                geohash_found = True
+            self.adventures.append(self.adventure_from_mission(mission))
+
+        if geohash_found is False:
+            # We didn't have a GeoHash for today yet, generate one
+            self.adventures.append(self.adventure_from_geohash(location, today))
+
+    def adventure_from_mission(self, mission):
+        target = point.point(mission.latitude, mission.longitude)
+        mission_adventure = adventure.adventure(target, mission.text, mission)
+        return mission_adventure
+
     def adventure_from_geohash(self, location, date):
         destination = self.geohash(location, date)
-        mission = adventure.adventure(destination, "Today's Geohash")
-        self.adventures.append(mission)
-        return mission
+        mission = midgard.mgdschema.ttoa_mission()
+        mission.type = 1
+        mission.text = "Today's Geohash"
+        mission.pubDate = date
+        mission.validDate = date.replace(hour=23, minute=59, second=59)
+        mission.latitude = destination.lat
+        mission.longitude = destination.lon
+        mission.create()
+        return self.adventure_from_mission(mission)
 
     def geohash(self, location, date):
         args = []

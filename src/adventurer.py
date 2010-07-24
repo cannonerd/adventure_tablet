@@ -79,6 +79,7 @@ class adventurer(gobject.GObject):
             if self.device.fix[1] & location.GPS_DEVICE_LATLONG_SET:
                 # We have a "hot" fix
                 self.location = point.point(self.device.fix[4], self.device.fix[5])
+                self.log_location_change()
 
     def location_error_liblocation(self, control, error):
         print "location error: %d" % error
@@ -90,12 +91,7 @@ class adventurer(gobject.GObject):
         if self.device.fix:
             if self.device.fix[1] & location.GPS_DEVICE_LATLONG_SET:
                 self.location = point.point(self.device.fix[4], self.device.fix[5])
-            
-            # Update user record
-            self.user.latitude = self.location.lat
-            self.user.longitude = self.location.lon
-            self.user.update()
-
+            self.log_location_change()
             self.emit('location-changed', self.location)
 
     def get_location_geoclue(self):
@@ -107,19 +103,22 @@ class adventurer(gobject.GObject):
 
         try:
             self.location = point.point(coordinates['latitude'], coordinates['longitude'])
+            self.log_location_change()
         except KeyError, e:
             #TODO: Define exception for no location
             self.location = point.point()
 
     def location_changed_geoclue(self, fields, timestamp, latitude, longitude, altitude, accuracy):
         self.location = point.point(latitude, longitude)
+        self.log_location_change()
+        self.emit('location-changed', self.location)
 
+    def log_location_change(self):
         # Update user record
         self.user.latitude = self.location.lat
         self.user.longitude = self.location.lon
         self.user.update()
-
-        self.emit('location-changed', self.location)
+        # TODO: Create a log entry if we're in an adventure?
 
 if __name__ == '__main__':
     suski = adventurer('suski')

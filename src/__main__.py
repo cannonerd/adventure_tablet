@@ -28,22 +28,9 @@ me = adventurer.adventurer(username, True)
 #players location
 me.get_location()
 #initialize game controller
-blyton = enid.enid()
-#generate an adventure
-date = datetime.date.today()
-mission = blyton.adventure_from_geohash(me.location, date)
-#test mission
-
-efhf = point.point(60.249418, 25.045655)
-malmi = adventure.adventure(efhf, "Go to Malmi!")
-blyton.adventures.append(malmi)
-
-#add plauer to adventure
-mission.adventurers.append(me)
+blyton = enid.enid(me.location)
 #prepare and show UI
 game = gameboard.UI(blyton, me)
-
 # TODO: We should hide the TToA splash screen
-
 game.show_all()
 gtk.main()
