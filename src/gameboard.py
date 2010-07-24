@@ -46,11 +46,13 @@ class UI(hildon.StackableWindow):
         self.connect('destroy', gtk.main_quit, None)
         self.set_title('the Tablet of Adventure')
 
-
-
         self.blyton = enid
         self.player = player
-        self.current_adventure = self.blyton.adventures[0]#ei valintaa otetaan ensimmainen
+
+        # For now we autoselect the first adventure
+        self.current_adventure = self.blyton.adventures[0]
+        self.current_adventure.adventurers.append(self.player)
+
         self.build_ui()
         self.add_players()
 
