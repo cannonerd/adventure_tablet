@@ -22,7 +22,7 @@
 """
 import gtk.gdk
 import gobject
-import adventurer, enid
+import adventurer, enid, point
 import os
 import sys
 import gtk
@@ -237,12 +237,12 @@ class UI(hildon.StackableWindow):
     def added(self, button):
         print"added"
 #lisataan adventure listaan seikkailun nimi ja kohde
-        datetime = datetime.datetime.today()
+        date = datetime.datetime.today()
         mission = midgard.mgdschema.ttoa_mission()
         mission.type = 2
         mission.text = self.create_adventure.get_text()
-        mission.pubDate = datetime
-        mission.validDate = datetime.replace(hour=23, minute=59, second=59)
+        mission.pubDate = date
+        mission.validDate = date.replace(hour=23, minute=59, second=59)
         mission.latitude = self.create_destination.lat
         mission.longitude = self.create_destination.lon
         mission.author = self.player.user.id
