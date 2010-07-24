@@ -42,7 +42,7 @@ class adventurer(gobject.GObject):
 
         self.nick = nickname
 
-    def init_midgard_session(self, username):
+    def init_midgard_session(self, nickname):
         # Ensure we have a corresponding Midgard user record
         try:
             self.mgduser = midgard.db.user({'login': nickname, 'authtype': 'APIkey'})
