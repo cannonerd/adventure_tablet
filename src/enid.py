@@ -32,13 +32,13 @@ class enid():
         mission_adventure = adventure.adventure(target, mission.text, mission)
         return mission_adventure
 
-    def adventure_from_geohash(self, location, date):
-        destination = self.geohash(location, date)
+    def adventure_from_geohash(self, location, datetime):
+        destination = self.geohash(location, datetime.date())
         mission = midgard.mgdschema.ttoa_mission()
         mission.type = 1
         mission.text = "Today's Geohash"
-        mission.pubDate = date.isoformat(' ')
-        mission.validDate = date.replace(hour=23, minute=59, second=59).isoformat(' ')
+        mission.pubDate = datetime
+        mission.validDate = datetime.replace(hour=23, minute=59, second=59)
         mission.latitude = destination.lat
         mission.longitude = destination.lon
         mission.create()
