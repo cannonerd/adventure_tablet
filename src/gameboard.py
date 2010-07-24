@@ -221,13 +221,29 @@ class UI(hildon.StackableWindow):
         self.osms = osmgpsmap.GpsMap()
         self.osms.connect('button_release_event', self.map_info)
 
+        zoom_in_button_choose = gtk.Button( " + ")
+        zoom_in_button_choose.connect('clicked', self.zoom_in_clicked_choose)
+
+        zoom_out_button_choose = gtk.Button(" - ")
+        zoom_out_button_choose.connect('clicked', self.zoom_out_clicked_choose)
+
+
         add = hildon.GtkButton(gtk.HILDON_SIZE_AUTO)
         add.set_label("Add")
         add.connect("clicked", self.added)
         vbox.pack_start(self.create_adventure, expand = False)
         vbox.pack_start(self.osms)
-        vbox.pack_end(add, expand = False)
+        hbox = gtk.HBox(False, 0)
+        hbox.pack_end(add, expand = False)
+        hbox.pack_end(zoom_in_button_choose, expand = False)
+        hbox.pack_end(zoom_out_button_choose, expand = False)
         wind.show_all()
+
+    def zoom_in_clicked_choose(self, button):
+        self.osms.set_zoom(self.osms.props.zoom + 1)
+ 
+    def zoom_out_clicked_choose(self, button):
+        self.osms.set_zoom(self.osms.props.zoom - 1)
 
     def added(self, button):
         date = datetime.datetime.today()
