@@ -282,6 +282,8 @@ class UI(hildon.StackableWindow):
         self.qapikey = hildon.Entry(gtk.HILDON_SIZE_AUTO)
         self.qapikey.set_placeholder("Your Qaiku Apikey is..")
 
+        window.show_all()
+
     def create_menu(self):
         self.menu = hildon.AppMenu()
 
