@@ -278,7 +278,7 @@ class UI(hildon.StackableWindow):
         label = gtk.Label("Give your Qaiku-api key")
         vbox = gtk.VBox(False, 0)
         vbox.pack_start(label, expand = False)
-        wind.add(vbox)
+        window.add(vbox)
         self.qapikey = hildon.Entry(gtk.HILDON_SIZE_AUTO)
         self.qapikey.set_placeholder("Your Qaiku Apikey is..")
 
