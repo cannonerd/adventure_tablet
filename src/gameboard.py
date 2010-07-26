@@ -274,14 +274,16 @@ class UI(hildon.StackableWindow):
     def settings(self, button):
         print "Settings clicked"
         window = hildon.StackableWindow()
+        vbox = gtk.VBox(False, 0)
+        window.add(vbox)
         window.set_title("Settings")
         label = gtk.Label("Give your Qaiku-api key")
-        vbox = gtk.VBox(False, 0)
-        vbox.pack_start(label, expand = False)
-        window.add(vbox)
         self.qapikey = hildon.Entry(gtk.HILDON_SIZE_AUTO)
         self.qapikey.set_placeholder("Your Qaiku Apikey is..")
+        label1 = gtk.Label("choose colour of your button")
+        vbox.pack_start(label, expand = False)
         vbox.pack_start(self.qapikey, expand = False)
+        vbox.pack_start(label1, expand = False)
         window.show_all()
 
     def create_menu(self):
