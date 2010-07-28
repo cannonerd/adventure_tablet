@@ -157,14 +157,11 @@ class UI(hildon.StackableWindow):
                 self.destination_clicked(self.destination_button)
                 return
 
-    def update_player_piece(self, adventurer):
-        self.osm.remove_image(adventurer.piece)
-        self.osm.add_image(adventurer.location.lat, adventurer.location.lon, adventurer.piece)
-
     def location_changed(self, adventurer, location, data=None):
 
         # FIXME: In newer OsmGpsMap versions we can just move the image
-        self.update_player_piece(adventurer)
+        self.osm.remove_image(adventurer.piece)
+        self.osm.add_image(adventurer.location.lat, adventurer.location.lon, adventurer.piece)
 
         if (self.track_location):
             self.osm.set_mapcenter(location.lat, location.lon, self.osm.props.zoom)
@@ -310,8 +307,9 @@ class UI(hildon.StackableWindow):
 
     def change_colour(self, button, colour):
         self.player.set_colour(colour)
+        self.osm.remove_image(self.player.piece)
         self.player.piece = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/" +  self.player.colour + ".png", 35,35)
-        self.update_player_piece(self.player)
+        self.osm.add_image(self.player.location.lat, self.player.location.lon, self.player.piece)
 
     def create_menu(self):
         self.menu = hildon.AppMenu()

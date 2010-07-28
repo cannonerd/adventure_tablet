@@ -22,8 +22,6 @@ if (midgard.storage.class_storage_exists('ttoa_user') is False):
     midgard.storage.create_class_storage('ttoa_log')
     midgard.storage.create_class_storage('ttoa_mission')
     midgard.storage.create_class_storage('midgard_parameter')
-if (midgard.storage.class_storage_exists('midgard_parameter') is False):
-    midgard.storage.create_class_storage('midgard_parameter')
 
 #initialize player for current user and log into Midgard
 username = getpass.getuser()
