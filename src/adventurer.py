@@ -18,6 +18,7 @@ class adventurer(gobject.GObject):
     location = None
     user = None
     apikey = None
+    piece = None
 
     __gsignals__ = {
         'location-changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, ))
