@@ -280,7 +280,7 @@ class UI(hildon.StackableWindow):
         label = gtk.Label("Give your Qaiku-api key")
         self.qapikey = hildon.Entry(gtk.HILDON_SIZE_AUTO)
         self.qapikey.set_placeholder("Your Qaiku Apikey is..")
-        label1 = gtk.Label("choose colour of your button")color = widget.get_color()
+        label1 = gtk.Label("choose colour of your button")
 
         button2 = hildon.ColorButton()
         button2.connect("clicked", color_changed, label)
