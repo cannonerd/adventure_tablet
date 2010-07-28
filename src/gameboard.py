@@ -313,19 +313,16 @@ class UI(hildon.StackableWindow):
         window.show_all()
 
     def save(self, button):
-        print "saved"
 
         apikey = self.qapikey.get_text()
         if self.player.check_password(apikey):
             stack = self.get_stack()
             stack.pop(1)
         else:
-            banner= hildon.hildon_banner_show_information(button, " ", "U fail, re try")
+            banner= hildon.hildon_banner_show_information(button, "", "U fail, re try")
 
     def change_colour(self, button, colour):
         if button.get_active() is False:
-            return
-        print "Changing colour to " + colour + " via toggle"
         self.player.set_colour(colour)
         self.osm.remove_image(self.player.piece)
         self.player.piece = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/" +  self.player.colour + ".png", 35,35)
