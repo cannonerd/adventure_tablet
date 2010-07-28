@@ -287,7 +287,7 @@ class UI(hildon.StackableWindow):
         self.button1 = gtk.Button()
         self.button1.add(button1_image)
         self.button1.connect ('clicked', self.colours)
-        hbox= gtk HBox(False, 0)
+        hbox= gtk.HBox(False, 0)
         hbox.pack_start(button1, expand = False)
         vbox.pack_start(label, expand = False)
         vbox.pack_start(self.qapikey, expand = False)
@@ -296,7 +296,7 @@ class UI(hildon.StackableWindow):
         window.show_all()
 
 
-    def colours(self):
+    def colours(self, button):
         print "you have chosen a colour"
 
     def create_menu(self):
