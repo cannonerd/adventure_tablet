@@ -323,6 +323,7 @@ class UI(hildon.StackableWindow):
 
     def change_colour(self, button, colour):
         if button.get_active() is False:
+            return
         self.player.set_colour(colour)
         self.osm.remove_image(self.player.piece)
         self.player.piece = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/" +  self.player.colour + ".png", 35,35)
