@@ -316,10 +316,11 @@ class UI(hildon.StackableWindow):
 
         apikey = self.qapikey.get_text()
         if self.player.check_password(apikey):
+            banneri= hildon.hildon_banner_show_information(button, "", "Qaiku api-key saved")
             stack = self.get_stack()
             stack.pop(1)
         else:
-            banner= hildon.hildon_banner_show_information(button, "", "U fail, re try")
+            banner= hildon.hildon_banner_show_information(button, "", "Incorrect qaiku api-key")
 
     def change_colour(self, button, colour):
         if button.get_active() is False:
