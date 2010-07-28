@@ -293,7 +293,7 @@ class UI(hildon.StackableWindow):
             # Make the selectors look like buttons (Maemo 5 style compatibility, see bug 4578)
             color_button.set_mode(False)
             if radioGroup is None:
-                radioGroup = color_buttonf
+                radioGroup = color_button
             color_button.add(color_image)
             color_button.connect ('toggled', self.colours, color)
             hbox.pack_start(color_button, expand = False)
