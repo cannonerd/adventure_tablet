@@ -17,6 +17,7 @@ class adventurer(gobject.GObject):
     adventure = None
     location = None
     user = None
+    apikey = None
 
     __gsignals__ = {
         'location-changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, ))
@@ -46,6 +47,9 @@ class adventurer(gobject.GObject):
                 if self.colour is None:
                     self.set_colour('grey')
 
+        if login is True:
+            self.apikey = self.user.get_parameter('adventuretablet', 'apikey')
+
         self.nick = nickname
 
     def set_colour(self, colour):
@@ -66,7 +70,8 @@ class adventurer(gobject.GObject):
             print("Connection failed, error %s. Try again later" % (e.message))
             return False
 
-        return True       
+        self.user.set_parameter('adventuretablet', 'apikey', password)
+        return True
 
     def init_midgard_session(self, nickname):
         # Ensure we have a corresponding Midgard user record
