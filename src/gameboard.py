@@ -51,12 +51,12 @@ class UI(hildon.StackableWindow):
         self.blyton = enid
         self.player = player
 
-        # For now we autoselect the first adventure
-        self.current_adventure = self.blyton.adventures[0]
-        self.current_adventure.adventurers.append(self.player)
-
         self.build_ui()
-        self.add_players()
+
+        # For now we autoselect the first adventure
+        self.select_adventure(self.blyton.adventures[0])
+        # And add current player to map
+        self.add_player_to_map(self.player)
 
         men = self.create_menu()
         self.set_app_menu(men)
@@ -64,15 +64,25 @@ class UI(hildon.StackableWindow):
 
         self.destination_clicked(self.destination_button)
 
+    def add_player_to_map(self, player):
+        if player.piece is not None:
+            # This player is already on the map
+            return
+        player.gameboard_listener = player.connect('location-changed', self.location_changed)
+        player.piece = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/" + player.colour + ".png", 35,35)
+        self.osm.add_image(player.location.lat, player.location.lon, player.piece)
+
     def add_players(self):
         for player in self.current_adventure.adventurers:
-            player.connect('location-changed', self.location_changed)
+            self.add_player_to_map(player)
 
-            player.piece = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/" + player.colour + ".png", 35,35)
-            self.osm.add_image(player.location.lat, player.location.lon, player.piece)
-
-        self.target_image = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/target.png", 24,24)
-        self.osm.add_image(self.current_adventure.destination.lat, self.current_adventure.destination.lon, self.target_image)
+    def remove_players(self):
+        for player in self.current_adventure.adventurers:
+            if player is self.player:
+                # Never remove the user
+                continue
+            self.osm.remove_image(player.piece)
+            player.disconnect(player.gameboard_listener)
 
     def build_ui(self):
         self.hbox = gtk.HBox(False, 0)
@@ -144,16 +154,33 @@ class UI(hildon.StackableWindow):
 
     def startstop(self, button):
         if button.get_label() == "start":
-            print "start"
+            self.current_adventure.add_adventurer(self.player)
             button.set_label("stop")
         else:
-            print "stop"
+            self.current_adventure.remove_adventurer(self.player)
             button.set_label("start")
 
     def add_adventure_to_selector(self, adventure):
         self.adventure_selector_position = self.adventure_selector_position + 1
         self.adventure_selector.append_text(adventure.name)
         adventure.combo_index = self.adventure_selector_position
+
+    def select_adventure(self, adventure):
+        if self.current_adventure is None:
+            # First run, we have to load the target image
+            self.target_image = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/target.png", 24,24)
+        else:
+            # On later runs we first have to remove old target from map
+            self.osm.remove_image(self.target_image)
+
+            # Remove players of previous adventure
+            self.remove_players()
+
+        self.current_adventure = adventure
+        self.osm.add_image(self.current_adventure.destination.lat, self.current_adventure.destination.lon, self.target_image)
+
+        # Add the players of the adventure
+        self.add_players()
 
     def changed_adventure(self, combobox):
         model = combobox.get_model()
@@ -164,9 +191,7 @@ class UI(hildon.StackableWindow):
         # Check which adventure user selected
         for adventure in self.blyton.adventures:
             if index is adventure.combo_index:
-                self.current_adventure = adventure
-                self.osm.remove_image(self.target_image)
-                self.osm.add_image(adventure.destination.lat, adventure.destination.lon, self.target_image)
+                self.select_adventure(adventure)
                 self.destination_clicked(self.destination_button)
                 return
 
