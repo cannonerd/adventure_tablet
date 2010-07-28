@@ -37,6 +37,7 @@ import osmgpsmap
 class UI(hildon.StackableWindow):
     track_location = False
     player = None
+    player_colours = ['blue', 'red', 'yellow', 'green', 'purple']
     blyton = None
     current_adventure = None
 
@@ -67,7 +68,7 @@ class UI(hildon.StackableWindow):
         for player in self.current_adventure.adventurers:
             player.connect('location-changed', self.location_changed)
 
-            player.piece = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/you.png", 35,35)
+            player.piece = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/" player.colour + ".png", 35,35)
             self.osm.add_image(player.location.lat, player.location.lon, player.piece)
 
         self.target_image = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/target.png", 24,24)
@@ -156,11 +157,14 @@ class UI(hildon.StackableWindow):
                 self.destination_clicked(self.destination_button)
                 return
 
+    def update_player_piece(self, adventurer):
+        self.osm.remove_image(adventurer.piece)
+        self.osm.add_image(adventurer.location.lat, adventurer.location.lon, adventurer.piece)
+
     def location_changed(self, adventurer, location, data=None):
 
         # FIXME: In newer OsmGpsMap versions we can just move the image
-        self.osm.remove_image(adventurer.piece)
-        self.osm.add_image(adventurer.location.lat, adventurer.location.lon, adventurer.piece)
+        self.update_player_piece(adventurer)
 
         if (self.track_location):
             self.osm.set_mapcenter(location.lat, location.lon, self.osm.props.zoom)
@@ -283,20 +287,20 @@ class UI(hildon.StackableWindow):
         label1 = gtk.Label("choose colour of your button")
 
         hbox= gtk.HBox(False, 0)
-        player_colors = ['you', 'red', 'yellow', 'green', 'purple']
+        
         radioGroup = None
-        for color in player_colors:
-            color_pixbuf = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/"+color+".png", 80,80)
-            color_image = gtk.Image()
-            color_image.set_from_pixbuf(color_pixbuf)
-            color_button = gtk.RadioButton(radioGroup)
+        for colour in self.player_colours:
+            colour_pixbuf = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/"+colour+".png", 80,80)
+            colour_image = gtk.Image()
+            colour_image.set_from_pixbuf(colour_pixbuf)
+            colour_button = gtk.RadioButton(radioGroup)
             # Make the selectors look like buttons (Maemo 5 style compatibility, see bug 4578)
-            color_button.set_mode(False)
+            colour_button.set_mode(False)
             if radioGroup is None:
-                radioGroup = color_button
-            color_button.add(color_image)
-            color_button.connect ('toggled', self.colours, color)
-            hbox.pack_start(color_button, expand = False)
+                radioGroup = colour_button
+            colour_button.add(colour_image)
+            colour_button.connect ('toggled', self.change_colour, colour)
+            hbox.pack_start(colour_button, expand = False)
 
         vbox.pack_start(label, expand = False)
         vbox.pack_start(self.qapikey, expand = False)
@@ -304,9 +308,10 @@ class UI(hildon.StackableWindow):
         vbox.pack_start (hbox, expand = False)
         window.show_all()
 
-    def colours(self, button, color):
-        print "you have chosen a colour " + color
-        # TODO: change user color on map and save to player
+    def change_colour(self, button, colour):
+        self.player.set_colour(colour)
+        self.player.piece = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/" player.colour + ".png", 35,35)
+        self.update_player_piece(self.player)
 
     def create_menu(self):
         self.menu = hildon.AppMenu()

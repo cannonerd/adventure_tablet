@@ -13,7 +13,7 @@ except ImportError:
 
 class adventurer(gobject.GObject):
     nick = ""
-    color = ""
+    colour = ""
     adventure = None
     location = None
     user = None
@@ -36,12 +36,19 @@ class adventurer(gobject.GObject):
             self.user = midgard.mgdschema.ttoa_user()
             self.user.username = nickname
             self.user.create()
+            # Default colour for new adventurers
+            self.set_colour('white')
         else:
             users = qb.execute()
             for user in users:
                 self.user = user
+                self.colour = self.user.get_parameter('adventuretablet', 'colour')
 
         self.nick = nickname
+
+    def set_colour(self, colour):
+        self.colour = colour
+        self.user.set_parameter('adventuretablet', 'colour', colour)
 
     def init_midgard_session(self, nickname):
         # Ensure we have a corresponding Midgard user record
