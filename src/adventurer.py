@@ -150,8 +150,9 @@ class adventurer(gobject.GObject):
         self.emit('location-changed', self.location, '', '')
 
     def location_changed_qaiku(self, message):
-        qaikudata = message['data'].split(',')
-        self.location = point.point(float(qaikudata[0]), float(qaikudata[1]))
+        if 'geo' not in message:
+            return
+        self.location = point.point(float(message['geo']['coordinates'][0]), float(message['geo']['coordinates'][1]))
         self.log_location_change()
         self.emit('location-changed', self.location, message['text'], message['id'])
 
