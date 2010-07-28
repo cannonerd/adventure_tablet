@@ -310,7 +310,7 @@ class UI(hildon.StackableWindow):
 
     def change_colour(self, button, colour):
         self.player.set_colour(colour)
-        self.player.piece = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/" +  player.colour + ".png", 35,35)
+        self.player.piece = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/" +  self.player.colour + ".png", 35,35)
         self.update_player_piece(self.player)
 
     def create_menu(self):
