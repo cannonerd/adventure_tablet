@@ -292,13 +292,13 @@ class UI(hildon.StackableWindow):
             colour_image.set_from_pixbuf(colour_pixbuf)
             colour_button = gtk.RadioButton(radioGroup)
             if self.player.colour == colour:
-                colour_button.set_active(gtk.TRUE)
+                colour_button.set_active(True)
             # Make the selectors look like buttons (Maemo 5 style compatibility, see bug 4578)
             colour_button.set_mode(False)
             if radioGroup is None:
                 radioGroup = colour_button
             colour_button.add(colour_image)
-            colour_button.connect ('toggled', self.change_colour, colour)
+            colour_button.connect('toggled', self.change_colour, colour)
             hbox.pack_start(colour_button, expand = False)
 
         vbox.pack_start(label, expand = False)
@@ -308,6 +308,7 @@ class UI(hildon.StackableWindow):
         window.show_all()
 
     def change_colour(self, button, colour):
+        print "Changing colour to " + colour + " via toggle"
         self.player.set_colour(colour)
         self.osm.remove_image(self.player.piece)
         self.player.piece = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/" +  self.player.colour + ".png", 35,35)
