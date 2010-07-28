@@ -63,7 +63,7 @@ class adventure():
             print "Connection failed, error %s" % (e.message)
 
         qaiku = simplejson.loads(response)
-        log.set_parameter('adventuretablet', 'qaikuid', qaiku.id)
+        log.set_parameter('adventuretablet', 'qaikuid', qaiku['id'])
 
     def adventure_to_qaiku(self, adventure, apikey):
         opener = urllib2.build_opener()
@@ -80,4 +80,4 @@ class adventure():
             print "Connection failed, error %s" % (e.message)
 
         qaiku = simplejson.loads(response)
-        adventure.set_qaikuid(qaiku.id)
+        adventure.set_qaikuid(qaiku['id'])
