@@ -46,7 +46,7 @@ class adventure():
         if adventure.qaikuid is None:
             return
 
-        if log.comment == '':
+        if log.comment is None:
             log.comment = 'Adventuring'
 
         opener = urllib2.build_opener()
