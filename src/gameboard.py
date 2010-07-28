@@ -342,9 +342,9 @@ class UI(hildon.StackableWindow):
         self.osm.remove_image(self.player.piece)
         self.player.piece = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/" +  self.player.colour + ".png", 35,35)
         self.osm.add_image(self.player.location.lat, self.player.location.lon, self.player.piece)
-    def log(self, button)
+    def log(self, button):
         print "log"
-    def others(self, button)
+    def others(self, button):
         print "others"
 
     def create_menu(self):
