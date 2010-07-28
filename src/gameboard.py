@@ -311,7 +311,7 @@ class UI(hildon.StackableWindow):
         vbox.pack_start (save_button, expand = False)
         window.show_all()
 
-    def save(self):
+    def save(self, button):
         print "saved"
         stack = self.get_stack()
         stack.pop(1)
