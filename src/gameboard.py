@@ -281,23 +281,21 @@ class UI(hildon.StackableWindow):
         self.qapikey = hildon.Entry(gtk.HILDON_SIZE_AUTO)
         self.qapikey.set_placeholder("Your Qaiku Apikey is..")
         label1 = gtk.Label("choose colour of your button")
+        button1_image = gtk.Image()
+        button1_image.set_from_file(red.png)
+        self.button1 = gtk.Button()
+        self.button1.add(button1_image)
+        self.button1.connect ('clicked', self.colours)
 
-        button2 = hildon.ColorButton()
-#        button2.connect("clicked", color_changed, label)
         vbox.pack_start(label, expand = False)
         vbox.pack_start(self.qapikey, expand = False)
         vbox.pack_start(label1, expand = False)
-        vbox.pack_start (button2, expand = False)
-#        vbox.pack_start (label2, expand = False)
+        vbox.pack_start (self.button1, expand = False)
         window.show_all()
 
 
-#    def color_changed(self,widget, label2):
-#        color2 = widget.get_color()
-#        self.label2.set_text("Current color is: (red=%s, green=%s, blue=%s, pixel=%s)" %
-#                       (color2.red, color2.green, color2.blue, color2.pixel))
-
-
+    def colours(self)
+        print "you have chosen a colour"
 
     def create_menu(self):
         self.menu = hildon.AppMenu()
