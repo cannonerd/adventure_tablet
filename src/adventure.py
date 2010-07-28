@@ -36,7 +36,7 @@ class adventure():
         opener = urllib2.build_opener()
         opener.addheaders = [('User-agent', 'adventure_tablet/0.1')]
         try:
-            data = urllib.urlencode({'status': unicode(adventure.text).encode('utf-8'), 'source': 'adventuretablet', 'channel': 'adventure', 'data': '%s,%s' % (adventure.destination.lat, adventure.destination.lon)})
+            data = urllib.urlencode({'status': unicode(adventure.name).encode('utf-8'), 'source': 'adventuretablet', 'channel': 'adventure', 'data': '%s,%s' % (adventure.destination.lat, adventure.destination.lon)})
             params = urllib.urlencode({'apikey': apikey})
             url = 'http://www.qaiku.com/api/statuses/update.json?%s' % params
             req = opener.open(url, data)
