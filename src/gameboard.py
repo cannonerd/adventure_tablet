@@ -282,33 +282,26 @@ class UI(hildon.StackableWindow):
         self.qapikey.set_placeholder("Your Qaiku Apikey is..")
         label1 = gtk.Label("choose colour of your button")
 
-        button1_pixbuf = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/red.png", 50,50)
-        button1_image = gtk.Image()
-        button1_image.set_from_pixbuf(button1_pixbuf)
-        button1 = gtk.ToggleButton()
-        button1.add(button1_image)
-        button1.connect ('toggled', self.colours)
-
-        button2_pixbuf = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/you.png", 50,50)
-        button2_image = gtk.Image()
-        button2_image.set_from_pixbuf(button2_pixbuf)
-        button2 = gtk.ToggleButton()
-        button2.set_active(True)
-        button2.add(button2_image)
-        button2.connect ('toggled', self.colours)
-
         hbox= gtk.HBox(False, 0)
-        hbox.pack_start(button1, expand = False)
-        hbox.pack_start(button2, expand = False)
+        player_colors = ['you', 'red']
+        for color in player_colors:
+            color_pixbuf = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/"+color+".png", 50,50)
+            color_image = gtk.Image()
+            color_image.set_from_pixbuf(color_pixbuf)
+            color_button = gtk.ToggleButton()
+            color_button.add(button1_image)
+            color_button.connect ('toggled', self.colours, color)
+            hbox.pack_start(color_button, expand = False)
+
         vbox.pack_start(label, expand = False)
         vbox.pack_start(self.qapikey, expand = False)
         vbox.pack_start(label1, expand = False)
         vbox.pack_start (hbox, expand = False)
         window.show_all()
 
-
-    def colours(self, button):
-        print "you have chosen a colour"
+    def colours(self, button, color):
+        print "you have chosen a colour " + color
+        # TODO: Untoggle all other buttons, change user color on map and save to player
 
     def create_menu(self):
         self.menu = hildon.AppMenu()
