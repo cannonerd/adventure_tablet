@@ -29,7 +29,15 @@ me = adventurer.adventurer(username, True)
 #players location
 me.get_location()
 #initialize game controller
-blyton = enid.enid(me.location)
+blyton = enid.enid()
+
+if me.apikey is not None:
+    # Fetch current adventures from Qaiku
+    blyton.adventures_from_qaiku(me.apikey)
+
+# Build adventure list
+blyton.refresh_adventures(me.location)
+
 #prepare and show UI
 game = gameboard.UI(blyton, me)
 # TODO: We should hide the TToA splash screen

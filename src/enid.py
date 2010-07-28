@@ -1,11 +1,9 @@
-import adventure, hashlib, datetime, struct, urllib, re, point, math
+import adventure, hashlib, datetime, struct, urllib, urllib2, simplejson, re, point, math
 import _midgard as midgard
 
 class enid():
     adventures = []
-
-    def __init__(self, location):
-        self.refresh_adventures(location)
+    last_updated = None
 
     def refresh_adventures(self, location):
         # Clear old list of adventures
@@ -27,6 +25,54 @@ class enid():
         if geohash_found is False:
             # We didn't have a GeoHash for today yet, generate one
             self.adventures.append(self.adventure_from_geohash(location, today))
+
+    def adventures_from_qaiku(self, apikey):
+        timestamp = datetime.datetime.today()
+        opener = urllib2.build_opener()
+        opener.addheaders = [('User-agent', 'adventure_tablet/0.1')]
+        try:
+            if self.last_updated is not None:
+                since = self.last_updated.strftime('%Y-%m-%d %H:%M:%S')
+                params = urllib.urlencode({'apikey': apikey, 'since': since})
+            else:
+                params = urllib.urlencode({'apikey': apikey})
+            url = 'http://www.qaiku.com/api/statuses/channel_timeline/adventure.json?%s' % (params)
+            req = opener.open(url)
+        except urllib2.HTTPError, e:
+            print "HTTP Error %s" % (e.code)
+            return
+        except urllib2.URLError, e:
+            print "Connection failed, error %s" % (e.message)
+            return
+
+        messages = json.loads(req.read())
+        for message in messages:
+            if message['in_reply_to_status_id']:
+                # This is a log entry or comment, we're only interested in adventures
+                continue
+
+            if message['data'] == '':
+                # No QaikuData found, we need this for our adventure
+                continue
+
+            qb = midgard.query_builder('ttoa_mission')
+            qb.add_constraint('parameter.value', '=', message['id'])
+            if qb.count() != 0:
+                # We already have this adventure
+                continue
+
+            mission = midgard.mgdschema.ttoa_mission()
+            mission.type = 2
+            mission.text = message['text']
+            mission.pubDate = timestamp
+            mission.validDate = timestamp.replace(hour=23, minute=59, second=59)
+            qaikudata = message['data'].split(',')
+            mission.latitude = qaikudata[0]
+            mission.longitude = qaikudata[1]
+            mission.create()
+            mission.set_parameter('adventuretablet', 'qaikuid', message['id'])
+
+        self.last_updated = timestamp
 
     def adventure_from_mission(self, mission):
         target = point.point(mission.latitude, mission.longitude)
