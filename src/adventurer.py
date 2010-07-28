@@ -21,7 +21,7 @@ class adventurer(gobject.GObject):
     piece = None
 
     __gsignals__ = {
-        'location-changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, ))
+        'location-changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_STRING, gobject.TYPE_STRING))
     }
 
     def __init__(self, nickname, login = False):
@@ -125,7 +125,7 @@ class adventurer(gobject.GObject):
             if self.device.fix[1] & location.GPS_DEVICE_LATLONG_SET:
                 self.location = point.point(self.device.fix[4], self.device.fix[5])
             self.log_location_change()
-            self.emit('location-changed', self.location)
+            self.emit('location-changed', self.location, '', '')
 
     def get_location_geoclue(self):
         self.geoclue = Geoclue.DiscoverLocation()
@@ -144,14 +144,19 @@ class adventurer(gobject.GObject):
     def location_changed_geoclue(self, fields, timestamp, latitude, longitude, altitude, accuracy):
         self.location = point.point(latitude, longitude)
         self.log_location_change()
-        self.emit('location-changed', self.location)
+        self.emit('location-changed', self.location, '', '')
+
+    def location_changed_qaiku(self, message):
+        qaikudata = message['data'].split(',')
+        self.location = point.point(float(qaikudata[0]), float(qaikudata[1]))
+        self.log_location_change()
+        self.emit('location-changed', self.location, message['text'], message['id'])
 
     def log_location_change(self):
         # Update user record
         self.user.latitude = self.location.lat
         self.user.longitude = self.location.lon
         self.user.update()
-        # TODO: Create a log entry if we're in an adventure?
 
 if __name__ == '__main__':
     suski = adventurer('suski')

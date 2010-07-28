@@ -56,7 +56,7 @@ class UI(hildon.StackableWindow):
         # For now we autoselect the first adventure
         self.select_adventure(self.blyton.adventures[0])
         # And add current player to map
-        self.add_player_to_map(self.player)
+        self.add_player_to_map(self.current_adventure, self.player)
 
         men = self.create_menu()
         self.set_app_menu(men)
@@ -64,7 +64,7 @@ class UI(hildon.StackableWindow):
 
         self.destination_clicked(self.destination_button)
 
-    def add_player_to_map(self, player):
+    def add_player_to_map(self, adventure, player):
         if player.piece is not None:
             # This player is already on the map
             return
@@ -74,7 +74,7 @@ class UI(hildon.StackableWindow):
 
     def add_players(self):
         for player in self.current_adventure.adventurers:
-            self.add_player_to_map(player)
+            self.add_player_to_map(self.current_adventure, player)
 
     def remove_players(self):
         for player in self.current_adventure.adventurers:
@@ -176,11 +176,19 @@ class UI(hildon.StackableWindow):
             # Remove players of previous adventure
             self.remove_players()
 
+            # Stop polling the old Qaiku feed
+            gobject.source_remove(self.current_adventure.polling_timeout)
+
         self.current_adventure = adventure
         self.osm.add_image(self.current_adventure.destination.lat, self.current_adventure.destination.lon, self.target_image)
 
         # Add the players of the adventure
         self.add_players()
+        self.current_adventure.connect('adventurer-added', self.add_player_to_map)
+
+        if self.player.apikey is not None:
+            # Start polling Qaiku
+            self.current_adventure.polling_timeout = gobject.timeout_add(60000, self.current_adventure.logs_from_qaiku, self.player.apikey)
 
     def changed_adventure(self, combobox):
         model = combobox.get_model()
@@ -195,7 +203,7 @@ class UI(hildon.StackableWindow):
                 self.destination_clicked(self.destination_button)
                 return
 
-    def location_changed(self, adventurer, location, data=None):
+    def location_changed(self, adventurer, location, text, qaikuid):
 
         # FIXME: In newer OsmGpsMap versions we can just move the image
         self.osm.remove_image(adventurer.piece)

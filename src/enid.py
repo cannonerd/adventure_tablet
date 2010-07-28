@@ -77,6 +77,20 @@ class enid():
     def adventure_from_mission(self, mission):
         target = point.point(mission.latitude, mission.longitude)
         mission_adventure = adventure.adventure(target, mission.text, mission)
+
+        # Check for adventurers
+        adventurers = []
+        qb = midgard.query_builder('ttoa_log')
+        qb.add_constraint('mission', '=', mission.id)
+        logs = qb.execute()
+        for log in logs:
+            if log.author not in adventurers:
+                adventurers.append(log.author)
+        for participant in adventurers:
+            user = midgard.mgdschema.ttoa_user()
+            user.get_by_id(participant)
+            mission_adventure.add_adventurer(adventurer.adventurer(user.username))
+
         return mission_adventure
 
     def adventure_from_geohash(self, location, datetime):
