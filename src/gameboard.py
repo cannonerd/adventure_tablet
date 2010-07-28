@@ -289,7 +289,7 @@ class UI(hildon.StackableWindow):
             color_image = gtk.Image()
             color_image.set_from_pixbuf(color_pixbuf)
             color_button = gtk.ToggleButton()
-            color_button.add(button1_image)
+            color_button.add(color_image)
             color_button.connect ('toggled', self.colours, color)
             hbox.pack_start(color_button, expand = False)
 
