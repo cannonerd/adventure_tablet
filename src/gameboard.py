@@ -290,8 +290,10 @@ class UI(hildon.StackableWindow):
             color_image = gtk.Image()
             color_image.set_from_pixbuf(color_pixbuf)
             color_button = gtk.RadioButton(radioGroup)
+            # Make the selectors look like buttons (Maemo 5 style compatibility, see bug 4578)
+            color_button.set_mode(False)
             if radioGroup is None:
-                radioGroup = color_button
+                radioGroup = color_buttonf
             color_button.add(color_image)
             color_button.connect ('toggled', self.colours, color)
             hbox.pack_start(color_button, expand = False)
@@ -304,7 +306,7 @@ class UI(hildon.StackableWindow):
 
     def colours(self, button, color):
         print "you have chosen a colour " + color
-        # TODO: Untoggle all other buttons, change user color on map and save to player
+        # TODO: change user color on map and save to player
 
     def create_menu(self):
         self.menu = hildon.AppMenu()
