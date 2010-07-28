@@ -37,12 +37,14 @@ class adventurer(gobject.GObject):
             self.user.username = nickname
             self.user.create()
             # Default colour for new adventurers
-            self.set_colour('white')
+            self.set_colour('grey')
         else:
             users = qb.execute()
             for user in users:
                 self.user = user
                 self.colour = self.user.get_parameter('adventuretablet', 'colour')
+                if self.colour is '':
+                    self.set_colour('grey')
 
         self.nick = nickname
 

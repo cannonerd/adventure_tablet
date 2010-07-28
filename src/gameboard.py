@@ -37,7 +37,7 @@ import osmgpsmap
 class UI(hildon.StackableWindow):
     track_location = False
     player = None
-    player_colours = ['blue', 'red', 'yellow', 'green', 'purple']
+    player_colours = ['grey', 'blue', 'red', 'yellow', 'green', 'purple']
     blyton = None
     current_adventure = None
 
@@ -68,7 +68,7 @@ class UI(hildon.StackableWindow):
         for player in self.current_adventure.adventurers:
             player.connect('location-changed', self.location_changed)
 
-            player.piece = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/" player.colour + ".png", 35,35)
+            player.piece = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/" + player.colour + ".png", 35,35)
             self.osm.add_image(player.location.lat, player.location.lon, player.piece)
 
         self.target_image = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/target.png", 24,24)
