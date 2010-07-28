@@ -89,6 +89,7 @@ class adventure(gobject.GObject):
         messages = simplejson.loads(req.read())
         for message in messages:
             # Check if the adventure already has this player
+            print "New log entry from Qaiku for " + self.name
             nick = message['user']['screen_name']
             message_adventurer = None
             for player in self.adventurers:

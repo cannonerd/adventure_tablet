@@ -5,11 +5,12 @@ class enid():
     adventures = []
     last_updated = None
 
-    def refresh_adventures(self, location):
+    def refresh_adventures(self, adventurer):
         # Clear old list of adventures
         self.adventures = []
 
         # Fetch currently valid adventures from Midgard
+        location = adventurer.location
         today = datetime.datetime.today()
         today = today.replace(microsecond=0)
         qb = midgard.query_builder('ttoa_mission')
@@ -20,11 +21,11 @@ class enid():
             if (mission.type is 1) and (int(math.floor(mission.latitude)) == int(math.floor(location.lat))) and (int(math.floor(mission.longitude)) == int(math.floor(location.lon))):
                 # We have a geohash for today and current graticule
                 geohash_found = True
-            self.adventures.append(self.adventure_from_mission(mission))
+            self.adventures.append(self.adventure_from_mission(mission, adventurer))
 
         if geohash_found is False:
             # We didn't have a GeoHash for today yet, generate one
-            self.adventures.append(self.adventure_from_geohash(location, today))
+            self.adventures.append(self.adventure_from_geohash(adventurer, today))
 
     def adventures_from_qaiku(self, apikey):
         timestamp = datetime.datetime.today()
@@ -74,7 +75,7 @@ class enid():
 
         self.last_updated = timestamp
 
-    def adventure_from_mission(self, mission):
+    def adventure_from_mission(self, mission, player):
         target = point.point(mission.latitude, mission.longitude)
         mission_adventure = adventure.adventure(target, mission.text, mission)
 
@@ -89,11 +90,15 @@ class enid():
         for participant in adventurers:
             user = midgard.mgdschema.ttoa_user()
             user.get_by_id(participant)
-            mission_adventure.add_adventurer(adventurer.adventurer(user.username))
+            if user.username == player.nick:
+                mission_adventure.add_adventurer(player)
+            else:
+                mission_adventure.add_adventurer(adventurer.adventurer(user.username))
 
         return mission_adventure
 
-    def adventure_from_geohash(self, location, datetime):
+    def adventure_from_geohash(self, adventurer, datetime):
+        location = adventurer.location
         destination = self.geohash(location, datetime.date())
         mission = midgard.mgdschema.ttoa_mission()
         mission.type = 1
@@ -103,7 +108,7 @@ class enid():
         mission.latitude = destination.lat
         mission.longitude = destination.lon
         mission.create()
-        return self.adventure_from_mission(mission)
+        return self.adventure_from_mission(mission, adventurer)
 
     def geohash(self, location, date):
         args = []

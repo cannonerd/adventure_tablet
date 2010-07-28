@@ -55,8 +55,10 @@ class UI(hildon.StackableWindow):
 
         # For now we autoselect the first adventure
         self.select_adventure(self.blyton.adventures[0])
-        # And add current player to map
-        self.add_player_to_map(self.current_adventure, self.player)
+        
+        if self.player not in self.current_adventure.adventurers:
+            # And add current player to map
+            self.add_player_to_map(self.current_adventure, self.player)
 
         men = self.create_menu()
         self.set_app_menu(men)
@@ -305,7 +307,7 @@ class UI(hildon.StackableWindow):
         mission.longitude = self.create_destination.lon
         mission.author = self.player.user.id
         mission.create()
-        adventure = self.blyton.adventure_from_mission(mission)
+        adventure = self.blyton.adventure_from_mission(mission, self.player)
         self.blyton.adventures.append(adventure)
         self.add_adventure_to_selector(adventure)
 

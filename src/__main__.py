@@ -36,7 +36,7 @@ if me.apikey is not None:
     blyton.adventures_from_qaiku(me.apikey)
 
 # Build adventure list
-blyton.refresh_adventures(me.location)
+blyton.refresh_adventures(me)
 
 #prepare and show UI
 game = gameboard.UI(blyton, me)
