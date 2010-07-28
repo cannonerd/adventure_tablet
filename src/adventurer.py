@@ -43,7 +43,7 @@ class adventurer(gobject.GObject):
             for user in users:
                 self.user = user
                 self.colour = self.user.get_parameter('adventuretablet', 'colour')
-                if self.colour is '':
+                if self.colour is None:
                     self.set_colour('grey')
 
         self.nick = nickname
