@@ -45,7 +45,7 @@ class enid():
             print "Connection failed, error %s" % (e.message)
             return
 
-        messages = json.loads(req.read())
+        messages = simplejson.loads(req.read())
         for message in messages:
             if message['in_reply_to_status_id']:
                 # This is a log entry or comment, we're only interested in adventures
