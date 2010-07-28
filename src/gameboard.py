@@ -291,7 +291,7 @@ class UI(hildon.StackableWindow):
 
         button2_pixbuf = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/you.png", 50,50)
         button2_image = gtk.Image()
-        button2_image.set_from_pixbuf(button1_pixbuf)
+        button2_image.set_from_pixbuf(button2_pixbuf)
         button2 = gtk.ToggleButton()
         button2.set_active(True)
         button2.add(button2_image)
