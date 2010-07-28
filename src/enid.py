@@ -1,4 +1,4 @@
-import adventure, hashlib, datetime, struct, urllib, urllib2, simplejson, re, point, math
+import adventure, adventurer, hashlib, datetime, struct, urllib, urllib2, simplejson, re, point, math
 import _midgard as midgard
 
 class enid():
