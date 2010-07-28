@@ -292,7 +292,7 @@ class UI(hildon.StackableWindow):
             colour_image.set_from_pixbuf(colour_pixbuf)
             colour_button = gtk.RadioButton(radioGroup)
             if self.player.colour is colour:
-                colour_button.set_active(True)
+                colour_button.set_active(gtk.TRUE)
             # Make the selectors look like buttons (Maemo 5 style compatibility, see bug 4578)
             colour_button.set_mode(False)
             if radioGroup is None:
