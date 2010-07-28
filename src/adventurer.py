@@ -1,4 +1,4 @@
-import point, gobject
+import point, gobject, urllib, urllib2
 import _midgard as midgard
 
 location = None
@@ -51,6 +51,22 @@ class adventurer(gobject.GObject):
     def set_colour(self, colour):
         self.colour = colour
         self.user.set_parameter('adventuretablet', 'colour', colour)
+
+    def check_password(self, password):
+        opener = urllib2.build_opener()
+        opener.addheaders = [('User-agent', 'adventure_tablet/0.1')]
+        try:
+            params = urllib.urlencode({'apikey': password})
+            url = 'http://www.qaiku.com/api/statuses/user_timeline.json?%s' % params
+            req = opener.open(url)
+        except urllib2.HTTPError, e:
+            print('Sorry, authorization failed.')
+            return False
+        except urllib2.URLError, e:
+            print("Connection failed, error %s. Try again later" % (e.message))
+            return False
+
+        return True       
 
     def init_midgard_session(self, nickname):
         # Ensure we have a corresponding Midgard user record

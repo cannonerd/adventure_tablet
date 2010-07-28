@@ -273,7 +273,6 @@ class UI(hildon.StackableWindow):
         self.osms.add_image(self.create_destination.lat, self.create_destination.lon, self.target_image)
 
     def settings(self, button):
-        print "Settings clicked"
         window = hildon.StackableWindow()
         vbox = gtk.VBox(False, 0)
         window.add(vbox)
@@ -281,6 +280,8 @@ class UI(hildon.StackableWindow):
         label = gtk.Label("Give your Qaiku-api key")
         self.qapikey = hildon.Entry(gtk.HILDON_SIZE_AUTO)
         self.qapikey.set_placeholder("Your Qaiku Apikey is..")
+
+
         label1 = gtk.Label("choose colour of your button")
 
         hbox= gtk.HBox(False, 0)
@@ -306,13 +307,18 @@ class UI(hildon.StackableWindow):
 
         vbox.pack_start(label, expand = False)
         vbox.pack_start(self.qapikey, expand = False)
+        vbox.pack_start (save_button, expand = False)
         vbox.pack_start(label1, expand = False)
         vbox.pack_start (hbox, expand = False)
-        vbox.pack_start (save_button, expand = False)
         window.show_all()
 
     def save(self, button):
         print "saved"
+
+        apikey = self.qapikey.get_text()
+        if self.player.check_password(apikey):
+            print "apikey is ok"
+
         stack = self.get_stack()
         stack.pop(1)
 
