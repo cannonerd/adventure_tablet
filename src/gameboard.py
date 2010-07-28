@@ -287,11 +287,12 @@ class UI(hildon.StackableWindow):
         self.button1 = gtk.Button()
         self.button1.add(button1_image)
         self.button1.connect ('clicked', self.colours)
-
+        hbox= gtk HBox(False, 0)
+        hbox.pack_start(button1, expand = False)
         vbox.pack_start(label, expand = False)
         vbox.pack_start(self.qapikey, expand = False)
         vbox.pack_start(label1, expand = False)
-        vbox.pack_start (self.button1, expand = False)
+        vbox.pack_start (hbox, expand = False)
         window.show_all()
 
 
