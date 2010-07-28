@@ -72,6 +72,7 @@ class adventurer(gobject.GObject):
             return False
 
         self.user.set_parameter('adventuretablet', 'apikey', password)
+        self.apikey = password
         return True
 
     def init_midgard_session(self, nickname):

@@ -300,6 +300,9 @@ class UI(hildon.StackableWindow):
         adventure = self.blyton.adventure_from_mission(mission)
         self.blyton.adventures.append(adventure)
         self.add_adventure_to_selector(adventure)
+
+        if self.player.apikey is not None:
+            adventure.adventure_to_qaiku(adventure, self.player.apikey)
         
         # Close the "add" window
         stack = self.get_stack()

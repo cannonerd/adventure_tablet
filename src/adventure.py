@@ -1,4 +1,4 @@
-import point, adventurer, datetime
+import point, adventurer, datetime, urllib, urllib2, simplejson
 import _midgard as midgard
 
 class adventure():
@@ -31,3 +31,18 @@ class adventure():
             log.comment = text
         log.participating = True
         log.create()
+
+    def adventure_to_qaiku(self, adventure, apikey):
+        opener = urllib2.build_opener()
+        opener.addheaders = [('User-agent', 'adventure_tablet/0.1')]
+        try:
+            data = urllib.urlencode({'status': unicode(adventure.text).encode('utf-8'), 'source': 'adventuretablet', 'channel': 'adventure', 'data': '%s,%s' % (adventure.destination.lat, adventure.destination.lon)})
+            params = urllib.urlencode({'apikey': apikey})
+            url = 'http://www.qaiku.com/api/statuses/update.json?%s' % params
+            req = opener.open(url, data)
+            response = req.read()
+        except urllib2.HTTPError, e:
+            print "Updating failed, HTTP %s" % (e.code)
+        except urllib2.URLError, e:
+            print "Connection failed, error %s" % (e.message)
+        print response
