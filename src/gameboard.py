@@ -294,7 +294,7 @@ class UI(hildon.StackableWindow):
         window.show_all()
 
 
-    def colours(self)
+    def colours(self):
         print "you have chosen a colour"
 
     def create_menu(self):
