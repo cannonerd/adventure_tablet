@@ -19,6 +19,7 @@ class adventurer(gobject.GObject):
     user = None
     apikey = None
     piece = None
+    participating = False
 
     __gsignals__ = {
         'location-changed': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, gobject.TYPE_STRING, gobject.TYPE_STRING))
@@ -67,10 +68,10 @@ class adventurer(gobject.GObject):
             url = 'http://www.qaiku.com/api/statuses/user_timeline.json?%s' % params
             req = opener.open(url)
         except urllib2.HTTPError, e:
-            print('Sorry, authorization failed.')
+            print('check_password: Sorry, authorization failed.')
             return False
         except urllib2.URLError, e:
-            print("Connection failed, error %s. Try again later" % (e.message))
+            print("check_password: Connection failed, error %s. Try again later" % (e.message))
             return False
 
         self.user.set_parameter('adventuretablet', 'apikey', password)

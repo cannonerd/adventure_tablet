@@ -21,7 +21,8 @@ class adventure(gobject.GObject):
         if self.mission is not None:
             self.qaikuid = self.mission.get_parameter('adventuretablet', 'qaikuid')
 
-    def add_adventurer(self, adventurer):
+    def add_adventurer(self, adventurer, participating = False):
+        adventurer.participating = participating
         self.adventurers.append(adventurer)
         adventurer.mission_listener = adventurer.connect('location-changed', self.log)
         self.emit('adventurer-added', adventurer)
@@ -36,6 +37,8 @@ class adventure(gobject.GObject):
             self.mission.set_parameter('adventuretablet', 'qaikuid', qaikuid)
 
     def log(self, adventurer, location, text, qaikuid):
+        if not adventurer.participating:
+            return
         if qaikuid != '':
             qb = midgard.query_builder('ttoa_log')
             qb.add_constraint('mission', '=', self.mission.id)
@@ -80,10 +83,10 @@ class adventure(gobject.GObject):
             url = 'http://www.qaiku.com/api/statuses/replies/%s.json?%s' % (self.qaikuid, params)
             req = opener.open(url)
         except urllib2.HTTPError, e:
-            print "HTTP Error %s" % (e.code)
+            print "logs_from_qaiku: HTTP Error %s" % (e.code)
             return
         except urllib2.URLError, e:
-            print "Connection failed, error %s" % (e.message)
+            print "logs_from_qaiku: Connection failed, error %s" % (e.message)
             return
 
         messages = simplejson.loads(req.read())
@@ -93,12 +96,12 @@ class adventure(gobject.GObject):
             nick = message['user']['screen_name']
             message_adventurer = None
             for player in self.adventurers:
-                if player.nick is nick:
+                if player.nick == nick:
                     message_adventurer = player
                     break
             if message_adventurer is None:
                 message_adventurer = adventurer.adventurer(nick)
-                self.add_adventurer(message_adventurer)
+                self.add_adventurer(message_adventurer, True)
 
             message_adventurer.location_changed_qaiku(message)
 
@@ -120,10 +123,10 @@ class adventure(gobject.GObject):
             req = opener.open(url, data)
             response = req.read()
         except urllib2.HTTPError, e:
-            print "Updating failed, HTTP %s" % (e.code)
+            print "log_to_qaiku: Updating failed, HTTP %s" % (e.code)
             return
         except urllib2.URLError, e:
-            print "Connection failed, error %s" % (e.message)
+            print "log_to_qaiku: Connection failed, error %s" % (e.message)
             return
 
         qaiku = simplejson.loads(response)
@@ -140,10 +143,10 @@ class adventure(gobject.GObject):
             req = opener.open(url, data)
             response = req.read()
         except urllib2.HTTPError, e:
-            print "Updating failed, HTTP %s" % (e.code)
+            print "adventure_to_qaiku: Updating failed, HTTP %s" % (e.code)
             return
         except urllib2.URLError, e:
-            print "Connection failed, error %s" % (e.message)
+            print "adventure_to_qaiku: Connection failed, error %s" % (e.message)
             return
 
         qaiku = simplejson.loads(response)

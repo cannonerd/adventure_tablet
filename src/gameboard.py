@@ -156,9 +156,11 @@ class UI(hildon.StackableWindow):
 
     def startstop(self, button):
         if button.get_label() == "start":
+            self.player.participating = True
             self.current_adventure.add_adventurer(self.player)
             button.set_label("stop")
         else:
+            self.player.participating = False
             self.current_adventure.remove_adventurer(self.player)
             button.set_label("start")
 

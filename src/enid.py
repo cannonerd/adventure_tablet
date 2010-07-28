@@ -40,10 +40,10 @@ class enid():
             url = 'http://www.qaiku.com/api/statuses/channel_timeline/adventure.json?%s' % (params)
             req = opener.open(url)
         except urllib2.HTTPError, e:
-            print "HTTP Error %s" % (e.code)
+            print "adventures_from_qaiku: HTTP Error %s" % (e.code)
             return
         except urllib2.URLError, e:
-            print "Connection failed, error %s" % (e.message)
+            print "adventures_from_qaiku: Connection failed, error %s" % (e.message)
             return
 
         messages = simplejson.loads(req.read())
