@@ -46,24 +46,27 @@ class adventure():
         if adventure.qaikuid is None:
             return
 
-        if log.text == '':
-            log.text = 'Adventuring'
+        if log.comment == '':
+            log.comment = 'Adventuring'
 
         opener = urllib2.build_opener()
         opener.addheaders = [('User-agent', 'adventure_tablet/0.1')]
         try:
-            data = urllib.urlencode({'status': unicode(log.text).encode('utf-8'), 'source': 'adventuretablet', 'channel': 'adventure', 'latitude': log.latitude, 'longitude': log.longitude, 'in_reply_to_status_id': adventure.qaikuid})
+            data = urllib.urlencode({'status': unicode(log.comment).encode('utf-8'), 'source': 'adventuretablet', 'channel': 'adventure', 'latitude': log.latitude, 'longitude': log.longitude, 'in_reply_to_status_id': adventure.qaikuid})
             params = urllib.urlencode({'apikey': apikey})
             url = 'http://www.qaiku.com/api/statuses/update.json?%s' % params
             req = opener.open(url, data)
             response = req.read()
         except urllib2.HTTPError, e:
             print "Updating failed, HTTP %s" % (e.code)
+            return
         except urllib2.URLError, e:
             print "Connection failed, error %s" % (e.message)
+            return
 
         qaiku = simplejson.loads(response)
-        log.set_parameter('adventuretablet', 'qaikuid', qaiku['id'])
+        if qaiku['id']:
+            log.set_parameter('adventuretablet', 'qaikuid', qaiku['id'])
 
     def adventure_to_qaiku(self, adventure, apikey):
         opener = urllib2.build_opener()
@@ -76,8 +79,10 @@ class adventure():
             response = req.read()
         except urllib2.HTTPError, e:
             print "Updating failed, HTTP %s" % (e.code)
+            return
         except urllib2.URLError, e:
             print "Connection failed, error %s" % (e.message)
+            return
 
         qaiku = simplejson.loads(response)
         adventure.set_qaikuid(qaiku['id'])
