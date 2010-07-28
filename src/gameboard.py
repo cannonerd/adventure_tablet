@@ -320,7 +320,7 @@ class UI(hildon.StackableWindow):
             stack = self.get_stack()
             stack.pop(1)
         else:
-            banner= hildon.hildon_banner_show_information(button, None, "U fail, re try")
+            banner= hildon.hildon_banner_show_information(button, " ", "U fail, re try")
 
     def change_colour(self, button, colour):
         if button.get_active() is False:
