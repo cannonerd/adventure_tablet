@@ -301,11 +301,20 @@ class UI(hildon.StackableWindow):
             colour_button.connect('toggled', self.change_colour, colour)
             hbox.pack_start(colour_button, expand = False)
 
+        save_button = gtk.Button(" save ")
+        save_button.connect('clicked', self.save)
+
         vbox.pack_start(label, expand = False)
         vbox.pack_start(self.qapikey, expand = False)
         vbox.pack_start(label1, expand = False)
         vbox.pack_start (hbox, expand = False)
+        vbox.pack_start (save_button, expand = False)
         window.show_all()
+
+    def save(self)
+        print "saved"
+        stack = self.get_stack()
+        stack.pop(1)
 
     def change_colour(self, button, colour):
         if button.get_active() is False:
