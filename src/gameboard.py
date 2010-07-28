@@ -111,9 +111,6 @@ class UI(hildon.StackableWindow):
         start_button = gtk.Button( " start ")
         start_button.connect('clicked', self.start)
 
-        stop_button = gtk.Button(" stop ")
-        stop_button.connect('clicked', self.stop)
-
         home_image = gtk.Image()
         home_image.set_from_stock(gtk.STOCK_HOME, gtk.ICON_SIZE_BUTTON)
         home_button = gtk.Button()
@@ -128,9 +125,8 @@ class UI(hildon.StackableWindow):
 
         vbox = gtk.VBox(False, 2)
         vbox.pack_start(self.adventure_selector, expand = False, fill = False)
-        participate =  gtk.HBox(True, 2)
-        participate.pack_start(start_button)
-        participate.pack_start(stop_button)
+        vbox.pack_start(start_button)
+
         locationbox = gtk.HBox(True, 2)
         zoombox = gtk.HBox(True, 2)
         zoombox.pack_start(zoom_in_button)
@@ -148,8 +144,7 @@ class UI(hildon.StackableWindow):
 
     def start(self, button):
         print "start"
-    def stop(self, button):
-        print "stop"
+
     def add_adventure_to_selector(self, adventure):
         self.adventure_selector_position = self.adventure_selector_position + 1
         self.adventure_selector.append_text(adventure.name)
