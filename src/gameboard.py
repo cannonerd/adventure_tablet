@@ -125,7 +125,7 @@ class UI(hildon.StackableWindow):
 
         vbox = gtk.VBox(False, 2)
         vbox.pack_start(self.adventure_selector, expand = False, fill = False)
-        vbox.pack_start(start_button)
+        vbox.pack_start(start_button, expand = False, fill = False)
 
         locationbox = gtk.HBox(True, 2)
         zoombox = gtk.HBox(True, 2)
@@ -342,6 +342,10 @@ class UI(hildon.StackableWindow):
         self.osm.remove_image(self.player.piece)
         self.player.piece = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/" +  self.player.colour + ".png", 35,35)
         self.osm.add_image(self.player.location.lat, self.player.location.lon, self.player.piece)
+    def log(self, button)
+        print "log"
+    def others(self, button)
+        print "others"
 
     def create_menu(self):
         self.menu = hildon.AppMenu()
@@ -355,9 +359,19 @@ class UI(hildon.StackableWindow):
         button1.set_label("create an adventure")
         button1.connect("clicked", self.create_adventure)
 
+        button2 = hildon.GtkButton(gtk.HILDON_SIZE_AUTO)
+        button2.set_label("log")
+        button2.connect("clicked", self.log)
+
+        button3 = hildon.GtkButton(gtk.HILDON_SIZE_AUTO)
+        button3.set_label("others")
+        button3.connect("clicked", self.others)
+
         # Add entry to the view menu
         self.menu.append(button)
         self.menu.append(button1)
+        self.menu.append(button2)
+        self.menu.append(button3)
 
         self.menu.show_all()
 
