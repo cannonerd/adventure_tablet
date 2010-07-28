@@ -53,6 +53,8 @@ class adventurer(gobject.GObject):
 
         self.nick = nickname
 
+        self.location = point.point(self.user.latitude, self.user.longitude)
+
     def set_colour(self, colour):
         self.colour = colour
         self.user.set_parameter('adventuretablet', 'colour', colour)
