@@ -283,12 +283,15 @@ class UI(hildon.StackableWindow):
         label1 = gtk.Label("choose colour of your button")
 
         hbox= gtk.HBox(False, 0)
-        player_colors = ['you', 'red']
+        player_colors = ['you', 'red', 'yellow', 'green', 'purple']
+        radioGroup = None
         for color in player_colors:
             color_pixbuf = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/"+color+".png", 50,50)
             color_image = gtk.Image()
             color_image.set_from_pixbuf(color_pixbuf)
-            color_button = gtk.ToggleButton()
+            color_button = gtk.RadioButton(radioGroup)
+            if radioGroup is None:
+                radioGroup = color_button
             color_button.add(color_image)
             color_button.connect ('toggled', self.colours, color)
             hbox.pack_start(color_button, expand = False)
