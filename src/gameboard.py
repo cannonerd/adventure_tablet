@@ -308,7 +308,7 @@ class UI(hildon.StackableWindow):
         window.show_all()
 
     def change_colour(self, button, colour):
-        if button.active is False:
+        if button.get_active() is False:
             return
         print "Changing colour to " + colour + " via toggle"
         self.player.set_colour(colour)
