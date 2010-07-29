@@ -17,6 +17,7 @@ class adventure(gobject.GObject):
 
     def __init__(self, destination, name, mission = None):
         gobject.GObject.__init__(self)
+        self.adventurers = []
         self.destination = destination
         self.name = name
         self.mission = mission

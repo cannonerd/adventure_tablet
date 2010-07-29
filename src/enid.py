@@ -94,9 +94,9 @@ class enid():
             user = midgard.mgdschema.ttoa_user()
             user.get_by_id(participant)
             if user.username == player.nick:
-                mission_adventure.add_adventurer(player)
+                mission_adventure.add_adventurer(player, True)
             else:
-                mission_adventure.add_adventurer(adventurer.adventurer(user.username))
+                mission_adventure.add_adventurer(adventurer.adventurer(user.username), True)
 
         return mission_adventure
 
