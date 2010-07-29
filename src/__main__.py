@@ -6,7 +6,7 @@ import _midgard as midgard
 splash = gtk.Window()
 splash.set_title('the Tablet of Adventure')
 # TODO: Display a picture of unicorns, kittens and ponies
-hildon.hildon_gtk_window_set_progress_indicator(splash, 1)
+#hildon.hildon_gtk_window_set_progress_indicator(splash, 1)
 splash.show_all()
 
 # Preparing configuration for using Midgard
@@ -46,12 +46,12 @@ if me.apikey is not None:
 hildon.hildon_banner_show_information(splash, "", "Building list of adventures")
 blyton.refresh_adventures(me)
 
+#prepare and show UI
+game = gameboard.UI(blyton, me)
+game.show_all()
+
 # Remove the splash screen
 hildon.hildon_gtk_window_set_progress_indicator(splash, 0)
 splash.destroy()
 
-#prepare and show UI
-game = gameboard.UI(blyton, me)
-
-game.show_all()
 gtk.main()
