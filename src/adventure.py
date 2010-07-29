@@ -82,10 +82,13 @@ class adventure(gobject.GObject):
             self.log_to_qaiku(self, log, adventurer)
 
     def logs_from_qaiku(self, player):
+        print "Polling updates from Qaiku"
         if self.qaikuid is None:
+            print "Adventure %s has no QaikuID, skipping poll" %s (self.name)
             return
 
         if self.mission is None:
+            print "Adventure %s has no mission, skipping poll" %s (self.name)
             return
 
         timestamp = datetime.datetime.today()
@@ -100,10 +103,10 @@ class adventure(gobject.GObject):
             url = 'http://www.qaiku.com/api/statuses/replies/%s.json?%s' % (self.qaikuid, params)
             req = opener.open(url)
         except urllib2.HTTPError, e:
-            print "logs_from_qaiku: HTTP Error %s" % (e.code)
+            print "logs_from_qaiku for %s: HTTP Error %s" % (self.name, e.code)
             return
         except urllib2.URLError, e:
-            print "logs_from_qaiku: Connection failed, error %s" % (e.message)
+            print "logs_from_qaiku for %s: Connection failed, error %s" % (self.name, e.message)
             return
 
         messages = simplejson.loads(req.read())

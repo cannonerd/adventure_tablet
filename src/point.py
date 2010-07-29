@@ -79,10 +79,10 @@ class point():
             req = opener.open(url)
             features = req.read()
         except urllib2.HTTPError, e:
-            print('Sorry, authorization failed.')
+            print('point.describe: HTTP error %s' % (e.code))
             return self.pretty_print()
         except urllib2.URLError, e:
-            print("Connection failed, error %s. Try again later" % (e.message))
+            print("point.describe: Connection failed, error %s" % (e.message))
             return self.pretty_print()
 
         try:
