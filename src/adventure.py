@@ -62,7 +62,7 @@ class adventure(gobject.GObject):
             log.set_parameter('adventuretablet', 'qaikuid', qaikuid)
         elif adventurer.apikey is not None:
             # This message needs to be sent to Qaiku
-            self.log_to_qaiku(self, log, adventurer.apikey)
+            self.log_to_qaiku(self, log, adventurer.adventurer)
 
     def logs_from_qaiku(self, player):
         if self.qaikuid is None:
@@ -109,14 +109,14 @@ class adventure(gobject.GObject):
 
         self.logs_last_updated = timestamp
 
-    def log_to_qaiku(self, adventure, log, apikey):
+    def log_to_qaiku(self, adventure, log, adventurer):
         if adventure.qaikuid is None:
             print "  No QaikuID for adventure"
             return
         self.current_adventure = adventure
-
         if log.comment is None:
-            log.comment = 'Adventuring in %s, distance to destination %s' %(self.current_adventure.destination.describe(), self.player.location.distance_to(self.current_adventure.destination))
+            apikey = adventurer.apikey
+            log.comment = 'Adventuring in %s, distance to destination %s' %(adventure.destination.describe(), adventurer.location.distance_to(adventure.destination))
 
         opener = urllib2.build_opener()
         opener.addheaders = [('User-agent', 'adventure_tablet/0.1')]
