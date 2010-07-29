@@ -37,7 +37,7 @@ class adventure(gobject.GObject):
             self.mission.set_parameter('adventuretablet', 'qaikuid', qaikuid)
 
     def log(self, adventurer, location, text, qaikuid):
-        if not adventurer.participating:
+        if adventurer.participating is False:
             return
         if qaikuid != '':
             qb = midgard.query_builder('ttoa_log')
