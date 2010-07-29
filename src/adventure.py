@@ -113,9 +113,10 @@ class adventure(gobject.GObject):
         if adventure.qaikuid is None:
             print "  No QaikuID for adventure"
             return
+        self.current_adventure = adventure
 
         if log.comment is None:
-            log.comment = 'Adventuring'
+            log.comment = 'Adventuring in %s, distance to destination %s' %(self.current_adventure.destination.describe(), self.player.location.distance_to(self.current_adventure.destination))
 
         opener = urllib2.build_opener()
         opener.addheaders = [('User-agent', 'adventure_tablet/0.1')]

@@ -389,8 +389,26 @@ class UI(hildon.StackableWindow):
         self.osm.add_image(self.player.location.lat, self.player.location.lon, self.player.piece)
     def log(self, button):
         print "log"
-    def others(self, button):
-        print "others"
+        wido= hildon.StackableWindow()
+        vbox= gtk.VBox(False, 0)
+        wido.add(vbox)
+        wido.set_title("the Log")
+        comment = "here be comments"#hae qaikusta
+        label = gtk.Label (comment)
+        vbox.pack_start(label, expand = False)
+        win.show_all()
+
+    def about(self, button):
+        print "about"
+        win = hildon.StackableWindow()
+        vbox = gtk.VBox(False, 0)
+        win.add(vbox)
+        win.set_title("About")
+        about = gtk.AboutDialog()
+        about.set_name("the Tablet of Adventure")
+        about.set_version("version 0.4")
+        vbox.pack_start(about, expand = False)
+        win.show_all()
 
     def create_menu(self):
         self.menu = hildon.AppMenu()
@@ -409,8 +427,8 @@ class UI(hildon.StackableWindow):
         button2.connect("clicked", self.log)
 
         button3 = hildon.GtkButton(gtk.HILDON_SIZE_AUTO)
-        button3.set_label("others")
-        button3.connect("clicked", self.others)
+        button3.set_label("about")
+        button3.connect("clicked", self.about)
 
         # Add entry to the view menu
         self.menu.append(button)
