@@ -68,7 +68,7 @@ class UI(hildon.StackableWindow):
         self.destination_clicked(self.destination_button)
 
     def add_player_to_map(self, adventure, player):
-        print "Adding " + player.nick + " to map of " + adventure.name
+        print "Adding " + player.nick + " to map of " + adventure.name + " to " player.location.describe()
         if player.piece is not None:
             # This player is already on the map
             print "  skipping add because player is already on map"
