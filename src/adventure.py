@@ -91,6 +91,10 @@ class adventure(gobject.GObject):
 
         messages = simplejson.loads(req.read())
         for message in messages:
+            if isinstance(message['geo'], dict) is False:
+                # Log without a location, skip
+                return
+
             # Check if the adventure already has this player
             nick = message['user']['screen_name']
             message_adventurer = None
@@ -121,7 +125,7 @@ class adventure(gobject.GObject):
         opener = urllib2.build_opener()
         opener.addheaders = [('User-agent', 'adventure_tablet/0.1')]
         try:
-            data = urllib.urlencode({'status': unicode(log.comment).encode('utf-8'), 'source': 'adventuretablet', 'channel': 'adventure', 'latitude': log.latitude, 'longitude': log.longitude, 'in_reply_to_status_id': adventure.qaikuid})
+            data = urllib.urlencode({'status': unicode(log.comment).encode('utf-8'), 'source': 'adventuretablet', 'lat': log.latitude, 'long': log.longitude, 'in_reply_to_status_id': adventure.qaikuid})
             params = urllib.urlencode({'apikey': apikey})
             url = 'http://www.qaiku.com/api/statuses/update.json?%s' % params
             req = opener.open(url, data)
