@@ -121,6 +121,7 @@ class adventure(gobject.GObject):
             if message['data'] != '':
                 qaikudata = message['data'].split(',')
                 if len(qaikudata) == 3:
+                    print "Overriding comment location with QaikuData %s" % (message['data'])
                     message['geo']['coordinates'][1] = float(qaikudata[0])
                     message['geo']['coordinates'][0] = float(qaikudata[1])
                     colour = qaikudata[2]
