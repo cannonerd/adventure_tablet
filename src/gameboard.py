@@ -29,6 +29,8 @@ import gtk
 import hildon
 import datetime
 import midgard
+gobject.threads_init()
+gtk.gdk.threads_init()
 
 import osmgpsmap
 
