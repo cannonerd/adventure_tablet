@@ -110,28 +110,29 @@ class adventure(gobject.GObject):
                 # Log without a location, skip
                 return
 
-            # Check if the adventure already has this player
-            nick = message['user']['screen_name']
-            message_adventurer = None
-            if nick == player.nick:
-                message_adventurer = player
-            else:
-                for player in self.adventurers:
-                    if player.nick == nick:
-                        message_adventurer = player
-                        break
-            if message_adventurer is None:
-                message_adventurer = adventurer.adventurer(nick)
-                self.add_adventurer(message_adventurer, True)
-
             # Parse QaikuData
+            colour = None
             if message['data'] != '':
                 qaikudata = message['data'].split(',')
                 if len(qaikudata) == 3:
                     message['geo']['coordinates'][1] = float(qaikudata[0])
                     message['geo']['coordinates'][0] = float(qaikudata[1])
-                    if message_adventurer.colour != qaikudata[2]:
-                        message_adventurer.set_colour(qaikudata[2])
+                    colour = qaikudata[2]
+
+            # Check if the adventure already has this player
+            nick = message['user']['screen_name']
+            message_adventurer = None
+            for player in self.adventurers:
+                if player.nick == nick:
+                    message_adventurer = player
+                    break
+            if message_adventurer is None:
+                message_adventurer = adventurer.adventurer(nick)
+                if colour is not None:
+                    if message_adventurer.colour != colour:
+                        message_adventurer.set_colour(colour)
+                message.adventurer.location = point.point(message['geo']['coordinates'][1], message['geo']['coordinates'][0])
+                self.add_adventurer(message_adventurer, True)
 
             message_adventurer.location_changed_qaiku(message)
 
