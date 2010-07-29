@@ -112,6 +112,7 @@ class adventure(gobject.GObject):
             return True
 
         messages = simplejson.loads(req.read())
+        messages.reverse()
         for message in messages:
             if isinstance(message['geo'], dict) is False:
                 # Log without a location, skip
