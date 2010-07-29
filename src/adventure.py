@@ -79,7 +79,7 @@ class adventure(gobject.GObject):
             log.set_parameter('adventuretablet', 'qaikuid', qaikuid)
         elif adventurer.apikey is not None:
             # This message needs to be sent to Qaiku
-            self.log_to_qaiku(self, log, adventurer)
+            self.log_to_qaiku(log, adventurer)
 
     def logs_from_qaiku(self, player):
         print "Polling updates from Qaiku"
@@ -145,17 +145,18 @@ class adventure(gobject.GObject):
 
         self.logs_last_updated = timestamp
 
-    def log_to_qaiku(self, adventure, log, adventurer):
-        if adventure.qaikuid is None:
-            print "No QaikuID for adventure %s" % (adventure.name)
+    def log_to_qaiku(self, log, adventurer):
+        if self.qaikuid is None:
+            print "No QaikuID for adventure %s" % (self.name)
             return
 
-        if log.comment is None:
-            if adventurer.location.distance_to(adventure.destination) <= 0.05:
-                log.comment = "Has arrived to destination %s." %(adventure.destination.describe())
-            else:
-                log.comment = 'Adventuring to %s, distance to destination %s km' %(adventure.destination.describe(), int(adventurer.location.distance_to(adventure.destination)))
+        print "Posting a log entry from %s to adventure %s to Qaiku thread %s" % (adventurer.nick, self.name, self.qaikuid)
 
+        if log.comment is None:
+            if adventurer.location.distance_to(self.destination) <= 0.05:
+                log.comment = "Has arrived to destination %s." % (self.destination.describe())
+            else:
+                log.comment = 'Adventuring to %s, distance to destination %s km' %(self.destination.describe(), int(adventurer.location.distance_to(self.destination)))
 
         opener = urllib2.build_opener()
         opener.addheaders = [('User-agent', 'adventure_tablet/0.1')]
@@ -165,7 +166,7 @@ class adventure(gobject.GObject):
                 'source': 'adventuretablet',
                 'lat': log.latitude,
                 'long': log.longitude,
-                'in_reply_to_status_id': adventure.qaikuid,
+                'in_reply_to_status_id': self.qaikuid,
                 'data': '%s,%s,%s' % (log.latitude, log.longitude, adventurer.colour)
             })
             params = urllib.urlencode({'apikey': adventurer.apikey})
