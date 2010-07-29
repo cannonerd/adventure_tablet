@@ -407,6 +407,8 @@ class UI(hildon.StackableWindow):
         about_tablet = gtk.AboutDialog()
         about_tablet.set_name("the Tablet of Adventure")
         about_tablet.set_version("version 0.4")
+        about_tablet.set_website("http://cannonerd.wordpress.com/")
+        about_tablet.set_authors("Susanna Huthanen")
 #        about_tablet.add(vbox)
         about_tablet.show_all()
 
