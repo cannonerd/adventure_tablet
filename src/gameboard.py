@@ -396,7 +396,7 @@ class UI(hildon.StackableWindow):
         comment = "here be comments"#hae qaikusta
         label = gtk.Label (comment)
         vbox.pack_start(label, expand = False)
-        win.show_all()
+        wido.show_all()
 
     def about(self, button):
         print "about"
@@ -407,7 +407,6 @@ class UI(hildon.StackableWindow):
         about_tablet = gtk.AboutDialog()
         about_tablet.set_name("the Tablet of Adventure")
         about_tablet.set_version("version 0.4")
-        vbox.pack_start(about_tablet, expand = False)
         win.show_all()
 
     def create_menu(self):
