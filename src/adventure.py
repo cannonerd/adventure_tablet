@@ -87,11 +87,11 @@ class adventure(gobject.GObject):
         print "Polling updates from Qaiku"
         if self.qaikuid is None:
             print "Adventure %s has no QaikuID, skipping poll" % (self.name)
-            return
+            return False
 
         if self.mission is None:
             print "Adventure %s has no mission, skipping poll" % (self.name)
-            return
+            return False
 
         timestamp = datetime.datetime.today()
         opener = urllib2.build_opener()
@@ -106,17 +106,17 @@ class adventure(gobject.GObject):
             req = opener.open(url)
         except urllib2.HTTPError, e:
             print "logs_from_qaiku for %s: HTTP Error %s" % (self.name, e.code)
-            return
+            return True
         except urllib2.URLError, e:
             print "logs_from_qaiku for %s: Connection failed, error %s" % (self.name, e.message)
-            return
+            return True
 
         messages = simplejson.loads(req.read())
         for message in messages:
             if isinstance(message['geo'], dict) is False:
                 # Log without a location, skip
                 print "Comment %s from %s has no location, skipping" % (message['text'], message['user']['screen_name'])
-                return
+                continue
 
             # Parse QaikuData
             colour = None
@@ -146,6 +146,7 @@ class adventure(gobject.GObject):
             message_adventurer.location_changed_qaiku(message)
 
         self.logs_last_updated = timestamp
+        return True
 
     def log_to_qaiku(self, log, adventurer):
         if self.qaikuid is None:
