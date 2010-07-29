@@ -56,10 +56,6 @@ class UI(hildon.StackableWindow):
 
         # For now we autoselect the first adventure
         self.select_adventure(self.blyton.adventures[0])
-        
-        if self.player not in self.current_adventure.adventurers:
-            # And add current player to map
-            self.add_player_to_map(self.current_adventure, self.player)
 
         men = self.create_menu()
         self.set_app_menu(men)
@@ -83,9 +79,6 @@ class UI(hildon.StackableWindow):
 
     def remove_players(self):
         for player in self.current_adventure.adventurers:
-            if player is self.player:
-                # Never remove the user
-                continue
             self.osm.remove_image(player.piece)
             player.piece = None
             player.disconnect(player.gameboard_listener)
@@ -181,6 +174,7 @@ class UI(hildon.StackableWindow):
             self.osm.remove_image(self.target_image)
 
             # Remove players of previous adventure
+            self.current_adventure.disconnect(self.current_adventure.gameboard_listener)
             self.remove_players()
 
             # Stop polling the old Qaiku feed
@@ -191,7 +185,7 @@ class UI(hildon.StackableWindow):
 
         # Add the players of the adventure
         self.add_players()
-        self.current_adventure.connect('adventurer-added', self.add_player_to_map)
+        self.current_adventure.gameboard_listener = self.current_adventure.connect('adventurer-added', self.add_player_to_map)
 
         if self.player.apikey is not None:
             # Start polling Qaiku
@@ -211,7 +205,6 @@ class UI(hildon.StackableWindow):
                 return
 
     def location_changed(self, adventurer, location, text, qaikuid):
-
         # FIXME: In newer OsmGpsMap versions we can just move the image
         self.osm.remove_image(adventurer.piece)
         self.osm.add_image(adventurer.location.lat, adventurer.location.lon, adventurer.piece)
