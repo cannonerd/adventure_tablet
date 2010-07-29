@@ -37,9 +37,7 @@ class adventure(gobject.GObject):
             self.mission.set_parameter('adventuretablet', 'qaikuid', qaikuid)
 
     def log(self, adventurer, location, text, qaikuid):
-        print "Got a new location log for " + adventurer.nick
         if adventurer.participating is False:
-            print "  Not storing as this is not a participant"
             return
         if qaikuid != '':
             qb = midgard.query_builder('ttoa_log')
@@ -47,7 +45,6 @@ class adventure(gobject.GObject):
             qb.add_constraint('parameter.value', '=', qaikuid)
             if qb.count() != 0:
                 # We already have this log entry
-                print "  This entry came from Qaiku already"
                 return
 
         log = midgard.mgdschema.ttoa_log()
@@ -67,7 +64,7 @@ class adventure(gobject.GObject):
             # This message needs to be sent to Qaiku
             self.log_to_qaiku(self, log, adventurer.apikey)
 
-    def logs_from_qaiku(self, apikey):
+    def logs_from_qaiku(self, player):
         if self.qaikuid is None:
             return
 
@@ -80,9 +77,9 @@ class adventure(gobject.GObject):
         try:
             if self.logs_last_updated is not None:
                 since = self.logs_last_updated.strftime('%Y-%m-%d %H:%M:%S')
-                params = urllib.urlencode({'apikey': apikey, 'since': since})
+                params = urllib.urlencode({'apikey': player.apikey, 'since': since})
             else:
-                params = urllib.urlencode({'apikey': apikey})
+                params = urllib.urlencode({'apikey': player.apikey})
             url = 'http://www.qaiku.com/api/statuses/replies/%s.json?%s' % (self.qaikuid, params)
             req = opener.open(url)
         except urllib2.HTTPError, e:
@@ -95,13 +92,15 @@ class adventure(gobject.GObject):
         messages = simplejson.loads(req.read())
         for message in messages:
             # Check if the adventure already has this player
-            print "New log entry from Qaiku for " + self.name
             nick = message['user']['screen_name']
             message_adventurer = None
-            for player in self.adventurers:
-                if player.nick == nick:
-                    message_adventurer = player
-                    break
+            if nick == player.nick:
+                message_adventurer = player
+            else:
+                for player in self.adventurers:
+                    if player.nick == nick:
+                        message_adventurer = player
+                        break
             if message_adventurer is None:
                 message_adventurer = adventurer.adventurer(nick)
                 self.add_adventurer(message_adventurer, True)

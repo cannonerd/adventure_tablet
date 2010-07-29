@@ -68,8 +68,10 @@ class UI(hildon.StackableWindow):
         self.destination_clicked(self.destination_button)
 
     def add_player_to_map(self, adventure, player):
+        print "Adding " + player.nick + " to map of " + adventure.name
         if player.piece is not None:
             # This player is already on the map
+            print "  skipping add because player is already on map"
             return
         player.gameboard_listener = player.connect('location-changed', self.location_changed)
         player.piece = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/" + player.colour + ".png", 35,35)
@@ -192,7 +194,7 @@ class UI(hildon.StackableWindow):
 
         if self.player.apikey is not None:
             # Start polling Qaiku
-            self.current_adventure.polling_timeout = gobject.timeout_add(60000, self.current_adventure.logs_from_qaiku, self.player.apikey)
+            self.current_adventure.polling_timeout = gobject.timeout_add(60000, self.current_adventure.logs_from_qaiku, self.player)
 
     def changed_adventure(self, combobox):
         model = combobox.get_model()
