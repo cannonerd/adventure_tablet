@@ -150,7 +150,7 @@ class adventure(gobject.GObject):
             return
 
         if log.comment is None:
-            if adventurer.location.distance_to(adventure.destination)) <= 0.05:
+            if adventurer.location.distance_to(adventure.destination) <= 0.05:
                 log.comment = "Has arrived to destination %s." %(adventure.destination.describe())
             else:
                 log.comment = 'Adventuring to %s, distance to destination %s km' %(adventure.destination.describe(), int(adventurer.location.distance_to(adventure.destination)))
