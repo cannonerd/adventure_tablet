@@ -37,7 +37,9 @@ class adventure(gobject.GObject):
             self.mission.set_parameter('adventuretablet', 'qaikuid', qaikuid)
 
     def log(self, adventurer, location, text, qaikuid):
+        print "Got a new location log for " + adventurer.nick
         if adventurer.participating is False:
+            print "  Not storing as this is not a participant"
             return
         if qaikuid != '':
             qb = midgard.query_builder('ttoa_log')
@@ -45,6 +47,7 @@ class adventure(gobject.GObject):
             qb.add_constraint('parameter.value', '=', qaikuid)
             if qb.count() != 0:
                 # We already have this log entry
+                print "  This entry came from Qaiku already"
                 return
 
         log = midgard.mgdschema.ttoa_log()
@@ -109,6 +112,7 @@ class adventure(gobject.GObject):
 
     def log_to_qaiku(self, adventure, log, apikey):
         if adventure.qaikuid is None:
+            print "  No QaikuID for adventure"
             return
 
         if log.comment is None:
