@@ -87,6 +87,7 @@ class UI(hildon.StackableWindow):
                 # Never remove the user
                 continue
             self.osm.remove_image(player.piece)
+            player.piece = None
             player.disconnect(player.gameboard_listener)
 
     def build_ui(self):
