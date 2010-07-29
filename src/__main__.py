@@ -5,8 +5,12 @@ import _midgard as midgard
 # Display splash screen while the app initializes
 splash = gtk.Window()
 splash.set_title('the Tablet of Adventure')
+splash_box = gtk.VBox(False, 0)
+splash.add(splash_box)
 splash_text = gtk.Label("Don't Panic. Here be dragons")
-splash.add(splash_text)
+splash_box.pack_start(splash_text, True)
+status_text = gtk.Label("Loading...")
+splash_box.pack_end(status_text)
 
 # TODO: Display a picture of unicorns, kittens and ponies
 hildon.hildon_gtk_window_set_progress_indicator(splash, 1)
@@ -25,6 +29,7 @@ if (connection.open_config(configuration) is False):
     exit()
 if (midgard.storage.class_storage_exists('ttoa_user') is False):
     # We only need to do these on the first run: prepare database tables
+    status_text.set_text("Initializing Midgard database...")
     midgard.storage.create_base_storage()
     midgard.storage.create_class_storage('ttoa_user')
     midgard.storage.create_class_storage('ttoa_log')
@@ -41,9 +46,11 @@ blyton = enid.enid()
 
 if me.apikey is not None:
     # Fetch current adventures from Qaiku
+    status_text.set_text("Fetching adventures from Qaiku...")
     blyton.adventures_from_qaiku(me.apikey)
 
 # Build adventure list
+status_text.set_text("Building list of adventures...")
 blyton.refresh_adventures(me)
 
 #prepare and show UI
