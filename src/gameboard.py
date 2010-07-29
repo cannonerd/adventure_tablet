@@ -237,14 +237,14 @@ class UI(hildon.StackableWindow):
 
         elif mode is 'home':
             if int(self.player.location.distance_to(self.current_adventure.destination)) <= 2:
-                description = u"You are in %s. Destination is %s km from you, in %s°" %(self.player.location.describe(), round( self.player.location.distance_to(self.current_adventure.destination), 2), self.player.location.bearing_to(self.current_adventure.destination))
+                description = u"You are in %s. Destination is %s km from you, at %s°" %(self.player.location.describe(), round( self.player.location.distance_to(self.current_adventure.destination), 2), self.player.location.bearing_to(self.current_adventure.destination))
             else:
-                description = u"You are in %s. Destination is %s km from you, in %s°" %(self.player.location.describe(), int(self.player.location.distance_to(self.current_adventure.destination)), self.player.location.bearing_to(self.current_adventure.destination))
+                description = u"You are in %s. Destination is %s km from you, at %s°" %(self.player.location.describe(), int(self.player.location.distance_to(self.current_adventure.destination)), self.player.location.bearing_to(self.current_adventure.destination))
         else:
             if int(self.player.location.distance_to(self.current_adventure.destination)) <= 2:
-                description = u"You are in %s. Destination is %s km from you, in %s°" %(self.player.location.describe(), round( self.player.location.distance_to(self.current_adventure.destination), 2), self.player.location.bearing_to(self.current_adventure.destination))
+                description = u"You are in %s. Destination is %s km from you, at %s°" %(self.player.location.describe(), round( self.player.location.distance_to(self.current_adventure.destination), 2), self.player.location.bearing_to(self.current_adventure.destination))
             else:
-                description = u"%s is in %s, some %s km from you, in %s°" % (self.current_adventure.name, self.current_adventure.destination.describe(), int(self.player.location.distance_to(self.current_adventure.destination)), self.player.location.bearing_to(self.current_adventure.destination))
+                description = u"%s is in %s, some %s km from you, at %s°" % (self.current_adventure.name, self.current_adventure.destination.describe(), int(self.player.location.distance_to(self.current_adventure.destination)), self.player.location.bearing_to(self.current_adventure.destination))
 
         self.destination_info.set_text(description)
 
