@@ -65,13 +65,15 @@ class UI(hildon.StackableWindow):
 
     def add_player_to_map(self, adventure, player):
         print "Adding " + player.nick + " to map of " + adventure.name + " to " + player.location.describe()
+        banner = hildon.hildon_banner_show_information(self, "", "%s has joined adventure %s" % (player.nick, adventure.name))
         if player.piece is not None:
             # This player is already on the map
             print "  skipping add because player is already on map"
             return
-        player.gameboard_listener = player.connect('location-changed', self.location_changed)
         player.piece = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/" + player.colour + ".png", 35,35)
         self.osm.add_image(player.location.lat, player.location.lon, player.piece)
+        player.gameboard_listener = player.connect('location-changed', self.location_changed)
+        print "Subscribed to location updates from %s to adventure %s" % (player.nick, adventure.name)
 
     def add_players(self):
         for player in self.current_adventure.adventurers:
@@ -208,14 +210,17 @@ class UI(hildon.StackableWindow):
 
     def location_changed(self, adventurer, location, text, qaikuid):
         # FIXME: In newer OsmGpsMap versions we can just move the image
-        self.osm.remove_image(adventurer.piece)
+        print "Adventurer %s has new location %s" % (adventurer.nick, location.pretty_print())
+        if adventurer.piece is not None:
+            self.osm.remove_image(adventurer.piece)
         self.osm.add_image(adventurer.location.lat, adventurer.location.lon, adventurer.piece)
 
-        if (self.track_location):
-            self.osm.set_mapcenter(location.lat, location.lon, self.osm.props.zoom)
-            self.update_description('home')
-        else:
-            self.update_description('destination')
+        if adventurer.nick == self.player.nick:
+            if (self.track_location):
+                self.osm.set_mapcenter(location.lat, location.lon, self.osm.props.zoom)
+                self.update_description('home')
+            else:
+                self.update_description('destination')
 
     def zoom_in_clicked(self, button):
         self.osm.set_zoom(self.osm.props.zoom + 1)

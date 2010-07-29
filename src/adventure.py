@@ -40,6 +40,7 @@ class adventure(gobject.GObject):
 
     def log(self, adventurer, location, text, qaikuid):
         if adventurer.participating is False:
+            print "Adventurer %s is not participating in %s, skipping log" % (adventurer.nick, self.name)
             return
 
         if adventurer.nick in self.last_log_position:
@@ -108,6 +109,7 @@ class adventure(gobject.GObject):
         for message in messages:
             if isinstance(message['geo'], dict) is False:
                 # Log without a location, skip
+                print "Comment %s from %s has no location, skipping" % (message['text'], message['user']['screen_name'])
                 return
 
             # Parse QaikuData
@@ -131,7 +133,7 @@ class adventure(gobject.GObject):
                 if colour is not None:
                     if message_adventurer.colour != colour:
                         message_adventurer.set_colour(colour)
-                message.adventurer.location = point.point(message['geo']['coordinates'][1], message['geo']['coordinates'][0])
+                message_adventurer.location = point.point(message['geo']['coordinates'][1], message['geo']['coordinates'][0])
                 self.add_adventurer(message_adventurer, True)
 
             message_adventurer.location_changed_qaiku(message)
