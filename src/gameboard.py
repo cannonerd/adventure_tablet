@@ -79,7 +79,8 @@ class UI(hildon.StackableWindow):
 
     def remove_players(self):
         for player in self.current_adventure.adventurers:
-            self.osm.remove_image(player.piece)
+            if player.piece is not None:
+                self.osm.remove_image(player.piece)
             player.piece = None
             player.disconnect(player.gameboard_listener)
 
