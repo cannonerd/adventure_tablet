@@ -401,14 +401,14 @@ class UI(hildon.StackableWindow):
     def about(self, button):
         print "about"
 #        win = hildon.StackableWindow()
-
+#        vbox = gtk.VBox(False, 0)
 
 #        win.set_title("About")
         about_tablet = gtk.AboutDialog()
         about_tablet.set_name("the Tablet of Adventure")
         about_tablet.set_version("version 0.4")
-
-
+#        about_tablet.add(vbox)
+        about_tablet.show_all()
 
     def create_menu(self):
         self.menu = hildon.AppMenu()
