@@ -6,7 +6,7 @@ import _midgard as midgard
 splash = gtk.Window()
 splash.set_title('the Tablet of Adventure')
 # TODO: Display a picture of unicorns, kittens and ponies
-splash.show()
+splash.show_all()
 
 hildon.hildon_gtk_window_set_progress_indicator(splash, 1)
 
