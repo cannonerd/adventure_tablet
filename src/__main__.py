@@ -1,6 +1,9 @@
 #instansoin pelaaja enid map
-import gameboard, enid, adventurer, datetime, gtk, adventure, point, getpass, hildon
+import gameboard, enid, adventurer, datetime, gtk, gobject, adventure, point, getpass, hildon
 import _midgard as midgard
+
+gobject.threads_init()
+gtk.gdk.threads_init()
 
 # Display splash screen while the app initializes
 splash = gtk.Window()
