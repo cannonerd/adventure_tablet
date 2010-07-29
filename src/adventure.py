@@ -9,6 +9,7 @@ class adventure(gobject.GObject):
     adventurers = []
     logs_last_updated = None
     last_log_position = {}
+    polling_timeout = None
 
     __gsignals__ = {
         'adventurer-added': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))

@@ -179,7 +179,8 @@ class UI(hildon.StackableWindow):
             self.remove_players()
 
             # Stop polling the old Qaiku feed
-            gobject.source_remove(self.current_adventure.polling_timeout)
+            if self.current_adventure.polling_timeout is not None:
+                gobject.source_remove(self.current_adventure.polling_timeout)
 
         self.current_adventure = adventure
         self.osm.add_image(self.current_adventure.destination.lat, self.current_adventure.destination.lon, self.target_image)
@@ -378,7 +379,8 @@ class UI(hildon.StackableWindow):
         if button.get_active() is False:
             return
         self.player.set_colour(colour)
-        self.osm.remove_image(self.player.piece)
+        if self.player.piece is not None:
+            self.osm.remove_image(self.player.piece)
         self.player.piece = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/" +  self.player.colour + ".png", 35,35)
         self.osm.add_image(self.player.location.lat, self.player.location.lon, self.player.piece)
     def log(self, button):
