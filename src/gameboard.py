@@ -404,10 +404,10 @@ class UI(hildon.StackableWindow):
         vbox = gtk.VBox(False, 0)
         win.add(vbox)
         win.set_title("About")
-        about = gtk.AboutDialog()
-        about.set_name("the Tablet of Adventure")
-        about.set_version("version 0.4")
-        vbox.pack_start(about, expand = False)
+        about_tablet = gtk.AboutDialog()
+        about_tablet.set_name("the Tablet of Adventure")
+        about_tablet.set_version("version 0.4")
+        vbox.pack_start(about_tablet, expand = False)
         win.show_all()
 
     def create_menu(self):
