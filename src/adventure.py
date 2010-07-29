@@ -25,12 +25,14 @@ class adventure(gobject.GObject):
             self.qaikuid = self.mission.get_parameter('adventuretablet', 'qaikuid')
 
     def add_adventurer(self, adventurer, participating = False):
+        print "Adding %s to adventure %s" % (adventurer.nick, self.name)
         adventurer.participating = participating
         self.adventurers.append(adventurer)
         adventurer.mission_listener = adventurer.connect('location-changed', self.log)
         self.emit('adventurer-added', adventurer)
 
     def remove_adventurer(self, adventurer):
+        print "Removing %s from adventure %s" % (adventurer.nick, self.name)
         self.adventurers.remove(adventurer)
         adventurer.disconnect(adventurer.mission_listener)
 
@@ -84,11 +86,11 @@ class adventure(gobject.GObject):
     def logs_from_qaiku(self, player):
         print "Polling updates from Qaiku"
         if self.qaikuid is None:
-            print "Adventure %s has no QaikuID, skipping poll" %s (self.name)
+            print "Adventure %s has no QaikuID, skipping poll" % (self.name)
             return
 
         if self.mission is None:
-            print "Adventure %s has no mission, skipping poll" %s (self.name)
+            print "Adventure %s has no mission, skipping poll" % (self.name)
             return
 
         timestamp = datetime.datetime.today()
