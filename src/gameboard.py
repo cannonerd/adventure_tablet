@@ -193,7 +193,7 @@ class UI(hildon.StackableWindow):
 
         if self.player.apikey is not None:
             # Start polling Qaiku
-            self.current_adventure.polling_timeout = gobject.timeout_add(60000, self.current_adventure.logs_from_qaiku, self.player)
+            self.current_adventure.polling_timeout = gobject.timeout_add(30000, self.current_adventure.logs_from_qaiku, self.player)
 
     def changed_adventure(self, combobox):
         model = combobox.get_model()

@@ -146,15 +146,14 @@ class adventure(gobject.GObject):
 
     def log_to_qaiku(self, adventure, log, adventurer):
         if adventure.qaikuid is None:
-            print "  No QaikuID for adventure"
+            print "No QaikuID for adventure %s" % (adventure.name)
             return
-        self.current_adventure = adventure
+
         if log.comment is None:
-            apikey = adventurer.apikey
-        if adventurer.location.distance_to(adventure.destination)) <= 0.05:
-            log.comment = "Has arrived to destination %s." %(adventure.destination.describe())
-        else:
-            log.comment = 'Adventuring to %s, distance to destination %s km' %(adventure.destination.describe(), int(adventurer.location.distance_to(adventure.destination)))
+            if adventurer.location.distance_to(adventure.destination)) <= 0.05:
+                log.comment = "Has arrived to destination %s." %(adventure.destination.describe())
+            else:
+                log.comment = 'Adventuring to %s, distance to destination %s km' %(adventure.destination.describe(), int(adventurer.location.distance_to(adventure.destination)))
 
 
         opener = urllib2.build_opener()
@@ -168,7 +167,7 @@ class adventure(gobject.GObject):
                 'in_reply_to_status_id': adventure.qaikuid,
                 'data': '%s,%s,%s' % (log.latitude, log.longitude, adventurer.colour)
             })
-            params = urllib.urlencode({'apikey': apikey})
+            params = urllib.urlencode({'apikey': adventurer.apikey})
             url = 'http://www.qaiku.com/api/statuses/update.json?%s' % params
             req = opener.open(url, data)
             response = req.read()
@@ -181,7 +180,10 @@ class adventure(gobject.GObject):
 
         qaiku = simplejson.loads(response)
         if qaiku['id']:
+            print "stored log for adventurer %s to Qaiku with ID %s" % (adventurer.nick, qaiku['id'])
             log.set_parameter('adventuretablet', 'qaikuid', qaiku['id'])
+        else:
+            print "stored log for adventurer %s to Qaiku but didn't get an ID back" % (adventurer.nick)
 
     def adventure_to_qaiku(self, adventure, apikey):
         opener = urllib2.build_opener()
