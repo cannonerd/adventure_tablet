@@ -1,8 +1,14 @@
 #instansoin pelaaja enid map
-import gameboard, enid, adventurer, datetime, gtk.gdk, adventure, point, getpass
+import gameboard, enid, adventurer, datetime, gtk, adventure, point, getpass, hildon
 import _midgard as midgard
 
-# TODO: We should display the TToA splash screen now
+# Display splash screen while the app initializes
+splash = gtk.Window()
+splash.set_title('the Tablet of Adventure')
+# TODO: Display a picture of unicorns, kittens and ponies
+splash.show()
+
+hildon.hildon_gtk_window_set_progress_indicator(splash, 1)
 
 # Preparing configuration for using Midgard
 # the SQLite database file will be placed into ~/.midgard2/data/adventuretablet.db
@@ -38,8 +44,12 @@ if me.apikey is not None:
 # Build adventure list
 blyton.refresh_adventures(me)
 
+# Remove the splash screen
+hildon.hildon_gtk_window_set_progress_indicator(splash, 0)
+splash.destroy()
+
 #prepare and show UI
 game = gameboard.UI(blyton, me)
-# TODO: We should hide the TToA splash screen
+
 game.show_all()
 gtk.main()
