@@ -151,7 +151,11 @@ class adventure(gobject.GObject):
         self.current_adventure = adventure
         if log.comment is None:
             apikey = adventurer.apikey
+        if adventurer.location.distance_to(adventure.destination)) <= 0.05:
+            log.comment = "Has arrived to destination %s." %(adventure.destination.describe())
+        else:
             log.comment = 'Adventuring to %s, distance to destination %s km' %(adventure.destination.describe(), int(adventurer.location.distance_to(adventure.destination)))
+
 
         opener = urllib2.build_opener()
         opener.addheaders = [('User-agent', 'adventure_tablet/0.1')]
