@@ -7,7 +7,7 @@ splash = gtk.Window()
 splash.set_title('the Tablet of Adventure')
 # TODO: Display a picture of unicorns, kittens and ponies
 hildon.hildon_gtk_window_set_progress_indicator(splash, 1)
-splash.show_all()
+splash.show()
 
 # Preparing configuration for using Midgard
 # the SQLite database file will be placed into ~/.midgard2/data/adventuretablet.db
