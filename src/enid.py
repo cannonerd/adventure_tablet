@@ -68,6 +68,9 @@ class enid():
             mission.pubDate = timestamp
             mission.validDate = timestamp.replace(hour=23, minute=59, second=59)
             qaikudata = message['data'].split(',')
+            if len(qaikudata) != 2:
+                # Invalid mission coordinates, skip
+                continue
             mission.latitude = float(qaikudata[0])
             mission.longitude = float(qaikudata[1])
             mission.create()

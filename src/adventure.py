@@ -123,6 +123,15 @@ class adventure(gobject.GObject):
                 message_adventurer = adventurer.adventurer(nick)
                 self.add_adventurer(message_adventurer, True)
 
+            # Parse QaikuData
+            if message['data'] != '':
+                qaikudata = message['data'].split(',')
+                if len(qaikudata) == 3:
+                    message['geo']['coordinates'][1] = float(qaikudata[0])
+                    message['geo']['coordinates'][0] = float(qaikudata[1])
+                    if message_adventurer.colour != qaikudata[2]:
+                        message_adventurer.set_colour(qaikudata[2])
+
             message_adventurer.location_changed_qaiku(message)
 
         self.logs_last_updated = timestamp
@@ -139,7 +148,14 @@ class adventure(gobject.GObject):
         opener = urllib2.build_opener()
         opener.addheaders = [('User-agent', 'adventure_tablet/0.1')]
         try:
-            data = urllib.urlencode({'status': unicode(log.comment).encode('utf-8'), 'source': 'adventuretablet', 'lat': log.latitude, 'long': log.longitude, 'in_reply_to_status_id': adventure.qaikuid})
+            data = urllib.urlencode({
+                'status': unicode(log.comment).encode('utf-8'),
+                'source': 'adventuretablet',
+                'lat': log.latitude,
+                'long': log.longitude,
+                'in_reply_to_status_id': adventure.qaikuid,
+                'data': '%s,%s,%s' % (log.latitude, log.longitude, adventurer.colour)
+            })
             params = urllib.urlencode({'apikey': apikey})
             url = 'http://www.qaiku.com/api/statuses/update.json?%s' % params
             req = opener.open(url, data)
@@ -159,7 +175,12 @@ class adventure(gobject.GObject):
         opener = urllib2.build_opener()
         opener.addheaders = [('User-agent', 'adventure_tablet/0.1')]
         try:
-            data = urllib.urlencode({'status': unicode(adventure.name).encode('utf-8'), 'source': 'adventuretablet', 'channel': 'adventure', 'data': '%s,%s' % (adventure.destination.lat, adventure.destination.lon)})
+            data = urllib.urlencode({
+                'status': unicode(adventure.name).encode('utf-8'),
+                'source': 'adventuretablet',
+                'channel': 'adventure',
+                'data': '%s,%s' % (adventure.destination.lat, adventure.destination.lon)
+            })
             params = urllib.urlencode({'apikey': apikey})
             url = 'http://www.qaiku.com/api/statuses/update.json?%s' % params
             req = opener.open(url, data)
