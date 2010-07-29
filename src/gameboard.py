@@ -40,6 +40,7 @@ class UI(hildon.StackableWindow):
     player_colours = ['grey', 'blue', 'red', 'yellow', 'green', 'purple']
     blyton = None
     current_adventure = None
+    create_destination = None
 
     def __init__(self, enid, player):
         win = hildon.StackableWindow.__init__(self)
@@ -299,6 +300,8 @@ class UI(hildon.StackableWindow):
         self.osms.set_zoom(self.osms.props.zoom - 1)
 
     def added(self, button):
+        if self.create_destination is None:
+            banner= hildon.hildon_banner_show_information(button, "", "You have to choose a destination")
         date = datetime.datetime.today()
         mission = midgard.mgdschema.ttoa_mission()
         mission.type = 2
