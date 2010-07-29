@@ -8,6 +8,7 @@ class adventure(gobject.GObject):
     name = ""
     adventurers = []
     logs_last_updated = None
+    last_log_position = {}
 
     __gsignals__ = {
         'adventurer-added': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))
@@ -39,6 +40,19 @@ class adventure(gobject.GObject):
     def log(self, adventurer, location, text, qaikuid):
         if adventurer.participating is False:
             return
+
+        if adventurer.nick in self.last_log_position:
+            # Only log if sufficient distance has been covered
+            distance_to_destination = self.destination.distance_to(location)
+            distance_from_last = self.last_log_position[adventurer.nick].distance_to(location)
+            if (distance_to_destination > 2):
+                if distance_from_last < 0.5:
+                    return
+            else:
+                if distance_from_last < 0.2:
+                    return
+        self.last_log_position[adventurer.nick] = location
+
         if qaikuid != '':
             qb = midgard.query_builder('ttoa_log')
             qb.add_constraint('mission', '=', self.mission.id)
