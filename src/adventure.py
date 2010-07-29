@@ -62,7 +62,7 @@ class adventure(gobject.GObject):
             log.set_parameter('adventuretablet', 'qaikuid', qaikuid)
         elif adventurer.apikey is not None:
             # This message needs to be sent to Qaiku
-            self.log_to_qaiku(self, log, adventurer.adventurer)
+            self.log_to_qaiku(self, log, adventurer)
 
     def logs_from_qaiku(self, player):
         if self.qaikuid is None:
