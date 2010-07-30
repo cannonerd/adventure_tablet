@@ -403,12 +403,12 @@ class UI(hildon.StackableWindow):
         self.qaiku_message = hildon.Entry(gtk.HILDON_SIZE_AUTO)
         self.qaiku_message.set_placeholder("I'finding myself in deep trouble..")
         log_b = hildon.GtkButton(gtk.HILDON_SIZE_AUTO)
-        log_b.set_label("about")
+        log_b.set_label("post to Qaiku")
         log_b.connect("clicked", self.log_button)
         label = gtk.Label (comment)
         vbox.pack_start(label, expand = False)
+        vbox.pack_end(log_b, expand = False)
         vbox.pack_end(self.qaiku_message, expand = False)
-        vbox.pack_end(log_b)
         wido.show_all()
 
     def log_button(self, button):
