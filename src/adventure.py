@@ -161,7 +161,7 @@ class adventure(gobject.GObject):
                 log.comment = "Has arrived to destination %s." % (self.destination.describe())
             else:
                 if adventurer.location.distance_to(self.destination) <= 2:
-                    log.comment = 'Adventuring to %s, distance to destination %s km' %(self.destination.describe(), round(adventurer.location.distance_to(self.destination)), 2)
+                    log.comment = 'Adventuring to %s, distance to destination %s km' %(self.destination.describe(), round(adventurer.location.distance_to(self.destination), 2))
                 else:
                     log.comment = 'Adventuring to %s, distance to destination %s km' %(self.destination.describe(), int(adventurer.location.distance_to(self.destination)))
 
