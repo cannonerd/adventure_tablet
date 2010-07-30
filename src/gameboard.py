@@ -401,6 +401,7 @@ class UI(hildon.StackableWindow):
         comment = "here be comments"#hae qaikusta
         self.qaiku_message = hildon.Entry(gtk.HILDON_SIZE_AUTO)
         self.qaiku_message.set_placeholder("I'finding myself in deep trouble..")
+        log = midgard.mgdschema.ttoa_log()
         log.comment = self.qaiku_message.get_text()
         label = gtk.Label (comment)
         vbox.pack_start(Qaiku_message, expand = False)
