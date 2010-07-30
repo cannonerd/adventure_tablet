@@ -413,7 +413,7 @@ class UI(hildon.StackableWindow):
 
     def log_button(self, button):
 
-        adventure.log(self.player, self.player.location, self.qaiku_message.get_text())
+        self.current_adventure.log(self.player, self.player.location, self.qaiku_message.get_text())
 
         banneri= hildon.hildon_banner_show_information(button, "", "Log has been sent")
         stack = self.get_stack()
