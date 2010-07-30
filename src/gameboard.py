@@ -404,7 +404,7 @@ class UI(hildon.StackableWindow):
         log = midgard.mgdschema.ttoa_log()
         log.comment = self.qaiku_message.get_text()
         label = gtk.Label (comment)
-        vbox.pack_start(qaiku_message, expand = False)
+        vbox.pack_start(self.qaiku_message, expand = False)
         vbox.pack_end()
         wido.show_all()
 
