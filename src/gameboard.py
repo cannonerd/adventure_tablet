@@ -408,7 +408,7 @@ class UI(hildon.StackableWindow):
         label = gtk.Label (comment)
         vbox.pack_start(label, expand = False)
         vbox.pack_end(self.qaiku_message, expand = False)
-        wido.append(log_b)
+        wido.pack_end(log_b)
         wido.show_all()
 
     def log_button(self, button):
