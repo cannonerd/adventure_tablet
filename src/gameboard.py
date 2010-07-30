@@ -221,6 +221,9 @@ class UI(hildon.StackableWindow):
                 self.update_description('home')
             else:
                 self.update_description('destination')
+        else:
+            banner= hildon.hildon_banner_show_information(button, "", "Your location is %s "%(location.pretty_print()) #TODO: Send an infobubble saying the text of the new location
+            pass
 
     def zoom_in_clicked(self, button):
         self.osm.set_zoom(self.osm.props.zoom + 1)
@@ -388,6 +391,7 @@ class UI(hildon.StackableWindow):
             self.osm.remove_image(self.player.piece)
         self.player.piece = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/" +  self.player.colour + ".png", 35,35)
         self.osm.add_image(self.player.location.lat, self.player.location.lon, self.player.piece)
+
     def log(self, button):
         print "log"
         wido= hildon.StackableWindow()
@@ -395,8 +399,12 @@ class UI(hildon.StackableWindow):
         wido.add(vbox)
         wido.set_title("the Log")
         comment = "here be comments"#hae qaikusta
+        self.qaiku_message = hildon.Entry(gtk.HILDON_SIZE_AUTO)
+        self.qaiku_message.set_placeholder("I'finding myself in deep trouble..")
+        log.comment = self.qaiku_message.get_text()
         label = gtk.Label (comment)
-        vbox.pack_start(label, expand = False)
+        vbox.pack_start(Qaiku_message, expand = False)
+        vbox.pack_end()
         wido.show_all()
 
     def about(self, button):
