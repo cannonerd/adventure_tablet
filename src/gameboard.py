@@ -405,7 +405,7 @@ class UI(hildon.StackableWindow):
         log.comment = self.qaiku_message.get_text()
         label = gtk.Label (comment)
         vbox.pack_start(self.qaiku_message, expand = False)
-        vbox.pack_end()
+        vbox.pack_end(self.qaiku_message, expand = False)
         wido.show_all()
 
     def about(self, button):
