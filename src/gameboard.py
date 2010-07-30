@@ -404,7 +404,7 @@ class UI(hildon.StackableWindow):
         self.qaiku_message.set_placeholder("I'finding myself in deep trouble..")
         log_b = hildon.GtkButton(gtk.HILDON_SIZE_AUTO)
         log_b.set_label("about")
-        logb.connect("clicked", self.log_button)
+        log_b.connect("clicked", self.log_button)
         label = gtk.Label (comment)
         vbox.pack_start(label, expand = False)
         vbox.pack_end(self.qaiku_message, expand = False)
