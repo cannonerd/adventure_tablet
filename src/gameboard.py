@@ -399,14 +399,27 @@ class UI(hildon.StackableWindow):
         wido.add(vbox)
         wido.set_title("the Log")
         comment = "here be comments"#hae qaikusta
+    
         self.qaiku_message = hildon.Entry(gtk.HILDON_SIZE_AUTO)
         self.qaiku_message.set_placeholder("I'finding myself in deep trouble..")
+        log_b = hildon.GtkButton(gtk.HILDON_SIZE_AUTO)
+        log_b.set_label("about")
+        logb.connect("clicked", self.log_button)
+        label = gtk.Label (comment)
+        vbox.pack_start(label, expand = False)
+        vbox.pack_end(self.qaiku_message, expand = False)
+        log_b.append(button)
+        wido.show_all()
+
+    def log_button(self, button):
+
         log = midgard.mgdschema.ttoa_log()
         log.comment = self.qaiku_message.get_text()
-        label = gtk.Label (comment)
-        vbox.pack_start(self.qaiku_message, expand = False)
-        vbox.pack_end(self.qaiku_message, expand = False)
-        wido.show_all()
+
+        banneri= hildon.hildon_banner_show_information(button, "", "Log has been sent")
+        stack = self.get_stack()
+        stack.pop(1)
+
 
     def about(self, button):
         about_tablet = gtk.AboutDialog()
