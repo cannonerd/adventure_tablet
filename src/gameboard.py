@@ -22,7 +22,7 @@
 """
 import gtk.gdk
 import gobject
-import adventurer, enid, point
+import adventurer, enid, point, adventure
 import os
 import sys
 import gtk
