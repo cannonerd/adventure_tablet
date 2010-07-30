@@ -222,8 +222,8 @@ class UI(hildon.StackableWindow):
             else:
                 self.update_description('destination')
         else:
-            banner= hildon.hildon_banner_show_information(button, "", "Your location is %s "%(location.pretty_print()) #TODO: Send an infobubble saying the text of the new location
-
+            banner= hildon.hildon_banner_show_information(button, "", "Your location is %s "%(location.pretty_print())) #TODO: Send an infobubble saying the text of the new location
+            pass
 
     def zoom_in_clicked(self, button):
         self.osm.set_zoom(self.osm.props.zoom + 1)
