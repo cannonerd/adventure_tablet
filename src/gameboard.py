@@ -403,10 +403,19 @@ class UI(hildon.StackableWindow):
         wido.set_title("the Log")
         comment = "here be comments"#hae qaikusta
 
-#        qb = midgard.query_builder('ttoa_log')
-#        qb.add_constraint('mission', '=', self.current_adventure.mission.id)
-#        logs = qb.execute()
-#        for log in logs:
+        qb = midgard.query_builder('ttoa_log')
+        qb.add_constraint('mission', '=', self.current_adventure.mission.id)
+        qb.add_order('metadata.created', 'ASC')
+        logs = qb.execute()
+        for log in logs:
+            # Now we have an individual log entry with coordinates in log.latitude etc, and text in log.comment
+            # Match log to the author of it
+            author = "anonymous"
+            for player in self.current_adventure.adventurers:
+                if player.user.id == log.author:
+                    author = player.nick
+
+            print "%s: %s" % (author, log.comment)
 
 
         self.qaiku_message = hildon.Entry(gtk.HILDON_SIZE_AUTO)
