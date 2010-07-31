@@ -37,7 +37,7 @@ import osmgpsmap
 class UI(hildon.StackableWindow):
     track_location = False
     player = None
-    player_colours = ['grey', 'blue', 'red', 'yellow', 'green', 'purple']
+    player_colours = ['grey', 'blue', 'red', 'yellow', 'green', 'purple', 'brown', 'turquoise', 'dgreen']
     blyton = None
     current_adventure = None
     create_destination = None
