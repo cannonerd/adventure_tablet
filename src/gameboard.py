@@ -367,8 +367,7 @@ class UI(hildon.StackableWindow):
             colour_button.connect('toggled', self.change_colour, colour)
             hbox.pack_start(colour_button, expand = False)
 
-        save_button = hildon.Button(gtk.HILDON_SIZE_FINGER_HEIGHT, hildon.BUTTON_ARRANGEMENT_VERTICAL)
-        save_button.set_title("Save")
+        save_button = hildon.Button(gtk.HILDON_SIZE_FINGER_HEIGHT, hildon.BUTTON_ARRANGEMENT_VERTICAL, "Save")
         save_button.connect('clicked', self.save)
 
         vbox.pack_start(label, expand = False, padding = 10)
@@ -412,6 +411,16 @@ class UI(hildon.StackableWindow):
         logs = qb.execute()
         players = {}
 
+        sw = gtk.ScrolledWindow()
+        sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        logview = gtk.TextView()
+        logview.set_editable(False)
+        logview.set_wrap_mode(gtk.WRAP_WORD)
+        logbuffer = logview.get_buffer()
+        sw.add(logview)
+        vbox.pack_start(sw, expand = True, fill = True)
+
+        log_string = ''
         for log in logs:
             # Now we have an individual log entry with coordinates in log.latitude etc, and text in log.comment
             # Match log to the author of it
@@ -422,16 +431,12 @@ class UI(hildon.StackableWindow):
                 else:
                     players[log.author] = 'anon #%s' % (log.author)
 
-            comment = "%s: %s" % (players[log.author], log.comment)
-
-            label = gtk.Label(comment)
-            vbox.pack_start(label, expand = False)
+            log_string = log_string + "%s: %s\n" % (players[log.author], log.comment)
 
         if self.current_adventure.qaikuid is not None:
             self.qaiku_message = hildon.Entry(gtk.HILDON_SIZE_AUTO)
             self.qaiku_message.set_placeholder("I'm finding myself in deep trouble..")
-            log_b = hildon.GtkButton(gtk.HILDON_SIZE_AUTO)
-            log_b.set_label("post to Qaiku")
+            log_b = hildon.Button(gtk.HILDON_SIZE_FINGER_HEIGHT, hildon.BUTTON_ARRANGEMENT_VERTICAL, "Post to Qaiku")
             log_b.connect("clicked", self.log_button)
             vbox.pack_end(log_b, expand = False)
             vbox.pack_end(self.qaiku_message, expand = False)
