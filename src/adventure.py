@@ -81,14 +81,6 @@ class adventure(gobject.GObject):
                 return
             self.adventurer_segments[adventurer.nick] = self.adventurer_segments[adventurer.nick][1:]
 
-        if qaikuid != '':
-            qb = midgard.query_builder('ttoa_log')
-            qb.add_constraint('mission', '=', self.mission.id)
-            qb.add_constraint('parameter.value', '=', qaikuid)
-            if qb.count() != 0:
-                # We already have this log entry
-                return
-
         log = midgard.mgdschema.ttoa_log()
         log.author = adventurer.user.id
         log.mission = self.mission.id
@@ -141,6 +133,14 @@ class adventure(gobject.GObject):
             if created_at > latest_update:
                 # We use timestamp from the messages in order to avoid gaps due to Qaiku and local machine being in different time
                 latest_update = created_at
+
+            qb = midgard.query_builder('ttoa_log')
+            qb.add_constraint('mission', '=', self.mission.id)
+            qb.add_constraint('parameter.value', '=', message['id'])
+            if qb.count() != 0:
+                # We already have this log entry
+                print "Skipping comment '%s' from %s as we already have it" % (message['text'], message['user']['screen_name'])
+                continue
 
             if isinstance(message['geo'], dict) is False:
                 # Log without a location, skip
