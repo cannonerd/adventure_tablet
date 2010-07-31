@@ -418,7 +418,7 @@ class UI(hildon.StackableWindow):
         logview.set_wrap_mode(gtk.WRAP_WORD)
         logbuffer = logview.get_buffer()
         sw.add(logview)
-        vbox.pack_start(sw, expand = True, fill = True)
+        vbox.pack_start(sw, expand = True)
 
         log_string = ''
         for log in logs:
@@ -432,6 +432,7 @@ class UI(hildon.StackableWindow):
                     players[log.author] = 'anon #%s' % (log.author)
 
             log_string = log_string + "%s: %s\n" % (players[log.author], log.comment)
+        logbuffer.set_text(log_string)
 
         if self.current_adventure.qaikuid is not None:
             self.qaiku_message = hildon.Entry(gtk.HILDON_SIZE_AUTO)
