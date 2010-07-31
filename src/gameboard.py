@@ -411,7 +411,7 @@ class UI(hildon.StackableWindow):
 
         qb = midgard.query_builder('ttoa_log')
         qb.add_constraint('mission', '=', self.current_adventure.mission.id)
-        qb.add_order('metadata.created', 'ASC')
+        qb.add_order('metadata.created', 'DESC')
         logs = qb.execute()
         players = {}
 
