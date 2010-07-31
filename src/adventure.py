@@ -41,21 +41,22 @@ class adventure(gobject.GObject):
         if self.mission is not None:
             self.mission.set_parameter('adventuretablet', 'qaikuid', qaikuid)
 
-    def log(self, adventurer, location, text, qaikuid):
+    def log(self, adventurer, location, text, qaikuid, force_store = False):
         if adventurer.participating is False:
             print "Adventurer %s is not participating in %s, skipping log" % (adventurer.nick, self.name)
             return
 
-        if adventurer.nick in self.last_log_position:
-            # Only log if sufficient distance has been covered
-            distance_to_destination = self.destination.distance_to(location)
-            distance_from_last = self.last_log_position[adventurer.nick].distance_to(location)
-            if (distance_to_destination > 2):
-                if distance_from_last < 0.5:
-                    return
-            else:
-                if distance_from_last < 0.2:
-                    return
+        if not force_store:
+            if adventurer.nick in self.last_log_position:
+                # Only log if sufficient distance has been covered
+                distance_to_destination = self.destination.distance_to(location)
+                distance_from_last = self.last_log_position[adventurer.nick].distance_to(location)
+                if (distance_to_destination > 2):
+                    if distance_from_last < 0.5:
+                        return
+                else:
+                    if distance_from_last < 0.2:
+                        return
         self.last_log_position[adventurer.nick] = location
 
         if qaikuid != '':

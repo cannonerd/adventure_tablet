@@ -210,7 +210,9 @@ class UI(hildon.StackableWindow):
 
     def location_changed(self, adventurer, location, text, qaikuid):
         # FIXME: In newer OsmGpsMap versions we can just move the image
-        print "Adventurer %s has new location %s" % (adventurer.nick, location.pretty_print())
+        if text == '':
+            text = "New location %s, distance to destination %s" % (location.pretty_print(), location.distance_to(self.current_adventure.destination))
+        print text
         if adventurer.piece is not None:
             self.osm.remove_image(adventurer.piece)
         self.osm.add_image(adventurer.location.lat, adventurer.location.lon, adventurer.piece)
@@ -222,6 +224,7 @@ class UI(hildon.StackableWindow):
             else:
                 self.update_description('destination')
         else:
+            banner= hildon.hildon_banner_show_information(self, "", "%s: %s" %(adventurer.nick, text))
             #TODO: Send an infobubble saying the text of the new location
             pass
 
@@ -399,7 +402,13 @@ class UI(hildon.StackableWindow):
         wido.add(vbox)
         wido.set_title("the Log")
         comment = "here be comments"#hae qaikusta
-    
+
+#        qb = midgard.query_builder('ttoa_log')
+#        qb.add_constraint('mission', '=', self.current_adventure.mission.id)
+#        logs = qb.execute()
+#        for log in logs:
+
+
         self.qaiku_message = hildon.Entry(gtk.HILDON_SIZE_AUTO)
         self.qaiku_message.set_placeholder("I'finding myself in deep trouble..")
         log_b = hildon.GtkButton(gtk.HILDON_SIZE_AUTO)
@@ -413,7 +422,8 @@ class UI(hildon.StackableWindow):
 
     def log_button(self, button):
 
-        self.current_adventure.log(self.player, self.player.location, self.qaiku_message.get_text(), '')
+        self.current_adventure.log(self.player, self.player.location, self.qaiku_message.get_text(), '', True
+)
 
         banneri= hildon.hildon_banner_show_information(button, "", "Log has been sent")
         stack = self.get_stack()
