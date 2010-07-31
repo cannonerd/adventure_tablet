@@ -270,7 +270,7 @@ class UI(hildon.StackableWindow):
     def create_adventure(self, button):
         wind = hildon.StackableWindow()
         wind.set_title("Plan your adventure")
-        label = gtk.Label("Name your adventure")
+        label = gtk.Label("Name your adventure: ")
         vbox = gtk.VBox(False, 0)
         wind.add(vbox)
         name_hbox= gtk.HBox(False, 0)
@@ -415,7 +415,7 @@ class UI(hildon.StackableWindow):
         logs = qb.execute()
         players = {}
 
-        sw = hildon.PannableArea
+        sw = hildon.PannableArea()
         logview = hildon.TextView()
         logview.set_editable(False)
         logview.set_wrap_mode(gtk.WRAP_WORD)
