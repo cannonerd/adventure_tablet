@@ -417,16 +417,16 @@ class UI(hildon.StackableWindow):
 
             print "%s: %s" % (author, log.comment)
 
-
-        self.qaiku_message = hildon.Entry(gtk.HILDON_SIZE_AUTO)
-        self.qaiku_message.set_placeholder("I'finding myself in deep trouble..")
-        log_b = hildon.GtkButton(gtk.HILDON_SIZE_AUTO)
-        log_b.set_label("post to Qaiku")
-        log_b.connect("clicked", self.log_button)
-        label = gtk.Label (comment)
-        vbox.pack_start(label, expand = False)
-        vbox.pack_end(log_b, expand = False)
-        vbox.pack_end(self.qaiku_message, expand = False)
+        if self.current_adventure.qaikuid is not None:
+            self.qaiku_message = hildon.Entry(gtk.HILDON_SIZE_AUTO)
+            self.qaiku_message.set_placeholder("I'finding myself in deep trouble..")
+            log_b = hildon.GtkButton(gtk.HILDON_SIZE_AUTO)
+            log_b.set_label("post to Qaiku")
+            log_b.connect("clicked", self.log_button)
+            label = gtk.Label (comment)
+            vbox.pack_start(label, expand = False)
+            vbox.pack_end(log_b, expand = False)
+            vbox.pack_end(self.qaiku_message, expand = False)
         wido.show_all()
 
     def log_button(self, button):
