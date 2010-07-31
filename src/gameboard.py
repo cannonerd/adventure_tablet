@@ -212,7 +212,7 @@ class UI(hildon.StackableWindow):
         # FIXME: In newer OsmGpsMap versions we can just move the image
         if text == '':
             text = "New location %s, distance to destination %s" % (location.pretty_print(), location.distance_to(self.current_adventure.destination))
-        print text
+        print "%s: %s" % (adventurer.nick, text)
         if adventurer.piece is not None:
             self.osm.remove_image(adventurer.piece)
         self.osm.add_image(adventurer.location.lat, adventurer.location.lon, adventurer.piece)

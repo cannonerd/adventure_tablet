@@ -75,7 +75,6 @@ class adventure(gobject.GObject):
                 return
 
             # Only log if sufficient distance has been covered
-            
             if len(self.adventurer_segments[adventurer.nick]) == 0:
                 return
             if adventurer.location.distance_to(self.destination) > self.adventurer_segments[adventurer.nick][0]:
