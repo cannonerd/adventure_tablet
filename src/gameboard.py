@@ -28,7 +28,7 @@ import sys
 import gtk
 import hildon
 import datetime
-import midgard
+import _midgard as midgard
 gobject.threads_init()
 gtk.gdk.threads_init()
 
