@@ -418,7 +418,7 @@ class UI(hildon.StackableWindow):
                 else:
                     players[log.author] = 'anon #%s' % (log.author)
 
-            comment = "%s: %s" % (players[log.author].username, log.comment)
+            comment = "%s: %s" % (players[log.author], log.comment)
 
             label = gtk.Label(comment)
             vbox.pack_start(label, expand = False)
