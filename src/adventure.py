@@ -1,4 +1,4 @@
-import point, gobject, adventurer, datetime, urllib, urllib2, simplejson
+import point, gobject, adventurer, datetime, time, urllib, urllib2, simplejson
 import _midgard as midgard
 
 class adventure(gobject.GObject):
@@ -107,7 +107,7 @@ class adventure(gobject.GObject):
             self.log_to_qaiku(log, adventurer)
 
     def logs_from_qaiku(self, player):
-        print "Polling updates from Qaiku"
+        print "Polling updates for %s from Qaiku" % (self.name)
         if self.qaikuid is None:
             print "Adventure %s has no QaikuID, skipping poll" % (self.name)
             return False
@@ -116,7 +116,6 @@ class adventure(gobject.GObject):
             print "Adventure %s has no mission, skipping poll" % (self.name)
             return False
 
-        timestamp = datetime.datetime.today()
         opener = urllib2.build_opener()
         opener.addheaders = [('User-agent', 'adventure_tablet/0.1')]
         try:
@@ -134,9 +133,15 @@ class adventure(gobject.GObject):
             print "logs_from_qaiku for %s: Connection failed, error %s" % (self.name, e.message)
             return True
 
+        latest_update = 0
         messages = simplejson.loads(req.read())
         messages.reverse()
         for message in messages:
+            created_at = int(time.mktime(time.strptime(message['created_at'], '%a %b %d %H:%M:%S +0000 %Y')))
+            if created_at > latest_update:
+                # We use timestamp from the messages in order to avoid gaps due to Qaiku and local machine being in different time
+                latest_update = created_at
+
             if isinstance(message['geo'], dict) is False:
                 # Log without a location, skip
                 print "Comment %s from %s has no location, skipping" % (message['text'], message['user']['screen_name'])
@@ -169,7 +174,7 @@ class adventure(gobject.GObject):
 
             message_adventurer.location_changed_qaiku(message)
 
-        self.logs_last_updated = timestamp
+        self.logs_last_updated = datetime.datetime.fromtimestamp(latest_update)
         return True
 
     def log_to_qaiku(self, log, adventurer):
