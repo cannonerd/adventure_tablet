@@ -401,12 +401,12 @@ class UI(hildon.StackableWindow):
         vbox= gtk.VBox(False, 0)
         wido.add(vbox)
         wido.set_title("the Log")
-        comment = "here be comments"#hae qaikusta
 
         qb = midgard.query_builder('ttoa_log')
         qb.add_constraint('mission', '=', self.current_adventure.mission.id)
         qb.add_order('metadata.created', 'ASC')
         logs = qb.execute()
+
         for log in logs:
             # Now we have an individual log entry with coordinates in log.latitude etc, and text in log.comment
             # Match log to the author of it
@@ -414,17 +414,17 @@ class UI(hildon.StackableWindow):
             for player in self.current_adventure.adventurers:
                 if player.user.id == log.author:
                     author = player.nick
+            comment = "%s: %s" % (author, log.comment)
 
-            print "%s: %s" % (author, log.comment)
+            label = gtk.Label(comment)
+            vbox.pack_start(label, expand = False)
 
         if self.current_adventure.qaikuid is not None:
             self.qaiku_message = hildon.Entry(gtk.HILDON_SIZE_AUTO)
-            self.qaiku_message.set_placeholder("I'finding myself in deep trouble..")
+            self.qaiku_message.set_placeholder("I'm finding myself in deep trouble..")
             log_b = hildon.GtkButton(gtk.HILDON_SIZE_AUTO)
             log_b.set_label("post to Qaiku")
             log_b.connect("clicked", self.log_button)
-            label = gtk.Label (comment)
-            vbox.pack_start(label, expand = False)
             vbox.pack_end(log_b, expand = False)
             vbox.pack_end(self.qaiku_message, expand = False)
         wido.show_all()

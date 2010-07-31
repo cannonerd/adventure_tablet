@@ -7,6 +7,7 @@ class adventure(gobject.GObject):
     qaikuid = None
     name = ""
     adventurers = []
+    adventurer_segments = {}
     logs_last_updated = None
     last_log_position = {}
     polling_timeout = None
@@ -30,6 +31,10 @@ class adventure(gobject.GObject):
         print "Adding %s to adventure %s" % (adventurer.nick, self.name)
         adventurer.participating = participating
         self.adventurers.append(adventurer)
+
+        self.adventurer_segments[adventurer.nick] = []
+        self.calculate_segments(adventurer.nick, adventurer.location.distance_to(self.destination)) 
+
         adventurer.mission_listener = adventurer.connect('location-changed', self.log)
         self.emit('adventurer-added', adventurer)
 
@@ -37,6 +42,25 @@ class adventure(gobject.GObject):
         print "Removing %s from adventure %s" % (adventurer.nick, self.name)
         self.adventurers.remove(adventurer)
         adventurer.disconnect(adventurer.mission_listener)
+
+    def check_arrival(self, distance):
+        if distance <= 0.1:
+            return True
+        return False
+
+    def calculate_segments(self, adventurer_nick, distance):
+        distance = float(distance)
+        segments = 4
+        segment_length = distance / segments
+        segments_to_traverse = segments - 1
+        while segments_to_traverse >= 0:
+            distance = distance - segment_length
+            if self.check_arrival(distance):
+                break
+            self.adventurer_segments[adventurer.nick][] = distance
+            segments_to_traverse = segments_to_traverse - 1
+            if segments_to_traverse == 0:
+                return self.calculate_segments(adventurer_nick, distance)
 
     def set_qaikuid(self, qaikuid):
         self.qaikuid = qaikuid
@@ -50,17 +74,13 @@ class adventure(gobject.GObject):
                 print "Adventurer %s is not participating in %s, skipping log" % (adventurer.nick, self.name)
                 return
 
-            if adventurer.nick in self.last_log_position:
-                # Only log if sufficient distance has been covered
-                distance_to_destination = self.destination.distance_to(location)
-                distance_from_last = self.last_log_position[adventurer.nick].distance_to(location)
-                if (distance_to_destination > 2):
-                    if distance_from_last < 0.5:
-                        return
-                else:
-                    if distance_from_last < 0.2:
-                        return
-        self.last_log_position[adventurer.nick] = location
+            # Only log if sufficient distance has been covered
+            
+            if len(self.adventurer_segments[adventurer.nick]) == 0:
+                return
+            if adventurer.location.distance_to(self.destination) > self.adventurer_segments[adventurer.nick][0]:
+                return
+            self.adventurer_segments[adventurer.nick] = self.adventurer_segments[adventurer.nick][1:]
 
         if qaikuid != '':
             qb = midgard.query_builder('ttoa_log')
