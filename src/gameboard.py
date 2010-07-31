@@ -370,7 +370,6 @@ class UI(hildon.StackableWindow):
         save_button = gtk.Button(" save ")
         save_button.connect('clicked', self.save)
 
-        vbox.pack_start(label2, expand = False, padding = 10)
         vbox.pack_start(label, expand = False, padding = 10)
         vbox.pack_start(self.qapikey, expand = False)
         vbox.pack_start(save_button, expand = False)
