@@ -208,7 +208,7 @@ class UI(hildon.StackableWindow):
                 self.destination_clicked(self.destination_button)
                 return
 
-    def location_changed(self, adventurer, location, text, qaikuid):
+    def location_changed(self, adventurer, location, text, qaikuid, force_log):
         # FIXME: In newer OsmGpsMap versions we can just move the image
         if text == '':
             text = "New location %s, distance to destination %s" % (location.pretty_print(), location.distance_to(self.current_adventure.destination))

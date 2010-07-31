@@ -57,7 +57,7 @@ class adventure(gobject.GObject):
             distance = distance - segment_length
             if self.check_arrival(distance):
                 break
-            self.adventurer_segments[adventurer.nick].append(distance)
+            self.adventurer_segments[adventurer_nick].append(distance)
             segments_to_traverse = segments_to_traverse - 1
             if segments_to_traverse == 0:
                 return self.calculate_segments(adventurer_nick, distance)
