@@ -275,6 +275,7 @@ class UI(hildon.StackableWindow):
         vbox.pack_start(label, expand = False)
         wind.add(vbox)
         self.create_adventure = hildon.Entry(gtk.HILDON_SIZE_AUTO)
+        self.create_adventure.set_max_length(25)
         self.create_adventure.set_placeholder("We're Going to...")
 #Choose your destination
 
@@ -283,15 +284,15 @@ class UI(hildon.StackableWindow):
         self.osms.set_mapcenter(self.player.location.lat, self.player.location.lon, 10)
         self.osms.add_image(self.osms.props.latitude, self.osms.props.longitude, self.target_image)
 
-        zoom_in_button_choose = gtk.Button( " + ")
+
+        zoom_in_button_choose = hildon.Button(gtk.HILDON_SIZE_FINGER_HEIGHT, hildon.BUTTON_ARRANGEMENT_VERTICAL, "+")
         zoom_in_button_choose.connect('clicked', self.zoom_in_clicked_choose)
 
-        zoom_out_button_choose = gtk.Button(" - ")
+        zoom_out_button_choose = hildon.Button(gtk.HILDON_SIZE_FINGER_HEIGHT, hildon.BUTTON_ARRANGEMENT_VERTICAL, "-")
         zoom_out_button_choose.connect('clicked', self.zoom_out_clicked_choose)
 
 
-        add = hildon.GtkButton(gtk.HILDON_SIZE_AUTO)
-        add.set_label("Add")
+        add = hildon.Button(gtk.HILDON_SIZE_FINGER_HEIGHT, hildon.BUTTON_ARRANGEMENT_VERTICAL, "Add")
         add.connect("clicked", self.added)
         vbox.pack_start(self.create_adventure, expand = False)
         vbox.pack_start(self.osms)
