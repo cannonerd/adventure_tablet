@@ -44,7 +44,7 @@ class adventure(gobject.GObject):
         adventurer.disconnect(adventurer.mission_listener)
 
     def check_arrival(self, distance):
-        if distance <= 0.1:
+        if distance <= 0.05:
             return True
         return False
 
@@ -55,9 +55,9 @@ class adventure(gobject.GObject):
         segments_to_traverse = segments - 1
         while segments_to_traverse >= 0:
             distance = distance - segment_length
+            self.adventurer_segments[adventurer_nick].append(distance)
             if self.check_arrival(distance):
                 break
-            self.adventurer_segments[adventurer_nick].append(distance)
             segments_to_traverse = segments_to_traverse - 1
             if segments_to_traverse == 0:
                 return self.calculate_segments(adventurer_nick, distance)
@@ -180,7 +180,7 @@ class adventure(gobject.GObject):
         print "Posting a log entry from %s to adventure %s to Qaiku thread %s" % (adventurer.nick, self.name, self.qaikuid)
 
         if log.comment is None:
-            if adventurer.location.distance_to(self.destination) <= 0.05:
+            if self.check_arrival(adventurer.location.distance_to(self.destination)):
                 log.comment = "Has arrived to destination %s." % (self.destination.describe())
             else:
                 if adventurer.location.distance_to(self.destination) <= 1:

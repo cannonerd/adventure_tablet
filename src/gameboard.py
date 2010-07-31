@@ -235,7 +235,7 @@ class UI(hildon.StackableWindow):
         self.osm.set_zoom(self.osm.props.zoom - 1)
 
     def update_description(self, mode):
-        if self.player.location.distance_to(self.current_adventure.destination) <= 0.05:
+        if self.current_adventure.check_arrival(self.player.location.distance_to(self.current_adventure.destination)):
             description = "Congratulations! you have arrived to your destination."
             self.osm.remove_image(self.target_image)
             self.fin_image = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/lippu.png", 45,45)
