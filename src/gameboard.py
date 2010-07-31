@@ -280,6 +280,7 @@ class UI(hildon.StackableWindow):
 
         self.osms = osmgpsmap.GpsMap()
         self.osms.connect('button_release_event', self.map_info)
+        self.osms.set_mapcenter(self.player.location.lat, self.player.location.lon, 8)
         self.osms.add_image(self.osms.props.latitude, self.osms.props.longitude, self.target_image)
 
         zoom_in_button_choose = gtk.Button( " + ")
