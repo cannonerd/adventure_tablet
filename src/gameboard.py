@@ -279,7 +279,7 @@ class UI(hildon.StackableWindow):
         self.create_adventure.set_max_length(25)
         self.create_adventure.set_placeholder("We're Going to...")
         name_hbox.pack_start(label, expand = False)
-        name_hbox.pack_start(self.create_adventure, expand = False)
+        name_hbox.pack_start(self.create_adventure, expand = True)
 #Choose your destination
 
         self.osms = osmgpsmap.GpsMap()
@@ -297,7 +297,7 @@ class UI(hildon.StackableWindow):
 
         add = hildon.Button(gtk.HILDON_SIZE_FINGER_HEIGHT, hildon.BUTTON_ARRANGEMENT_VERTICAL, " Add ")
         add.connect("clicked", self.added)
-        vbox.pack_start(name_hbox)
+        vbox.pack_start(name_hbox, expand = False)
         vbox.pack_start(self.osms)
         hbox = gtk.HBox(False, 0)
         hbox.pack_start(zoom_in_button_choose, expand = False)
