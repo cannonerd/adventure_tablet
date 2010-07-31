@@ -368,7 +368,7 @@ class UI(hildon.StackableWindow):
             hbox.pack_start(colour_button, expand = False)
 
         save_button = hildon.Button(gtk.HILDON_SIZE_THUMB_HEIGHT, hildon.BUTTON_ARRANGEMENT_VERTICAL)
-        save_button.set_text("Save")
+        save_button.set_title("Save")
         save_button.connect('clicked', self.save)
 
         vbox.pack_start(label, expand = False, padding = 10)
