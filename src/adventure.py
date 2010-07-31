@@ -29,6 +29,8 @@ class adventure(gobject.GObject):
 
     def add_adventurer(self, adventurer, participating = False):
         print "Adding %s to adventure %s" % (adventurer.nick, self.name)
+        if adventurer in self.adventurers:
+            return
         adventurer.participating = participating
         self.adventurers.append(adventurer)
 
@@ -40,6 +42,8 @@ class adventure(gobject.GObject):
 
     def remove_adventurer(self, adventurer):
         print "Removing %s from adventure %s" % (adventurer.nick, self.name)
+        if adventurer not in self.adventurers:
+            return
         self.adventurers.remove(adventurer)
         adventurer.disconnect(adventurer.mission_listener)
 
