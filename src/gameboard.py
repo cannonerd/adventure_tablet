@@ -272,11 +272,14 @@ class UI(hildon.StackableWindow):
         wind.set_title("Plan your adventure")
         label = gtk.Label("Name your adventure")
         vbox = gtk.VBox(False, 0)
-        vbox.pack_start(label, expand = False)
         wind.add(vbox)
+        name_hbox= gtk.HBox(False, 0)
+
         self.create_adventure = hildon.Entry(gtk.HILDON_SIZE_AUTO)
         self.create_adventure.set_max_length(25)
         self.create_adventure.set_placeholder("We're Going to...")
+        name_hbox.pack_start(label, expand = False)
+        name_hbox.pack_start(self.create_adventure, expand = False)
 #Choose your destination
 
         self.osms = osmgpsmap.GpsMap()
@@ -285,16 +288,16 @@ class UI(hildon.StackableWindow):
         self.osms.add_image(self.osms.props.latitude, self.osms.props.longitude, self.target_image)
 
 
-        zoom_in_button_choose = hildon.Button(gtk.HILDON_SIZE_FINGER_HEIGHT, hildon.BUTTON_ARRANGEMENT_VERTICAL, "+")
+        zoom_in_button_choose = hildon.Button(gtk.HILDON_SIZE_FINGER_HEIGHT, hildon.BUTTON_ARRANGEMENT_VERTICAL, "  +  ")
         zoom_in_button_choose.connect('clicked', self.zoom_in_clicked_choose)
 
-        zoom_out_button_choose = hildon.Button(gtk.HILDON_SIZE_FINGER_HEIGHT, hildon.BUTTON_ARRANGEMENT_VERTICAL, "-")
+        zoom_out_button_choose = hildon.Button(gtk.HILDON_SIZE_FINGER_HEIGHT, hildon.BUTTON_ARRANGEMENT_VERTICAL, "  -  ")
         zoom_out_button_choose.connect('clicked', self.zoom_out_clicked_choose)
 
 
-        add = hildon.Button(gtk.HILDON_SIZE_FINGER_HEIGHT, hildon.BUTTON_ARRANGEMENT_VERTICAL, "Add")
+        add = hildon.Button(gtk.HILDON_SIZE_FINGER_HEIGHT, hildon.BUTTON_ARRANGEMENT_VERTICAL, " Add ")
         add.connect("clicked", self.added)
-        vbox.pack_start(self.create_adventure, expand = False)
+        vbox.pack_start(name_hbox)
         vbox.pack_start(self.osms)
         hbox = gtk.HBox(False, 0)
         hbox.pack_start(zoom_in_button_choose, expand = False)
