@@ -174,7 +174,8 @@ class adventure(gobject.GObject):
 
             message_adventurer.location_changed_qaiku(message)
 
-        self.logs_last_updated = datetime.datetime.fromtimestamp(latest_update)
+        if latest_update > 0:
+            self.logs_last_updated = datetime.datetime.fromtimestamp(latest_update)
         return True
 
     def log_to_qaiku(self, log, adventurer):
