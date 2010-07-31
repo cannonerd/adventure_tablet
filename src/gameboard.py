@@ -373,7 +373,7 @@ class UI(hildon.StackableWindow):
         vbox.pack_start(label, expand = False)
         vbox.pack_start(self.qapikey, expand = False)
         vbox.pack_start (save_button, expand = False)
-        vbox.pack_start(label1, expand = False)
+        vbox.pack_start(label1, expand = False, padding = 2)
         vbox.pack_start (hbox, expand = False)
         window.show_all()
 
