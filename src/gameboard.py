@@ -415,9 +415,8 @@ class UI(hildon.StackableWindow):
         logs = qb.execute()
         players = {}
 
-        sw = gtk.ScrolledWindow()
-        sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-        logview = gtk.TextView()
+        sw = hildon.PannableArea
+        logview = hildon.TextView()
         logview.set_editable(False)
         logview.set_wrap_mode(gtk.WRAP_WORD)
         logbuffer = logview.get_buffer()
