@@ -406,15 +406,19 @@ class UI(hildon.StackableWindow):
         qb.add_constraint('mission', '=', self.current_adventure.mission.id)
         qb.add_order('metadata.created', 'ASC')
         logs = qb.execute()
+        players = {}
 
         for log in logs:
             # Now we have an individual log entry with coordinates in log.latitude etc, and text in log.comment
             # Match log to the author of it
-            author = "anonymous"
-            for player in self.current_adventure.adventurers:
-                if player.user.id == log.author:
-                    author = player.nick
-            comment = "%s: %s" % (author, log.comment)
+            if log.author not in players:
+                player = midgard.mgdschema.ttoa_user()
+                if player.get_by_id(log.author):
+                    players[log.author] = player.username
+                else:
+                    players[log.author] = 'anon #%s' % (log.author)
+
+            comment = "%s: %s" % (players[log.author].username, log.comment)
 
             label = gtk.Label(comment)
             vbox.pack_start(label, expand = False)
