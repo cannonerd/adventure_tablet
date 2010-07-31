@@ -348,7 +348,7 @@ class UI(hildon.StackableWindow):
 
 
         label1 = gtk.Label("choose colour of your button")
-
+        label2 = gtk.Label("  ")
         hbox= gtk.HBox(False, 0)
         
         radioGroup = None
@@ -369,12 +369,14 @@ class UI(hildon.StackableWindow):
 
         save_button = gtk.Button(" save ")
         save_button.connect('clicked', self.save)
-
+        
         vbox.pack_start(label, expand = False)
         vbox.pack_start(self.qapikey, expand = False)
         vbox.pack_start(save_button, expand = False)
-        vbox.pack_end(hbox, expand = False)
-        vbox.pack_end(label1, expand = False, padding = 10)
+        vbox.pack_start(label2, expand = False, padding = 10)
+        vbox.pack_start(label1, expand = False, padding = 10)
+        vbox.pack_start(hbox, expand = False)
+
         window.show_all()
 
     def save(self, button):
