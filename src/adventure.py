@@ -23,6 +23,8 @@ class adventure(gobject.GObject):
         self.mission = mission
         if self.mission is not None:
             self.qaikuid = self.mission.get_parameter('adventuretablet', 'qaikuid')
+            if self.qaikuid == '':
+                self.qaikuid = None
 
     def add_adventurer(self, adventurer, participating = False):
         print "Adding %s to adventure %s" % (adventurer.nick, self.name)
