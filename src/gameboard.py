@@ -117,7 +117,7 @@ class UI(hildon.StackableWindow):
         zoom_in_button = gtk.Button(" + ")
         zoom_in_button.connect('clicked', self.zoom_in_clicked)
 
-        zoom_out_button = gtk.button(" - ")
+        zoom_out_button = gtk.Button(" - ")
         zoom_out_button.connect('clicked', self.zoom_out_clicked)
 
         start_button = hildon.Button(gtk.HILDON_SIZE_FINGER_HEIGHT, hildon.BUTTON_ARRANGEMENT_VERTICAL, "Start")
