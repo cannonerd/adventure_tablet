@@ -1,6 +1,8 @@
 #instansoin pelaaja enid map
 import gameboard, enid, adventurer, datetime, gtk, adventure, point, getpass, hildon
 import _midgard as midgard
+import socket
+import urllib2
 
 # Display splash screen while the app initializes
 splash = gtk.Window()
@@ -35,6 +37,10 @@ me = adventurer.adventurer(username, True)
 me.get_location()
 #initialize game controller
 blyton = enid.enid()
+
+# timeout in seconds
+timeout = 10
+socket.setdefaulttimeout(timeout)
 
 if me.apikey is not None:
     # Fetch current adventures from Qaiku

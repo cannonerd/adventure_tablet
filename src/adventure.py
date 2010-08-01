@@ -91,8 +91,17 @@ class adventure(gobject.GObject):
         log.date = datetime.datetime.today()
         log.latitude = location.lat
         log.longitude = location.lon
-        if text != '':
-            log.comment = text
+
+        if text == '':
+            if self.check_arrival(adventurer.location.distance_to(self.destination)):
+                text = "Has arrived to destination %s." % (self.destination.describe())
+            else:
+                if adventurer.location.distance_to(self.destination) <= 1:
+                    text = 'Adventuring to %s, distance to destination %s km' %(self.destination.describe(), round(adventurer.location.distance_to(self.destination), 2))
+                else:
+                    text = 'Adventuring to %s, distance to destination %s km' %(self.destination.describe(), int(adventurer.location.distance_to(self.destination)))
+
+        log.comment = text
         log.participating = True
         log.create()
         if qaikuid != '':
@@ -147,8 +156,10 @@ class adventure(gobject.GObject):
                 continue
 
             if isinstance(message['geo'], dict) is False:
-                # Log without a location, skip
-                print "Comment %s from %s has no location, skipping" % (message['text'], message['user']['screen_name'])
+                # Log without a location, place to 0,0
+                print "Comment %s from %s has no location, sending %s to Timbuktu" % (message['text'], message['user']['screen_name'], message['user']['screen_name'])
+                message['geo']['coordinates'][1] = 16.775833
+                message['geo']['coordinates'][0] = -3.009444
                 continue
 
             # Parse QaikuData
@@ -188,15 +199,6 @@ class adventure(gobject.GObject):
             return
 
         print "Posting a log entry from %s to adventure %s to Qaiku thread %s" % (adventurer.nick, self.name, self.qaikuid)
-
-        if log.comment is None:
-            if self.check_arrival(adventurer.location.distance_to(self.destination)):
-                log.comment = "Has arrived to destination %s." % (self.destination.describe())
-            else:
-                if adventurer.location.distance_to(self.destination) <= 1:
-                    log.comment = 'Adventuring to %s, distance to destination %s km' %(self.destination.describe(), round(adventurer.location.distance_to(self.destination), 2))
-                else:
-                    log.comment = 'Adventuring to %s, distance to destination %s km' %(self.destination.describe(), int(adventurer.location.distance_to(self.destination)))
 
         opener = urllib2.build_opener()
         opener.addheaders = [('User-agent', 'adventure_tablet/0.1')]
