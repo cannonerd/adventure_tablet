@@ -15,7 +15,8 @@ class adventuretablet(gobject.GObject):
         self.splash.set_title('the Tablet of Adventure')
         # TODO: Display a picture of unicorns, kittens and ponies
         vbox = gtk.VBox(False, 0)
-        pixbuf = gtk.gdk.pixbuf_new_from_file_at_size ("blue.png", 200,200)
+        print os.path.dirname(__file__) + "/blue.png"
+        pixbuf = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/blue.png", 200,200)
         image = gtk.Image()
         image.set_from_pixbuf(pixbuf)
         self.status = gtk.Label()
