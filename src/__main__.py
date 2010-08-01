@@ -1,4 +1,4 @@
-import gameboard, enid, adventurer, datetime, gtk, adventure, point, getpass, hildon, socket
+import gameboard, enid, adventurer, datetime, gobject, gtk, adventure, point, getpass, hildon, socket
 import _midgard as midgard
 
 class adventuretablet(gobject.GObject):
