@@ -84,6 +84,9 @@ class point():
         except urllib2.URLError, e:
             print("point.describe: Connection failed, error %s" % (e.message))
             return self.pretty_print()
+        except IOError, e:
+            print "point.describe: Connection failed"
+            return self.pretty_print()
 
         try:
             features = json.loads(features)

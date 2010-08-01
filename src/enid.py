@@ -47,6 +47,9 @@ class enid():
         except urllib2.URLError, e:
             print "adventures_from_qaiku: Connection failed, error %s" % (e.message)
             return
+        except IOError, e:
+            print "adventures_from_qaiku: Connection failed"
+            return
 
         messages = simplejson.loads(req.read())
         for message in messages:
@@ -132,7 +135,11 @@ class enid():
             west = -1
         else:
             west = 1
-        djia = urllib.urlopen((date - datetime.timedelta(td30)).strftime("http://irc.peeron.com/xkcd/map/data/%Y/%m/%d")).read()
+        try:
+            djia = urllib.urlopen((date - datetime.timedelta(td30)).strftime("http://irc.peeron.com/xkcd/map/data/%Y/%m/%d")).read()
+        except IOError, e:
+            print "geohash: DJIA connection failed"
+            return None
         if '404 Not Found' in djia:
             # FIXME: Throw an exception here instead
             print("Dow Jones not available yet.")

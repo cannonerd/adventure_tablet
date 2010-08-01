@@ -138,6 +138,9 @@ class adventure(gobject.GObject):
         except urllib2.URLError, e:
             print "logs_from_qaiku for %s: Connection failed, error %s" % (self.name, e.message)
             return True
+        except IOError, e:
+            print "logs_from_qaiku for %s: Connection failed" % (self.name)
+            return True
 
         latest_update = 0
         messages = simplejson.loads(req.read())
@@ -222,6 +225,9 @@ class adventure(gobject.GObject):
         except urllib2.URLError, e:
             print "log_to_qaiku: Connection failed, error %s" % (e.message)
             return
+        except IOError, e:
+            print "log_to_qaiku: Connection failed"
+            return
 
         qaiku = simplejson.loads(response)
         if qaiku['id']:
@@ -250,6 +256,9 @@ class adventure(gobject.GObject):
             return
         except urllib2.URLError, e:
             print "adventure_to_qaiku: Connection failed, error %s" % (e.message)
+            return
+        except IOError, e:
+            print "adventure_to_qaiku: Connection failed"
             return
 
         qaiku = simplejson.loads(response)
