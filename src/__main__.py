@@ -35,7 +35,7 @@ class adventuretablet(gobject.GObject):
         connection = midgard.connection()
         if (connection.open_config(configuration) is False):
             print "failed to open midgard connection"
-            exit()
+            self.emit('storage-ready', False)
         if (midgard.storage.class_storage_exists('ttoa_user') is False):
             # We only need to do these on the first run: prepare database tables
             midgard.storage.create_base_storage()
@@ -48,7 +48,10 @@ class adventuretablet(gobject.GObject):
         # Return false so the timeout is removed
         return False
 
-    def show_game(self):
+    def show_game(self, ttoa, storage_ready):
+        if not storage_ready:
+            exit()
+
         #initialize player for current user and log into Midgard
         username = getpass.getuser()
         me = adventurer.adventurer(username, True)
