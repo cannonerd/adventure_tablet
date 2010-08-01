@@ -1,59 +1,76 @@
-#instansoin pelaaja enid map
-import gameboard, enid, adventurer, datetime, gtk, adventure, point, getpass, hildon
+import gameboard, enid, adventurer, datetime, gtk, adventure, point, getpass, hildon, socket
 import _midgard as midgard
-import socket
-import urllib2
 
-# Display splash screen while the app initializes
-splash = gtk.Window()
-splash.set_title('the Tablet of Adventure')
-# TODO: Display a picture of unicorns, kittens and ponies
-hildon.hildon_gtk_window_set_progress_indicator(splash, 1)
-splash.show()
+class adventuretablet(gobject.GObject):
 
-# Preparing configuration for using Midgard
-# the SQLite database file will be placed into ~/.midgard2/data/adventuretablet.db
-configuration = midgard.config()
-configuration.dbtype = 'SQLite'
-configuration.database = 'adventuretablet'
+    __gsignals__ = {
+        'storage-ready': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_BOOLEAN,))
+    }
 
-# Open a Midgard repository connection with our config
-connection = midgard.connection()
-if (connection.open_config(configuration) is False):
-    print "failed to open midgard connection"
-    exit()
-if (midgard.storage.class_storage_exists('ttoa_user') is False):
-    # We only need to do these on the first run: prepare database tables
-    midgard.storage.create_base_storage()
-    midgard.storage.create_class_storage('ttoa_user')
-    midgard.storage.create_class_storage('ttoa_log')
-    midgard.storage.create_class_storage('ttoa_mission')
-    midgard.storage.create_class_storage('midgard_parameter')
+    def __init__(self):
+        gobject.GObject.__init__(self)
 
-#initialize player for current user and log into Midgard
-username = getpass.getuser()
-me = adventurer.adventurer(username, True)
-#players location
-me.get_location()
-#initialize game controller
-blyton = enid.enid()
+        # Display splash screen while the app initializes
+        self.splash = gtk.Window()
+        self.splash.set_title('the Tablet of Adventure')
+        # TODO: Display a picture of unicorns, kittens and ponies
+        hildon.hildon_gtk_window_set_progress_indicator(self.splash, 1)
+        self.splash.show_all()
 
-# Set a default timeout for our HTTP requests so they don't hang when cell connection is bad
-socket.setdefaulttimeout(10)
+        # Set a default timeout for our HTTP requests so they don't hang when cell connection is bad
+        socket.setdefaulttimeout(10)
 
-if me.apikey is not None:
-    # Fetch current adventures from Qaiku
-    blyton.adventures_from_qaiku(me.apikey)
+        # Tell GLib to prepare Midgard and show game when ready
+        self.connect('storage-ready', self.show_game)
+        gobject.timeout_add(5, self.prepare_midgard)
 
-# Build adventure list
-blyton.refresh_adventures(me)
+    def prepare_midgard(self):
+        # Preparing configuration for using Midgard
+        # the SQLite database file will be placed into ~/.midgard2/data/adventuretablet.db
+        configuration = midgard.config()
+        configuration.dbtype = 'SQLite'
+        configuration.database = 'adventuretablet'
 
-#prepare and show UI
-game = gameboard.UI(blyton, me)
-game.show_all()
+        # Open a Midgard repository connection with our config
+        connection = midgard.connection()
+        if (connection.open_config(configuration) is False):
+            print "failed to open midgard connection"
+            exit()
+        if (midgard.storage.class_storage_exists('ttoa_user') is False):
+            # We only need to do these on the first run: prepare database tables
+            midgard.storage.create_base_storage()
+            midgard.storage.create_class_storage('ttoa_user')
+            midgard.storage.create_class_storage('ttoa_log')
+            midgard.storage.create_class_storage('ttoa_mission')
+            midgard.storage.create_class_storage('midgard_parameter')
 
-# Remove the splash screen
-hildon.hildon_gtk_window_set_progress_indicator(splash, 0)
-splash.destroy()
+        self.emit('storage-ready', True)
+        # Return false so the timeout is removed
+        return False
 
+    def show_game(self):
+        #initialize player for current user and log into Midgard
+        username = getpass.getuser()
+        me = adventurer.adventurer(username, True)
+        #players location
+        me.get_location()
+        #initialize game controller
+        blyton = enid.enid()
+
+        if me.apikey is not None:
+            # Fetch current adventures from Qaiku
+            blyton.adventures_from_qaiku(me.apikey)
+
+        # Build adventure list
+        blyton.refresh_adventures(me)
+
+        #prepare and show UI
+        game = gameboard.UI(blyton, me)
+        game.show_all()
+
+        # Remove the splash screen
+        hildon.hildon_gtk_window_set_progress_indicator(splash, 0)
+        splash.destroy()
+
+ttoa = adventuretablet()
 gtk.main()
