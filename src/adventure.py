@@ -95,6 +95,7 @@ class adventure(gobject.GObject):
         if text == '':
             if self.check_arrival(location.distance_to(self.destination)):
                 text = "Has arrived to destination %s." % (self.destination.describe())
+                self.remove_adventurer(adventurer)
             else:
                 if location.distance_to(self.destination) <= 1:
                     text = 'Adventuring to %s, distance to destination %s km' %(self.destination.describe(), round(location.distance_to(self.destination), 2))
