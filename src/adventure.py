@@ -42,9 +42,8 @@ class adventure(gobject.GObject):
 
     def remove_adventurer(self, adventurer):
         print "Removing %s from adventure %s" % (adventurer.nick, self.name)
-        if adventurer not in self.adventurers:
-            return
-        self.adventurers.remove(adventurer)
+        if adventurer in self.adventurers:
+            self.adventurers.remove(adventurer)
         adventurer.disconnect(adventurer.mission_listener)
 
     def check_arrival(self, distance):
@@ -72,6 +71,7 @@ class adventure(gobject.GObject):
             self.mission.set_parameter('adventuretablet', 'qaikuid', qaikuid)
 
     def log(self, adventurer, location, text, qaikuid, force_store = False):
+        print "%s: New location %s, distance to %s %s" % (adventurer.nick, location.pretty_print(), self.name, location.distance_to(self.current_adventure.destination))
 
         if not force_store:
             if adventurer.participating is False:
