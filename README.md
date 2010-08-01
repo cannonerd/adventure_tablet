@@ -15,10 +15,21 @@ Dependencies
 * Python
 * PyGTK
 * python-osmgpsmap
-* python-geoclue
-* geoclue-hostip (and other providers)
+* python-geoclue (and geoclue-hostip) _or_ python-location
+* python-midgard2
+* libgda4-sqlite
+* python-simplejson
 
 Running Tablet of Adventure
 ---------------------------
 
-    python src/map.py
+    python src/__main__.py
+
+Building Tablet of Adventure for Maemo
+--------------------------------------
+
+* Update the `debian/changelog` file
+* Create source package with `$ dpkg-buildpackage -rfakeroot -S -us -uc`
+* Upload to <https://garage.maemo.org/extras-assistant/index.php>
+* Monitor the build happening on <https://garage.maemo.org/pipermail/extras-cauldron-builds/>
+* Check that everything looks correct on <http://maemo.org/packages/view/adventure-tablet/>
