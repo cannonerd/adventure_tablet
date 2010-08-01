@@ -29,7 +29,7 @@ Building Tablet of Adventure for Maemo
 --------------------------------------
 
 * Update the `debian/changelog` file
-* Create source package with `$ dpkg-buildpackage -rfakeroot -S -us -uc`
+* Create source package with `$ dpkg-buildpackage -rfakeroot -S -us -uc -sa`
 * Upload to <https://garage.maemo.org/extras-assistant/index.php>
 * Monitor the build happening on <https://garage.maemo.org/pipermail/extras-cauldron-builds/>
 * Check that everything looks correct on <http://maemo.org/packages/view/adventure-tablet/>
