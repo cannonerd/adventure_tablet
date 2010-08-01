@@ -27,7 +27,6 @@ class adventuretablet(gobject.GObject):
         self.splash.add(vbox)
         vbox.show()
         self.splash.show()
-        hildon.hildon_gtk_window_set_progress_indicator(self.splash, 1)
 
         # Set a default timeout for our HTTP requests so they don't hang when cell connection is bad
         socket.setdefaulttimeout(10)
@@ -39,6 +38,8 @@ class adventuretablet(gobject.GObject):
         gtk.main()
 
     def prepare_midgard(self):
+        hildon.hildon_gtk_window_set_progress_indicator(self.splash, 1)
+
         #self.status.set_text("Initializing Midgard connection...")
 
         # Preparing configuration for using Midgard
