@@ -37,7 +37,7 @@ class adventuretablet(gobject.GObject):
         gobject.timeout_add(5, self.prepare_midgard)
 
     def prepare_midgard(self):
-        self.status.set_text("Initializing Midgard connection...")
+        #self.status.set_text("Initializing Midgard connection...")
 
         # Preparing configuration for using Midgard
         # the SQLite database file will be placed into ~/.midgard2/data/adventuretablet.db
@@ -52,7 +52,7 @@ class adventuretablet(gobject.GObject):
             self.emit('storage-ready', False)
         if (midgard.storage.class_storage_exists('ttoa_user') is False):
             # We only need to do these on the first run: prepare database tables
-            self.status.set_text("Building Midgard database tables on this first run")
+            #self.status.set_text("Building Midgard database tables on this first run")
             midgard.storage.create_base_storage()
             midgard.storage.create_class_storage('ttoa_user')
             midgard.storage.create_class_storage('ttoa_log')
@@ -77,11 +77,11 @@ class adventuretablet(gobject.GObject):
 
         if me.apikey is not None:
             # Fetch current adventures from Qaiku
-            self.status.set_text("Fetching adventures from Qaiku...")
+            #self.status.set_text("Fetching adventures from Qaiku...")
             blyton.adventures_from_qaiku(me.apikey)
 
         # Build adventure list
-        self.status.set_text("Starting the game...")
+        #self.status.set_text("Starting the game...")
         blyton.refresh_adventures(me)
 
         #prepare and show UI
