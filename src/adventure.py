@@ -93,13 +93,13 @@ class adventure(gobject.GObject):
         log.longitude = location.lon
 
         if text == '':
-            if self.check_arrival(adventurer.location.distance_to(self.destination)):
+            if self.check_arrival(location.distance_to(self.destination)):
                 text = "Has arrived to destination %s." % (self.destination.describe())
             else:
-                if adventurer.location.distance_to(self.destination) <= 1:
-                    text = 'Adventuring to %s, distance to destination %s km' %(self.destination.describe(), round(adventurer.location.distance_to(self.destination), 2))
+                if location.distance_to(self.destination) <= 1:
+                    text = 'Adventuring to %s, distance to destination %s km' %(self.destination.describe(), round(location.distance_to(self.destination), 2))
                 else:
-                    text = 'Adventuring to %s, distance to destination %s km' %(self.destination.describe(), int(adventurer.location.distance_to(self.destination)))
+                    text = 'Adventuring to %s, distance to destination %s km' %(self.destination.describe(), int(location.distance_to(self.destination)))
 
         log.comment = text
         log.participating = True
