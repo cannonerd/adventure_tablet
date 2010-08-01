@@ -19,7 +19,7 @@ class adventuretablet(gobject.GObject):
         image = gtk.Image()
         image.set_from_pixbuf(pixbuf)
         self.status = gtk.Label()
-        self.status.set_text("Initializing... Don't panic")
+        self.status.set_text("Initializing...")
         vbox.pack_start(image)
         vbox.pack_start(self.status)
         self.splash.add(vbox)
