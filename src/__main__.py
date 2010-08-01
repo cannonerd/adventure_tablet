@@ -15,18 +15,20 @@ class adventuretablet(gobject.GObject):
         self.splash.set_title('the Tablet of Adventure')
         # TODO: Display a picture of unicorns, kittens and ponies
         vbox = gtk.VBox(False, 0)
-        pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(os.path.abspath(os.path.dirname(__file__)) + "/blue.png", 200,200)
-        image = gtk.Image()
-        image.set_from_pixbuf(pixbuf)
-        image.show()
+        #pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(os.path.abspath(os.path.dirname(__file__)) + "/blue.png", 200,200)
+        #image = gtk.Image()
+        #image.set_from_pixbuf(pixbuf)
+        #image.show()
         self.status = gtk.Label()
         self.status.set_text("Initializing...")
         self.status.show()
-        vbox.pack_start(image)
+        #vbox.pack_start(image)
         vbox.pack_start(self.status)
         self.splash.add(vbox)
         vbox.show()
         self.splash.show()
+
+        hildon.hildon_gtk_window_set_progress_indicator(self.splash, 1)
 
         # Set a default timeout for our HTTP requests so they don't hang when cell connection is bad
         socket.setdefaulttimeout(10)
@@ -35,11 +37,7 @@ class adventuretablet(gobject.GObject):
         self.connect('storage-ready', self.show_game)
         gobject.timeout_add(50, self.prepare_midgard)
 
-        gtk.main()
-
     def prepare_midgard(self):
-        hildon.hildon_gtk_window_set_progress_indicator(self.splash, 1)
-
         #self.status.set_text("Initializing Midgard connection...")
 
         # Preparing configuration for using Midgard
@@ -96,3 +94,4 @@ class adventuretablet(gobject.GObject):
         self.splash.destroy()
 
 ttoa = adventuretablet()
+gtk.main()
