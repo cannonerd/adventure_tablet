@@ -71,7 +71,7 @@ class adventure(gobject.GObject):
             self.mission.set_parameter('adventuretablet', 'qaikuid', qaikuid)
 
     def log(self, adventurer, location, text, qaikuid, force_store = False):
-        print "%s: New location %s, distance to %s %s" % (adventurer.nick, location.pretty_print(), self.name, location.distance_to(self.current_adventure.destination))
+        print "%s: New location %s, distance to %s %s" % (adventurer.nick, location.pretty_print(), self.name, location.distance_to(self.destination))
 
         if not force_store:
             if adventurer.participating is False:
