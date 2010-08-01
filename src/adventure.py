@@ -28,7 +28,7 @@ class adventure(gobject.GObject):
                 self.qaikuid = None
 
     def add_adventurer(self, adventurer, participating = False):
-        print "Adding %s to adventure %s" % (adventurer.nick, self.name)
+        #print "Adding %s to adventure %s" % (adventurer.nick, self.name)
         if adventurer in self.adventurers:
             return
         adventurer.participating = participating
@@ -41,7 +41,7 @@ class adventure(gobject.GObject):
         self.emit('adventurer-added', adventurer)
 
     def remove_adventurer(self, adventurer):
-        print "Removing %s from adventure %s" % (adventurer.nick, self.name)
+        #print "Removing %s from adventure %s" % (adventurer.nick, self.name)
         if adventurer in self.adventurers:
             self.adventurers.remove(adventurer)
         adventurer.disconnect(adventurer.mission_listener)
@@ -71,11 +71,11 @@ class adventure(gobject.GObject):
             self.mission.set_parameter('adventuretablet', 'qaikuid', qaikuid)
 
     def log(self, adventurer, location, text, qaikuid, force_store = False):
-        print "%s: New location %s, distance to %s %s" % (adventurer.nick, location.pretty_print(), self.name, location.distance_to(self.destination))
+        #print "%s: New location %s, distance to %s %s" % (adventurer.nick, location.pretty_print(), self.name, location.distance_to(self.destination))
 
         if not force_store:
             if adventurer.participating is False:
-                print "Adventurer %s is not participating in %s, skipping log" % (adventurer.nick, self.name)
+                #print "Adventurer %s is not participating in %s, skipping log" % (adventurer.nick, self.name)
                 return
 
             # Only log if sufficient distance has been covered
@@ -112,13 +112,13 @@ class adventure(gobject.GObject):
             self.log_to_qaiku(log, adventurer)
 
     def logs_from_qaiku(self, player):
-        print "Polling updates for %s from Qaiku" % (self.name)
+        #print "Polling updates for %s from Qaiku" % (self.name)
         if self.qaikuid is None:
-            print "Adventure %s has no QaikuID, skipping poll" % (self.name)
+            #print "Adventure %s has no QaikuID, skipping poll" % (self.name)
             return False
 
         if self.mission is None:
-            print "Adventure %s has no mission, skipping poll" % (self.name)
+            #print "Adventure %s has no mission, skipping poll" % (self.name)
             return False
 
         opener = urllib2.build_opener()
@@ -152,12 +152,12 @@ class adventure(gobject.GObject):
             qb.add_constraint('parameter.value', '=', message['id'])
             if qb.count() != 0:
                 # We already have this log entry
-                print "Skipping comment '%s' from %s as we already have it" % (message['text'], message['user']['screen_name'])
+                #print "Skipping comment '%s' from %s as we already have it" % (message['text'], message['user']['screen_name'])
                 continue
 
             if isinstance(message['geo'], dict) is False:
-                # Log without a location, place to 0,0
-                print "Comment %s from %s has no location, sending %s to Timbuktu" % (message['text'], message['user']['screen_name'], message['user']['screen_name'])
+                # Log without a location, place to Timbuktu
+                #print "Comment %s from %s has no location, sending %s to Timbuktu" % (message['text'], message['user']['screen_name'], message['user']['screen_name'])
                 message['geo']['coordinates'][1] = 16.775833
                 message['geo']['coordinates'][0] = -3.009444
                 continue
@@ -167,7 +167,7 @@ class adventure(gobject.GObject):
             if message['data'] != '':
                 qaikudata = message['data'].split(',')
                 if len(qaikudata) == 3:
-                    print "Overriding comment location with QaikuData %s" % (message['data'])
+                    #print "Overriding comment location with QaikuData %s" % (message['data'])
                     message['geo']['coordinates'][1] = float(qaikudata[0])
                     message['geo']['coordinates'][0] = float(qaikudata[1])
                     colour = qaikudata[2]
@@ -195,10 +195,10 @@ class adventure(gobject.GObject):
 
     def log_to_qaiku(self, log, adventurer):
         if self.qaikuid is None:
-            print "No QaikuID for adventure %s" % (self.name)
+            #print "No QaikuID for adventure %s" % (self.name)
             return
 
-        print "Posting a log entry from %s to adventure %s to Qaiku thread %s" % (adventurer.nick, self.name, self.qaikuid)
+        #print "Posting a log entry from %s to adventure %s to Qaiku thread %s" % (adventurer.nick, self.name, self.qaikuid)
 
         opener = urllib2.build_opener()
         opener.addheaders = [('User-agent', 'adventure_tablet/0.1')]
@@ -224,10 +224,11 @@ class adventure(gobject.GObject):
 
         qaiku = simplejson.loads(response)
         if qaiku['id']:
-            print "stored log for adventurer %s to Qaiku with ID %s" % (adventurer.nick, qaiku['id'])
+            #print "stored log for adventurer %s to Qaiku with ID %s" % (adventurer.nick, qaiku['id'])
             log.set_parameter('adventuretablet', 'qaikuid', qaiku['id'])
         else:
-            print "stored log for adventurer %s to Qaiku but didn't get an ID back" % (adventurer.nick)
+            #print "stored log for adventurer %s to Qaiku but didn't get an ID back" % (adventurer.nick)
+            pass
 
     def adventure_to_qaiku(self, adventure, apikey):
         opener = urllib2.build_opener()

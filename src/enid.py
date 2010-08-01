@@ -25,7 +25,9 @@ class enid():
 
         if geohash_found is False:
             # We didn't have a GeoHash for today yet, generate one
-            self.adventures.append(self.adventure_from_geohash(adventurer, today))
+            geohash = self.adventure_from_geohash(adventurer, today)
+            if geohash is not None:
+                self.adventures.append(geohash)
 
     def adventures_from_qaiku(self, apikey):
         timestamp = datetime.datetime.today()
@@ -134,6 +136,7 @@ class enid():
         if '404 Not Found' in djia:
             # FIXME: Throw an exception here instead
             print("Dow Jones not available yet.")
+            return None
         sum = hashlib.md5("%s-%s" % (date, djia)).digest()
         n, w = [str(d*(abs(a)+f)) for d, f, a in zip((south, west),
             [x/2.**64 for x in struct.unpack_from(">QQ", sum)], args[0:])]
