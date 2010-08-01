@@ -24,9 +24,8 @@ class adventuretablet(gobject.GObject):
         vbox.pack_start(image)
         vbox.pack_start(self.status)
         self.splash.add(vbox)
-        
-        hildon.hildon_gtk_window_set_progress_indicator(self.splash, 1)
         self.splash.show_all()
+        hildon.hildon_gtk_window_set_progress_indicator(self.splash, 1)
 
         # Set a default timeout for our HTTP requests so they don't hang when cell connection is bad
         socket.setdefaulttimeout(10)
