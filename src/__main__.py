@@ -15,7 +15,7 @@ class adventuretablet(gobject.GObject):
         self.splash.set_title('the Tablet of Adventure')
         # TODO: Display a picture of unicorns, kittens and ponies
         vbox = gtk.VBox(False, 0)
-        pixbuf = gtk.gdk.pixbuf_new_from_file_at_size (os.path.abspath(os.path.dirname(__file__)) + "/blue.png", 200,200)
+        pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(os.path.abspath(os.path.dirname(__file__)) + "/blue.png", 200,200)
         image = gtk.Image()
         image.set_from_pixbuf(pixbuf)
         image.show()
@@ -34,7 +34,9 @@ class adventuretablet(gobject.GObject):
 
         # Tell GLib to prepare Midgard and show game when ready
         self.connect('storage-ready', self.show_game)
-        gobject.timeout_add(5, self.prepare_midgard)
+        gobject.timeout_add(50, self.prepare_midgard)
+
+        gtk.main()
 
     def prepare_midgard(self):
         #self.status.set_text("Initializing Midgard connection...")
@@ -93,4 +95,3 @@ class adventuretablet(gobject.GObject):
         self.splash.destroy()
 
 ttoa = adventuretablet()
-gtk.main()
