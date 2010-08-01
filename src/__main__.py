@@ -38,9 +38,8 @@ me.get_location()
 #initialize game controller
 blyton = enid.enid()
 
-# timeout in seconds
-timeout = 10
-socket.setdefaulttimeout(timeout)
+# Set a default timeout for our HTTP requests so they don't hang when cell connection is bad
+socket.setdefaulttimeout(10)
 
 if me.apikey is not None:
     # Fetch current adventures from Qaiku
