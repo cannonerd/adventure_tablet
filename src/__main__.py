@@ -14,6 +14,11 @@ class adventuretablet(gobject.GObject):
         self.splash = gtk.Window()
         self.splash.set_title('the Tablet of Adventure')
         # TODO: Display a picture of unicorns, kittens and ponies
+        pixbuf = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/blue.png", 200,200)
+        image = gtk.Image()
+        image.set_from_pixbuf(pixbuf)
+        self.splash.add(image)
+        
         hildon.hildon_gtk_window_set_progress_indicator(self.splash, 1)
         self.splash.show_all()
 
@@ -25,6 +30,8 @@ class adventuretablet(gobject.GObject):
         gobject.timeout_add(5, self.prepare_midgard)
 
     def prepare_midgard(self):
+        banner = hildon.hildon_banner_show_information(self.splash, "", "Initializing Midgard storage")
+
         # Preparing configuration for using Midgard
         # the SQLite database file will be placed into ~/.midgard2/data/adventuretablet.db
         configuration = midgard.config()
@@ -72,8 +79,8 @@ class adventuretablet(gobject.GObject):
         game.show_all()
 
         # Remove the splash screen
-        hildon.hildon_gtk_window_set_progress_indicator(splash, 0)
-        splash.destroy()
+        hildon.hildon_gtk_window_set_progress_indicator(self.splash, 0)
+        self.splash.destroy()
 
 ttoa = adventuretablet()
 gtk.main()
