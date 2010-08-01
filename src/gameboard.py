@@ -403,7 +403,6 @@ class UI(hildon.StackableWindow):
         self.osm.add_image(self.player.location.lat, self.player.location.lon, self.player.piece)
 
     def log(self, button):
-        print "log"
         wido= hildon.StackableWindow()
         vbox= gtk.VBox(False, 0)
         wido.add(vbox)
