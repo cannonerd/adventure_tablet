@@ -15,16 +15,18 @@ class adventuretablet(gobject.GObject):
         self.splash.set_title('the Tablet of Adventure')
         # TODO: Display a picture of unicorns, kittens and ponies
         vbox = gtk.VBox(False, 0)
-        print os.path.dirname(__file__) + "/blue.png"
-        pixbuf = gtk.gdk.pixbuf_new_from_file_at_size (os.path.dirname(__file__) + "/blue.png", 200,200)
+        pixbuf = gtk.gdk.pixbuf_new_from_file_at_size (os.path.abspath(os.path.dirname(__file__)) + "/blue.png", 200,200)
         image = gtk.Image()
         image.set_from_pixbuf(pixbuf)
+        image.show()
         self.status = gtk.Label()
         self.status.set_text("Initializing...")
+        self.status.show()
         vbox.pack_start(image)
         vbox.pack_start(self.status)
         self.splash.add(vbox)
-        self.splash.show_all()
+        vbox.show()
+        self.splash.show()
         hildon.hildon_gtk_window_set_progress_indicator(self.splash, 1)
 
         # Set a default timeout for our HTTP requests so they don't hang when cell connection is bad
