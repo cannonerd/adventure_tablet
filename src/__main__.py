@@ -18,15 +18,12 @@ class adventuretablet(gobject.GObject):
         pixbuf = gtk.gdk.pixbuf_new_from_file_at_size (os.path.abspath(os.path.dirname(__file__)) + "/blue.png", 200,200)
         image = gtk.Image()
         image.set_from_pixbuf(pixbuf)
-        image.show()
         self.status = gtk.Label()
         self.status.set_text("Initializing... Don't panic")
-        self.status.show()
         vbox.pack_start(image)
         vbox.pack_start(self.status)
         self.splash.add(vbox)
-        vbox.show()
-        self.splash.show()
+        self.splash.show_all()
         hildon.hildon_gtk_window_set_progress_indicator(self.splash, 1)
 
         # Set a default timeout for our HTTP requests so they don't hang when cell connection is bad
