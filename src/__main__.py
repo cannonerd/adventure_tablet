@@ -29,6 +29,7 @@ class adventuretablet(gobject.GObject):
         #vbox.pack_start(self.status)
         self.splash.add(vbox)
         vbox.show()
+        self.splash.fullscreen()
         self.splash.show()
 
         hildon.hildon_gtk_window_set_progress_indicator(self.splash, 1)
