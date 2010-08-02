@@ -1,3 +1,9 @@
+adventure-tablet (1.0) unstable; urgency=low
+
+  * New artwork and splash screen
+
+ -- Henri Bergius <henri.bergius@iki.fi>  Mon, 02 Aug 2010 17:32:24 +0200
+
 adventure-tablet (0.9.1) unstable; urgency=low
 
   * Improved reliability in case of internet connection issues

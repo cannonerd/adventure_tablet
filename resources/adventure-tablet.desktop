@@ -8,4 +8,4 @@ Exec=/usr/bin/python /opt/adventure-tablet/src/__main__.py >/tmp/adventure_table
 Icon=adventure-tablet
 Categories=Game;AdventureGame;
 Name[en_US]=AdventureTablet
-Comment=Random adventure generator
+Comment=Social adventure game for the real world
