@@ -38,7 +38,7 @@ class adventuretablet(gobject.GObject):
 
         # Tell GLib to prepare Midgard and show game when ready
         self.connect('storage-ready', self.prepare_game)
-        gobject.iddle_add(50, self.prepare_midgard)
+        gobject.idle_add(self.prepare_midgard)
 
     def prepare_midgard(self):
         #self.status.set_text("Initializing Midgard connection...")
