@@ -12,6 +12,9 @@ class adventuretablet(gobject.GObject):
     def __init__(self):
         gobject.GObject.__init__(self)
 
+set the type_hint of the window to GDK_WINDOW_TYPE_HINT_SPLASHSCREEN
+since what you want is a splash screen.
+
         # Display splash screen while the app initializes
         self.splash = gtk.Window()
         self.splash.set_title('the Tablet of Adventure')
@@ -37,7 +40,7 @@ class adventuretablet(gobject.GObject):
 
         # Tell GLib to prepare Midgard and show game when ready
         self.connect('storage-ready', self.prepare_game)
-        gobject.timeout_add(50, self.prepare_midgard)
+        gobject.iddle_add(50, self.prepare_midgard)
 
     def prepare_midgard(self):
         #self.status.set_text("Initializing Midgard connection...")
