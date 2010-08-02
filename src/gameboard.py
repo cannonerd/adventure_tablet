@@ -461,8 +461,7 @@ class UI(hildon.StackableWindow):
         about_tablet = gtk.AboutDialog()
         about_tablet.set_name("the Tablet of Adventure")
         about_tablet.set_version("version 0.4")
-        about_tablet.set_copyright("Map (c) OpenStreetMap and contributors, CC-BY-SA")
-        about_tablet.set_copyright("Artwork byt Nina Mutik")
+        about_tablet.set_copyright("Map (c) OpenStreetMap and contributors, CC-BY-SA" "Artwork byt Nina Mutik")
         about_tablet.set_website("http://cannonerd.wordpress.com/")
 
         about_tablet.show_all()
