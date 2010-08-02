@@ -12,8 +12,6 @@ class adventuretablet(gobject.GObject):
     def __init__(self):
         gobject.GObject.__init__(self)
 
-set the type_hint of the window to GDK_WINDOW_TYPE_HINT_SPLASHSCREEN
-since what you want is a splash screen.
 
         # Display splash screen while the app initializes
         self.splash = gtk.Window()
