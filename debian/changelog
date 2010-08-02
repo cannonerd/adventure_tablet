@@ -1,3 +1,10 @@
+adventure-tablet (0.9.1) unstable; urgency=low
+
+  * Improved reliability in case of internet connection issues
+  * Added a workaround for geohash generation when location service is slow to start
+
+ -- Henri Bergius <henri.bergius@iki.fi>  Mon, 02 Aug 2010 11:22:24 +0200
+
 adventure-tablet (0.9) unstable; urgency=low
 
   * Social features: share your adventures via Qaiku
