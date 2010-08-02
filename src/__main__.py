@@ -14,7 +14,7 @@ class adventuretablet(gobject.GObject):
 
 
         # Display splash screen while the app initializes
-        self.splash = gtk.Window.fullscreen()
+        self.splash = gtk.Window()
         self.splash.set_title('the Tablet of Adventure')
         # TODO: Display a picture of unicorns, kittens and ponies
         vbox = gtk.VBox(False, 0)
