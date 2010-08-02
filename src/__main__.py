@@ -26,7 +26,7 @@ class adventuretablet(gobject.GObject):
         self.status.set_text("Initializing...")
         self.status.show()
         vbox.pack_start(image)
-        #vbox.pack_start(self.status)
+        vbox.pack_start(self.status)
         self.splash.add(vbox)
         vbox.show()
         self.splash.fullscreen()
