@@ -3,6 +3,8 @@ import _midgard as midgard
 
 class adventuretablet(gobject.GObject):
 
+    location_listener = None
+
     __gsignals__ = {
         'storage-ready': (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_BOOLEAN,))
     }
@@ -34,7 +36,7 @@ class adventuretablet(gobject.GObject):
         socket.setdefaulttimeout(10)
 
         # Tell GLib to prepare Midgard and show game when ready
-        self.connect('storage-ready', self.show_game)
+        self.connect('storage-ready', self.prepare_game)
         gobject.timeout_add(50, self.prepare_midgard)
 
     def prepare_midgard(self):
@@ -64,7 +66,7 @@ class adventuretablet(gobject.GObject):
         # Return false so the timeout is removed
         return False
 
-    def show_game(self, ttoa, storage_ready):
+    def prepare_game(self, ttoa, storage_ready):
         if not storage_ready:
             exit()
 
@@ -74,19 +76,30 @@ class adventuretablet(gobject.GObject):
         #players location
         me.get_location()
         #initialize game controller
-        blyton = enid.enid()
+        self.blyton = enid.enid()
 
-        if me.apikey is not None:
+        if int(me.location.lat) == 0 and int(me.location.lon) == 0:
+            # We didn't get location yet, register adventure list to be refreshed after first location change
+            print "No initial location, postponing adventure list generation until location changes"
+            self.location_listener = me.connect('location-changed', self.show_game)
+        else:
+            self.show_game(me, me.location, '', '', False)
+
+    def show_game(self, adventurer, location, text, qaikuid, force_store = False):
+        if self.location_listener is not None:
+            adventurer.disconnect(self.location_listener)
+
+        if adventurer.apikey is not None:
             # Fetch current adventures from Qaiku
             #self.status.set_text("Fetching adventures from Qaiku...")
-            blyton.adventures_from_qaiku(me.apikey)
+            self.blyton.adventures_from_qaiku(adventurer.apikey)
 
         # Build adventure list
         #self.status.set_text("Starting the game...")
-        blyton.refresh_adventures(me)
+        self.blyton.refresh_adventures(adventurer)
 
         #prepare and show UI
-        game = gameboard.UI(blyton, me)
+        game = gameboard.UI(self.blyton, adventurer)
         game.show_all()
 
         # Remove the splash screen
