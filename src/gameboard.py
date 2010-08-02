@@ -347,6 +347,7 @@ class UI(hildon.StackableWindow):
         window.add(vbox)
         window.set_title("Settings")
         label = gtk.Label("Give your Qaiku-api key")
+        label3 = gtk.Label("go to:http://www.qaiku.com, http://www.qaiku.com/settings/api/")
         self.qapikey = hildon.Entry(gtk.HILDON_SIZE_AUTO)
         self.qapikey.set_placeholder("Your Qaiku Apikey is..")
 
@@ -374,7 +375,8 @@ class UI(hildon.StackableWindow):
         save_button = hildon.Button(gtk.HILDON_SIZE_FINGER_HEIGHT, hildon.BUTTON_ARRANGEMENT_VERTICAL, "Save")
         save_button.connect('clicked', self.save)
 
-        vbox.pack_start(label, expand = False, padding = 10)
+        vbox.pack_start(label, expand = False)
+        vbox.pack_start(label3, expand = False)
         vbox.pack_start(self.qapikey, expand = False)
         vbox.pack_start(save_button, expand = False, padding = 4)
         vbox.pack_start(label2, expand = False)

@@ -73,6 +73,9 @@ class adventurer(gobject.GObject):
         except urllib2.URLError, e:
             print("check_password: Connection failed, error %s. Try again later" % (e.message))
             return False
+        except IOError, e:
+            print "check_password: Connection failed"
+            return False
 
         self.user.set_parameter('adventuretablet', 'apikey', password)
         self.apikey = password
