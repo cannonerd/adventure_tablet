@@ -99,10 +99,10 @@ class UI(hildon.StackableWindow):
         self.osm.set_keyboard_shortcut(osmgpsmap.KEY_LEFT, gtk.gdk.keyval_from_name("Left"))
         self.osm.set_keyboard_shortcut(osmgpsmap.KEY_RIGHT, gtk.gdk.keyval_from_name("Right"))
 
-#        self.adventure_selector = gtk.combo_box_new_text()
-        self.adventure_selector = hildon.hildon_touch_selector_new_text()
-        self.adventure_selector.append_text('Select adventure:')
-        self.adventure_selector_position = 0
+
+        self.adventure_selector = hildon.TouchSelector()
+        self.adventure_store = gtk.ListStore(gobject.TYPE_STRING)
+        self.adventure_selector.append_text_column(self.adventure_store, 0)
         for adventure in self.blyton.adventures:
             self.add_adventure_to_selector(adventure)
         self.adventure_selector.connect('changed', self.changed_adventure)
@@ -165,9 +165,9 @@ class UI(hildon.StackableWindow):
             button.set_title("Start")
 
     def add_adventure_to_selector(self, adventure):
-        self.adventure_selector_position = self.adventure_selector_position + 1
-        self.adventure_selector.append_text(adventure.name)
-        adventure.combo_index = self.adventure_selector_position
+        i = self.adventure_store.append()
+        self.adventure_store.set(i,0, adventure.name)
+        adventure.combo_index = i
         
 
     def select_adventure(self, adventure):
