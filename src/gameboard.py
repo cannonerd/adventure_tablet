@@ -105,7 +105,7 @@ class UI(hildon.StackableWindow):
         for adventure in self.blyton.adventures:
             self.add_adventure_to_selector(adventure)
         self.adventure_selector.connect('changed', self.changed_adventure)
-        self.adventure_selector.set_active(0)
+        self.adventure_selector.set_active(0,0)
 
 
         self.latlon_entry = gtk.Entry()
