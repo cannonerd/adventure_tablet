@@ -136,7 +136,7 @@ class UI(hildon.StackableWindow):
         self.destination_button.connect ('clicked', self.destination_clicked)
 
         vbox = gtk.VBox(False, 2)
-        vbox.pack_start(self.adventure_selector, expand = False, fill = False)
+        vbox.pack_start(self.adventure_selector)#, expand = False, fill = False)
         vbox.pack_start(start_button, expand = False, fill = False)
 
         locationbox = gtk.HBox(True, 2)
