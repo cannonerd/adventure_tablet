@@ -107,7 +107,7 @@ class UI(hildon.StackableWindow):
             self.store_text.set(new_iter, 0, item)
         renderer = gtk.CellRendererPixbuf()
         renderer.set_fixed_size(-1, 100)
-        selector.set_column_selection_mode(hildon.TOUCH_SELECTOR_SELECTION_MODE_MULTIPLE)
+        adventure.selector.set_column_selection_mode(hildon.TOUCH_SELECTOR_SELECTION_MODE_MULTIPLE)
         column.set_property("text-column", 0)
 
 
