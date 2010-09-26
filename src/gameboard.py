@@ -170,7 +170,7 @@ class UI(hildon.StackableWindow):
             self.current_adventure.remove_adventurer(self.player)
             button.set_title("Start")
 
-    def add_adventure_to_selector(self, adventure):
+#    def add_adventure_to_selector(self, adventure):
 #        self.adventure_selector_position = self.adventure_selector_position + 1
 #        self.adventure_selector.append_text(adventure.name)
 #        adventure.combo_index = self.adventure_selector_position
