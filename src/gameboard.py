@@ -101,7 +101,7 @@ class UI(hildon.StackableWindow):
 
         self.adventure_selector = hildon.TouchSelector(text = True)
         self.adventure_selector.append_text('Select adventure:')
-#        self.adventure_selector_position = 0
+        self.adventure_selector_position = 0
         for adventure in self.blyton.adventures:
             self.add_adventure_to_selector(adventure)
         self.adventure_selector.connect('changed', self.changed_adventure)
