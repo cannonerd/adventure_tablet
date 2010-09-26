@@ -101,7 +101,7 @@ class UI(hildon.StackableWindow):
 
 #        self.adventure_selector = gtk.combo_box_new_text()
         self.adventure_selector = hildon.PickerButton(gtk.HILDON_SIZE_FINGER_HEIGHT, hildon.BUTTON_ARRANGEMENT_VERTICAL)
-        selector= hildon.TouchSelector()
+        selector= hildon.TouchSelector('Select adventure')
         self.adventure_selector.set_selector(selector)
 #        self.adventure_selector.append_text('Select adventure:')
         self.adventure_selector_position = 0
@@ -168,7 +168,7 @@ class UI(hildon.StackableWindow):
 
     def add_adventure_to_selector(self, adventure):
         self.adventure_selector_position = self.adventure_selector_position + 1
-        self.adventure_selector.append_text(adventure.name)
+#        self.adventure_selector.append_text(adventure.name)
         adventure.combo_index = self.adventure_selector_position
         
 
