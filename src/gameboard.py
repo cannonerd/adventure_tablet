@@ -197,9 +197,9 @@ class UI(hildon.StackableWindow):
             # Start polling Qaiku
             self.current_adventure.polling_timeout = gobject.timeout_add(30000, self.current_adventure.logs_from_qaiku, self.player)
 
-    def changed_adventure(self, combobox, user_data):
-        model = combobox.get_model(0)
-        index = combobox.get_active(0)
+    def changed_adventure(self, TouchSelector, user_data):
+        model = TouchSelector.get_model(0)
+        index = TouchSelector.get_active(0)
         if index is 0:
             # "Select adventure" selected
             return
