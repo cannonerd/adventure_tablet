@@ -100,6 +100,7 @@ class UI(hildon.StackableWindow):
         self.osm.set_keyboard_shortcut(osmgpsmap.KEY_RIGHT, gtk.gdk.keyval_from_name("Right"))
 
         self.adventure_selector = hildon.PickerButton(gtk.HILDON_SIZE_FINGER_HEIGHT, hildon.BUTTON_ARRANGEMENT_VERTICAL)
+        self.adventure_selector.hildon.set_selector(hildon.touchselector)
         self.adventure_selector.append_text('Select adventure:')
         self.adventure_selector_position = 0
         for adventure in self.blyton.adventures:
