@@ -107,7 +107,8 @@ class UI(hildon.StackableWindow):
             self.add_adventure_to_selector(adventure)
         self.adventure_selector.connect('changed', self.changed_adventure)
         self.adventure_selector.set_active(0,0)
-
+        adventure_picker = hildon.PickerButton(gtk.HILDON_SIZE_FINGER_HEIGHT, hildon.BUTTON_ARRANGEMENT_VERTICAL)
+        adventure_picker.set_selector(self.adventure_selector)
 
         self.latlon_entry = gtk.Entry()
 
@@ -137,7 +138,8 @@ class UI(hildon.StackableWindow):
         self.destination_button.connect ('clicked', self.destination_clicked)
 
         vbox = gtk.VBox(False, 2)
-        vbox.pack_start(self.adventure_selector)#, expand = False, fill = False)
+#        vbox.pack_start(self.adventure_selector)#, expand = False, fill = False)
+        vbox.pack_start(adventure_picker, expand = False, fill = False)
         vbox.pack_start(start_button, expand = False, fill = False)
 
         locationbox = gtk.HBox(True, 2)
