@@ -105,7 +105,10 @@ class UI(hildon.StackableWindow):
         for item in self.text_list:
             new_iter = self.store_text.append()
             self.store_text.set(new_iter, 0, item)
-        self.adventure_selector.append_text('Select adventure:')
+        renderer = gtk.CellRendererPixbuf()
+        renderer.set_fixed_size(-1, 100)
+        column.set_property("text-column", 0)
+
 
 #        self.adventure_selector.append_text('Select adventure:')
 #        self.adventure_selector_position = 0
