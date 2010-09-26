@@ -103,6 +103,7 @@ class UI(hildon.StackableWindow):
         self.adventure_selector = hildon.TouchSelector()
         self.adventure_store = gtk.ListStore(gobject.TYPE_STRING)
         self.adventure_selector.append_text_column(self.adventure_store, 0)
+        self.adventure_index = 0
         for adventure in self.blyton.adventures:
             self.add_adventure_to_selector(adventure)
         self.adventure_selector.connect('changed', self.changed_adventure)
@@ -169,8 +170,8 @@ class UI(hildon.StackableWindow):
     def add_adventure_to_selector(self, adventure):
         i = self.adventure_store.append()
         self.adventure_store.set(i,0, adventure.name)
-        adventure.combo_index = i
-        
+        adventure.combo_index = self.adventure_index
+        self.adventure_index = self.adventure_index + 1
 
     def select_adventure(self, adventure):
         if self.current_adventure is None:
@@ -200,10 +201,7 @@ class UI(hildon.StackableWindow):
             self.current_adventure.polling_timeout = gobject.timeout_add(30000, self.current_adventure.logs_from_qaiku, self.player)
 
     def changed_adventure(self, TouchSelector, user_data):
-        selected = TouchSelector.get_selected(0)
-        index = selected[1]
-        #model = TouchSelector.get_model(0)
-        #index = self.adventure_picker.get_active()
+        index = TouchSelector.get_active(0)
         # Check which adventure user selected
         for adventure in self.blyton.adventures:
             if index is adventure.combo_index:
