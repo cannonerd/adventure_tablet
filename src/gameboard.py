@@ -99,13 +99,20 @@ class UI(hildon.StackableWindow):
         self.osm.set_keyboard_shortcut(osmgpsmap.KEY_LEFT, gtk.gdk.keyval_from_name("Left"))
         self.osm.set_keyboard_shortcut(osmgpsmap.KEY_RIGHT, gtk.gdk.keyval_from_name("Right"))
 
-        self.adventure_selector = hildon.TouchSelector(text = True)
-        self.adventure_selector.append_text('Select adventure:')
-        self.adventure_selector_position = 0
-        for adventure in self.blyton.adventures:
-            self.add_adventure_to_selector(adventure)
-        self.adventure_selector.connect('changed', self.changed_adventure)
-        self.adventure_selector.set_active(0,0)
+        self.adventure_selector = hildon.TouchSelector()
+        self.text_list = gtk.stock_list_ids()
+        self.store_text = gtk.ListStore(gobject.TYPE_STRING)
+        for item in icon_list:
+            new_iter = store_text.append("text")
+            store_text.set(new_iter, 0, item)
+
+
+#        self.adventure_selector.append_text('Select adventure:')
+#        self.adventure_selector_position = 0
+#        for adventure in self.blyton.adventures:
+#            self.add_adventure_to_selector(adventure)
+#        self.adventure_selector.connect('changed', self.changed_adventure)
+#        self.adventure_selector.set_active(0,0)
 
 
         self.latlon_entry = gtk.Entry()
@@ -164,9 +171,10 @@ class UI(hildon.StackableWindow):
             button.set_title("Start")
 
     def add_adventure_to_selector(self, adventure):
-        self.adventure_selector_position = self.adventure_selector_position + 1
-        self.adventure_selector.append_text(adventure.name)
-        adventure.combo_index = self.adventure_selector_position
+#        self.adventure_selector_position = self.adventure_selector_position + 1
+#        self.adventure_selector.append_text(adventure.name)
+#        adventure.combo_index = self.adventure_selector_position
+        
 
     def select_adventure(self, adventure):
         if self.current_adventure is None:
@@ -196,17 +204,17 @@ class UI(hildon.StackableWindow):
             self.current_adventure.polling_timeout = gobject.timeout_add(30000, self.current_adventure.logs_from_qaiku, self.player)
 
     def changed_adventure(self, TouchSelector, user_data):
-        model = TouchSelector.get_model(adventure.combo_index)
-        index = TouchSelector.get_active(0)
-        if index is 0:
-            # "Select adventure" selected
-            return
-        # Check which adventure user selected
-        for adventure in self.blyton.adventures:
-            if index is adventure.combo_index:
-                self.select_adventure(adventure)
-                self.destination_clicked(self.destination_button)
-                return
+#        model = TouchSelector.get_model(0)
+#        index = TouchSelector.get_active(0)
+#        if index is 0:
+#            # "Select adventure" selected
+#            return
+#        # Check which adventure user selected
+#        for adventure in self.blyton.adventures:
+#            if index is adventure.combo_index:
+#                self.select_adventure(adventure)
+#                self.destination_clicked(self.destination_button)
+#                return
 
     def location_changed(self, adventurer, location, text, qaikuid, force_log):
         # FIXME: In newer OsmGpsMap versions we can just move the image
