@@ -102,7 +102,7 @@ class UI(hildon.StackableWindow):
         self.adventure_selector = hildon.TouchSelector()
         self.text_list = gtk.stock_list_ids()
         self.store_text = gtk.ListStore(gobject.TYPE_STRING)
-        for item in icon_list:
+        for item in text_list:
             new_iter = store_text.append("text")
             store_text.set(new_iter, 0, item)
 
