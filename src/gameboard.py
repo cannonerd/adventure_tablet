@@ -103,7 +103,7 @@ class UI(hildon.StackableWindow):
         self.text_list = gtk.stock_list_ids()
         self.store_text = gtk.ListStore(gobject.TYPE_STRING)
         for item in self.text_list:
-            new_iter = self.store_text.append("text")
+            new_iter = self.store_text.append()
             self.store_text.set(new_iter, 0, item)
 
 
